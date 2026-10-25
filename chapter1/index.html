@@ -1,0 +1,1246 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="随机过程第一章：按同步学习指导逐点讲解概率论基础，含全部12道例题、互动演示与自测。">
+<title>第一章 · 把概率论想明白</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="style.css">
+<script defer src="assets/katex/katex.min.js">
+</script>
+<script defer src="assets/katex/contrib/auto-render.min.js">
+</script>
+<script defer src="app.js">
+</script>
+</head>
+<body>
+<div id="reading-progress" aria-hidden="true">
+</div>
+<aside class="sidebar">
+<a class="brand" href="../index.html">
+<span class="brand-icon">∿</span> 随机过程 · 理解笔记</a>
+<p class="side-label">CHAPTER 01 / 概率论基础</p>
+<nav aria-label="章节目录">
+<a href="#start">从这里开始</a>
+<a href="#toolbox">随用随查：数学小工具</a>
+<a href="#space">01 概率空间</a>
+<a href="#distribution">02 随机变量与分布</a>
+<a href="#moments">03 数字特征</a>
+<a href="#common-distributions">↳ 常见分布逐步推导</a>
+<a href="#transforms">04 特征函数与变换</a>
+<a href="#normal">05 多维正态分布</a>
+<a href="#conditional">06 条件数学期望</a>
+<a href="#convergence">07 收敛与大数定律</a>
+<a href="#examples">12 道例题逐题拆解</a>
+<a href="#review">自测与速查</a>
+<a href="#sources">知识覆盖与易错点</a>
+</nav>
+<div class="side-bottom">
+<label for="search">查找知识点或例题</label>
+<input id="search" type="search" placeholder="例如：独立 / 例 1.9">
+<button id="search-button">查找</button>
+<p id="search-status" role="status">
+</p>
+<button id="print">打印 / 保存为 PDF</button>
+<p class="muted">先读懂一句话，再记住一个式子。</p>
+<p>
+<a href="../chapter2/index.html">第二章：随机过程 →</a>
+</p>
+<p>
+<a href="../index.html">回到教程目录</a>
+</p>
+</div>
+</aside>
+<main>
+<header id="start" class="hero">
+<div class="eyebrow">随机过程速通 · 第一站</div>
+<h1>先把概率论<br>
+<em>想明白。</em>
+</h1>
+<p class="lead">公式是对一件事的精确描述。<br>这份教程先说清楚那件事，再把公式放回来。</p>
+<div class="hero-meta">
+<span>7 组知识点</span>
+<span>12 道完整例题</span>
+<span>离线可用 · 可打印</span>
+</div>
+<a class="primary" href="#space">开始理解 →</a>
+<svg class="hero-art" viewBox="0 0 400 240" role="img" aria-label="由单次随机波动逐渐走向稳定均值的示意图">
+<path d="M15 120H390M40 20V220" stroke="currentColor" opacity=".18"/>
+<path d="M40 180L58 50L76 169L94 91L112 149L130 86L148 137L166 103L184 130L202 113L220 126L238 116L256 124L274 118L292 122L310 119L328 121L346 120L380 120" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M40 120H380" stroke="currentColor" stroke-dasharray="5 7" opacity=".4"/>
+<text x="354" y="105" fill="currentColor" font-size="20">μ</text>
+</svg>
+</header>
+<section class="intro">
+<h2>这章到底在为后面准备什么？</h2>
+<p>随机过程可以先理解为“一串随时间变化的随机变量”。所以这一章准备三套工具：<strong>用分布描述一个随机量，用条件期望利用已经知道的信息，用收敛描述观察越来越多时会怎样。</strong>特征函数则把难算的相加问题，变成容易算的相乘问题。</p>
+<div class="route">
+<div>
+<b>第一遍 · 建立直觉</b>
+<p>按 01 → 07 阅读每节开头和小例子。遇到变换的技术性质，先知道用途。</p>
+</div>
+<div>
+<b>第二遍 · 会做题</b>
+<p>跟做例 1.1—1.12。每题先停在“入口”，自己决定第一步。</p>
+</div>
+<div>
+<b>第三遍 · 检查理解</b>
+<p>完成末尾自测，再回看答错题对应的知识点。公式速查用于最后复习。</p>
+</div>
+</div>
+<div class="note">本套 HTML 是完整学习材料：本章包含 7 组知识点、12 道例题的全部条件与推导，以及做题所需的小工具。后续章节直接链接到这里复习，不要求再看任何书。课后习题全解不属于这 12 道例题，本次不逐题改写；知识范围的出处仅在章末记录。</div>
+<details>
+<summary>符号看不懂时，先展开这张翻译表</summary>
+<div class="table-wrap">
+<table>
+<tr>
+<th>符号</th>
+<th>怎么读</th>
+<th>意思</th>
+</tr>
+<tr>
+<td>\(\omega,\Omega\)</td>
+<td>一个结果、所有结果</td>
+<td>一次试验的完整记录，以及所有可能记录的集合</td>
+</tr>
+<tr>
+<td>\(A\in\mathcal F\)</td>
+<td>A 属于事件域</td>
+<td>A 是我们允许询问概率的事件</td>
+</tr>
+<tr>
+<td>\(\forall,\exists,\Rightarrow,\iff\)</td>
+<td>任意、存在、推出、当且仅当</td>
+<td>分别交代范围、存在性、单向结论、双向结论</td>
+</tr>
+<tr>
+<td>\(E,D,\operatorname{Var}\)</td>
+<td>期望、方差</td>
+<td>这里的 \(DX\) 就是 \(\operatorname{Var}(X)\)</td>
+</tr>
+<tr>
+<td>\(\mathbf1_A\)</td>
+<td>事件 A 的指示变量</td>
+<td>A 发生取 1，否则取 0</td>
+</tr>
+<tr>
+<td>\(\sum,\int,dF\)</td>
+<td>求和、积分、按分布加权</td>
+<td>离散时加权相加；连续时把极细的小块加起来；dF 统一两者</td>
+</tr>
+<tr>
+<td>\(i,\overline z,z^\top\)</td>
+<td>虚数单位、共轭、转置</td>
+<td>\(i^2=-1\)；i 与工程中常用的 j 都表示虚数单位；转置把列变行或行变列</td>
+</tr>
+<tr>
+<td>a.s. / i.i.d.</td>
+<td>几乎必然 / 独立同分布</td>
+<td>概率 1 的意义下成立 / 每次同一分布且彼此独立</td>
+</tr>
+</table>
+</div>
+</details>
+</section>
+<section id="toolbox" class="intro">
+<div class="section-num">遇到再查 / 本章数学小工具</div>
+<h2>少量符号，先翻译成动作</h2>
+<p>本章默认你认识普通函数、求导和积分。下面把例题额外用到的计数、级数与“概率 1”解释清楚；不需要一开始就背。</p>
+<details id="counting-tools">
+<summary>阶乘、组合数、二项式：是在数什么？</summary>
+<p>
+<b>阶乘：</b>\(n!=n(n-1)\cdots1\)，表示 n 个不同物品排队的方式数，约定 0!=1。例如 3 人排队有 3×2×1=6 种。</p>
+<p>
+<b>组合数：</b>从 n 个对象里选 k 个，只看选中谁、不计内部顺序：</p>\[\binom nk=\frac{n!}{k!(n-k)!},\qquad0\le k\le n.\]<p>先把 n 个对象排队，再让前 k 个入选，每一组人会因前后内部排法重复 k!(n−k)! 次，所以要除掉。\(\binom nk\) 有时也写成 \(C_n^k\)。</p>
+<p>
+<b>二项式展开：</b>\((a+b)^n=\sum_{k=0}^n\binom nk a^kb^{n-k}\)。因为 n 个括号中选 k 个取 a，另外 n−k 个取 b，正好有 \(\binom nk\) 种选法。例 1.2 与常见分布会用到它。</p>
+</details>
+<details id="series-tools">
+<summary>三个反复使用的级数与求和公式</summary>\[\sum_{k=0}^{\infty}z^k=\frac1{1-z}\quad(|z|&lt;1),\qquad e^z=\sum_{k=0}^{\infty}\frac{z^k}{k!}.\]<p>第一条来自有限和 \(1+z+\cdots+z^n=(1-z^{n+1})/(1-z)\)，当 |z|&lt;1 时尾项趋 0。第二条是指数函数的幂级数，实数和复数 z 都成立；取 z=−1 得到 \(e^{-1}=1-1+1/2!-1/3!+\cdots\)。</p>\[\sum_{k=1}^nk=\frac{n(n+1)}2,\qquad\sum_{k=1}^nk^2=\frac{n(n+1)(2n+1)}6.\]<p>第一条把首尾配对即可得到；第二条可把 \((k+1)^3-k^3=3k^2+3k+1\) 从 k=0 加到 n，让左边逐项抵消，再代入第一条解出平方和。例 1.10 用它计算加权方差。</p>
+</details>
+<div id="almost-sure" class="note">
+<b>“几乎处处/几乎必然”就是“除了一个概率为 0 的例外集合”。</b>若 U 在 (0,1) 均匀抽取，每个指定点的概率都为 0，但总会抽到某个点。概率为 0 不等于集合为空；概率为 1 的性质也允许在个别零概率结果上不成立。后面的条件期望与收敛都按这个含义理解。</div>
+</section>
+<section id="space" class="lesson">
+<div class="section-num">01 / 概率论先说清楚的三个对象</div>
+<h2>概率空间：有哪些结果，哪些问题能问，各有多大概率</h2>
+<p class="intuition">先不看公式。抛两次硬币，一次完整记录可能是“先正后反”。我们先列出所有记录，再规定什么算一个事件，最后给事件分配概率。这三件事合起来叫<strong>概率空间</strong>。</p>
+<h3>第一件：把“一个结果”和“所有结果”分开</h3>
+<p>用 H 表示正面、T 表示反面。HH 表示两次都是正面，HT 表示先正后反。全部可能记录组成一个集合，叫<strong>样本空间</strong>，记作大写希腊字母 Ω：</p>
+<p class="formula-name">样本空间：把全部可能结果列在大括号里</p>\[\Omega=\{HH,HT,TH,TT\}.\]
+<p>小写 ω 表示其中<strong>一个</strong>完整结果，比如 ω=HT。写“ω∈Ω”读作“ω 属于 Ω”，意思只是这张记录在结果清单里。Ω 是整张清单，ω 是清单中的一项，不是同一个对象。</p>
+<h3>第二件：“事件”是满足某句话的那些结果</h3>
+<p>事件“至少一次正面”不是一条单独记录，因为 HH、HT、TH 都能使它发生。把这三条记录放进集合 A，就得到这个事件的数学表达：</p>\[A=\{HH,HT,TH\}.\]
+<p>事件 A 发生，意思是实际抽到的 ω 在 A 里面。A 是 Ω 的一个子集，写成 A⊆Ω。“两次都不是正面”是相反事件，记作 Aᶜ，这里 Aᶜ={TT}。</p>
+<div class="table-wrap"><table><tr><th>记号</th><th>读成一句话</th><th>对两次硬币的具体含义</th></tr><tr><td>A∪B</td><td>A 或 B 至少发生一个</td><td>把两份结果清单合在一起，重复的只留一次</td></tr><tr><td>A∩B</td><td>A 与 B 同时发生</td><td>只保留两张清单里共同的记录</td></tr><tr><td>Aᶜ</td><td>A 不发生</td><td>从 Ω 中删去 A 的记录</td></tr><tr><td>∅</td><td>空集</td><td>没有任何记录满足这个条件，即不可能事件</td></tr></table></div>
+<h3>第三件：事件域 ℱ 与概率 P，各管什么？</h3>
+<p><strong>事件域 ℱ</strong>（花体 F）是一份“允许按本模型询问概率的事件清单”。它的成员是事件，也就是一个个集合，不是数值。在这个有限硬币例子里，可以把 Ω 的所有子集都列入 ℱ。</p>
+<p><strong>概率 P</strong>是一条赋值规则：输入一个允许的事件 A，输出一个 0 到 1 的数 P(A)。它回答“这个事件的可能性占多少”。公平、独立地抛两次时，四条完整记录各占 1/4，所以 P(A)=3/4。</p>
+<p class="formula-name">定义名称：概率空间（三个对象组成的一套模型）</p>\[(\Omega,\mathcal F,P).\]
+<p>这不是要算一个乘积。圆括号只表示把“全部结果 Ω、允许的事件 ℱ、概率规则 P”放在一起。后面的随机变量定义会用这三个对象，所以不能跳过它们。</p>
+<h3>事件域为什么又叫 σ 域？</h3>
+<p>我们要求这份事件清单在做常见的逻辑操作后仍然完整。符合以下三条的清单叫<strong>σ 域</strong>，在概率问题里也叫事件域：</p>
+<ol><li>Ω 本身要在清单里：可以问“某个可能结果发生了”这个必然事件。</li><li>若 A 在清单里，Aᶜ 也要在：既能问“A 发生”，也能问“A 不发生”。</li><li>若 A₁、A₂、……都在清单里，“它们至少有一个发生”的事件也要在。</li></ol>
+<p class="formula-name">σ 域三条要求的符号写法</p>\[\Omega\in\mathcal F;\qquad A\in\mathcal F\Rightarrow A^c\in\mathcal F;\qquad A_1,A_2,\ldots\in\mathcal F\Rightarrow\bigcup_{n=1}^{\infty}A_n\in\mathcal F.\]
+<p>这里“∈”表示在清单里；“⇒”表示前一句能推出后一句；大写 ∪ 表示把 n=1、2、3……这些事件取“或”。能按整数编号的无限多个叫“可数多个”。在连续问题中，保留这个限制能使概率规则保持一致；本章有限的枚举例子里，所有子集都允许时，三条自然满足。</p>
+<h3>概率三公理：怎样分配才不会自相矛盾？</h3>
+<p><strong>概率公理是模型必须服从的基本规则，不是从其他公式算出来的结论。</strong>第一，概率不能为负；第二，全部可能结果的总概率是 1；第三，互不重叠的事件可以直接相加。</p>\[P(A)\ge0,\qquad P(\Omega)=1,\qquad P\!\left(\bigcup_{n=1}^{\infty}A_n\right)=\sum_{n=1}^{\infty}P(A_n)\quad\text{当各 }A_n\text{ 互不重叠时}.\]
+<p>Σ 是求和号，把后面所有项加起来。互不重叠是 Aᵢ∩Aⱼ=∅（i≠j）：同一条结果不会被加两次。A 和 Aᶜ 正好把 Ω 分成两块，所以 P(A)+P(Aᶜ)=1，移项得到 <strong>P(Aᶜ)=1−P(A)</strong>。两个一般事件可能重叠，先加会多算交集一次，所以要减去一次：</p>
+<p class="formula-name">结论名称：两事件的加法公式</p>\[P(A\cup B)=P(A)+P(B)-P(A\cap B).\]
+<h3 id="event-independence">互斥与独立：一个是不能同时发生，一个是不改变概率</h3>
+<p><strong>互斥</strong>定义为 A∩B=∅。<strong>独立</strong>定义为 P(A∩B)=P(A)P(B)，也就是知道 B 发生后，不改变 A 的概率。两个本来都有正概率的互斥事件不独立：一个发生，另一个立刻变得不可能。</p>
+<details id="probability-limits"><summary>概率能怎样取极限？后面的 CDF 与收敛会用到</summary><p>若事件 Aₙ 一层层缩小，则它们最终共同留下的是交集，概率也趋向交集概率；若一层层扩大，则最终收进来的是并集，概率趋向并集概率：</p>\[A_1\supseteq A_2\supseteq\cdots\Rightarrow P(A_n)\to P(\bigcap_nA_n),\qquad A_1\subseteq A_2\subseteq\cdots\Rightarrow P(A_n)\to P(\bigcup_nA_n).\]<p>这是概率连续性，不是额外假设：扩大时，每次新增的部分互不重叠，按可数可加性加起来即可；缩小则对补集用同一结论。</p></details>
+<details open id="bayes"><summary>条件概率、全概率、贝叶斯：先认识名字，再看推导</summary><p><strong>条件概率</strong>回答：“已经知道 B 发生，只在 B 的范围里看，A 占多少？”竖线“|”读作“在……条件下”。只要 P(B)&gt;0，就定义：</p>\[P(A\mid B)=\frac{P(A\cap B)}{P(B)}.\]<p>分子是 A、B 都满足的那块，分母是现在允许考虑的全部范围 B。将分母乘回去，就得到乘法公式 P(A∩B)=P(B)P(A|B)。</p><p><strong>全概率公式</strong>回答：“A 可以来自几种互斥来源，把每个来源的贡献加起来是多少？”设 Bⱼ 是这些来源，彼此互斥且合起来是 Ω。事件 A 被切成 A∩Bⱼ，于是：</p>\[P(A)=\sum_jP(A\cap B_j)=\sum_jP(B_j)P(A\mid B_j).\]<p><strong>贝叶斯公式</strong>反过来问：“既然 A 发生，它来自来源 Bⱼ 的概率是多少？”把条件概率定义与刚算出的 P(A) 合起来：</p>\[P(B_j\mid A)=\frac{P(B_j\cap A)}{P(A)}=\frac{P(B_j)P(A\mid B_j)}{\sum_kP(B_k)P(A\mid B_k)}.\]<p>例：等概率选甲乙盒，再取一根螺栓。甲盒长螺栓比例 3/5、乙盒 2/3。令 A=“取到长的”，B₁=“选甲”。来自甲且是长的占 (1/2)(3/5)=3/10；来自乙且是长的占 (1/2)(2/3)=1/3；二者相加 P(A)=19/30。已经知道是长的，再问来自甲，就在这 19/30 里面取甲的 3/10，得到 9/19。</p></details>
+<div class="takeaway">本节先记清对象：ω 是一条结果，Ω 是所有结果，事件 A 是一批结果，ℱ 是允许的事件清单，P 是给事件赋概率的规则。</div>
+</section>
+<section id="distribution" class="lesson">
+<div class="section-num">02 / 学习指导 1.1 · 第 2 点</div>
+<h2>随机变量与分布：给结果打分，再描述分数</h2>
+<p class="intuition">随机变量不是一个“会自己乱变的字母”，而是一条固定的计分规则：完整结果进来，一个数出去。</p>
+<p>仍抛两次硬币，令 X 为正面次数：\(X(HH)=2\)，\(X(HT)=X(TH)=1\)，\(X(TT)=0\)。随机的是抽到哪张结果卡，计分规则 X 本身是固定的。</p>
+<h3 id="random-variable-definition">随机变量的定义：一条结果怎样变成一个数？</h3>
+<p>先给正式定义的<strong>文字版本</strong>：在已经规定好的概率空间 (Ω,ℱ,P) 上，如果一条规则 X 给每个结果 ω 分配一个实数，并且对任意实数门槛 x，“X 的得分不超过 x”的那些结果组成一个允许的事件，就称 X 为一个<strong>随机变量</strong>。后半条要求叫作<strong>X 对事件域 ℱ 可测</strong>。</p>
+<p>“可测”就是这个要求的名称：筛出事件之后，原来的概率 P 必须能处理它。这里也不是物理上的“拿仪器去测量”。</p>
+<p>写公式前，把每个符号逐一对上：</p>
+<div class="table-wrap"><table><tr><th>符号/写法</th><th>这个位置表示什么</th><th>两次硬币例子</th></tr><tr><td>Ω</td><td>所有完整试验结果的集合</td><td>{HH,HT,TH,TT}</td></tr><tr><td>ω</td><td>Ω 中某一条具体记录</td><td>例如 HT</td></tr><tr><td>ℝ</td><td>所有实数的集合，包括整数、小数、负数</td><td>这里实际得分仅为 0、1、2，但都属于 ℝ</td></tr><tr><td>X</td><td>给完整结果打分的规则，不是一个门槛</td><td>数正面次数</td></tr><tr><td>X(ω)</td><td>把某条记录交给规则 X 后的数值</td><td>X(HT)=1</td></tr><tr><td>x</td><td>我们人为设定的实数门槛，和大写 X 不同</td><td>例如 x=1</td></tr><tr><td>{ω∈Ω:X(ω)≤x}</td><td>把所有得分不超过 x 的记录收进一个集合；冒号读作“使得”</td><td>x=1 时为 {TT,HT,TH}</td></tr><tr><td>∈ℱ</td><td>刚才收出的集合在允许的事件清单里</td><td>允许的清单若包含所有子集，这一项自然在内</td></tr></table></div>
+<p class="formula-name">随机变量定义的符号写法（这两行合起来才是完整条件）</p>
+\[X:\Omega\longrightarrow\mathbb R,\qquad\omega\longmapsto X(\omega).\]
+\[\text{对每个实数 }x,\qquad A_x:=\{\omega\in\Omega:X(\omega)\le x\}\in\mathcal F.\]
+<p>第一行读作“X 是把结果集合 Ω 中的记录，送到实数集合 ℝ 的一个函数”；长箭头就是输入到输出。第二行先用 Aₓ 给筛出来的集合起个短名；“:=”读作“定义为”。然后要求 Aₓ 是允许的事件。这是<strong>定义/合法性要求</strong>，不是一道等着你算出数值的等式。</p>
+<h3>把“每个 x”实际试几个，你会看到它在检查什么</h3>
+<div class="table-wrap"><table><tr><th>人为设置的门槛</th><th>筛出的 Aₓ</th><th>公平独立硬币时，它的概率</th></tr><tr><td>x=−1</td><td>∅：没有记录得分≤−1</td><td>0</td></tr><tr><td>x=0.5</td><td>{TT}</td><td>1/4</td></tr><tr><td>x=1</td><td>{TT,HT,TH}</td><td>3/4</td></tr><tr><td>x=10</td><td>Ω：所有记录的得分都≤10</td><td>1</td></tr></table></div>
+<p>当 ℱ 包含这个有限 Ω 的全部子集时，不管怎么设门槛，筛出的结果都在清单中，因此这条计分规则确实是随机变量。满足“可测”之后，我们才可以放心地写 P(X≤x)，把这些筛选问题交给 P 求概率。</p>
+<details id="measurability-example"><summary>为什么定义不能只说“给每条记录一个数”？一个小反例</summary><p>设模型只保留“第一枚是正面还是反面”的信息，允许的事件清单是 ℱ={∅,Ω,{HH,HT},{TH,TT}}。这四个集合满足 σ 域要求，但没有列出每个单独结果。</p><p>“第一枚正面记 1，否则记 0”是可测的，因为任何门槛筛出来的集合都在这四项里。但“总正面数”这条规则在 x=0.5 时筛出 {TT}，它不在这份 ℱ 中。我们原来的 P 没有给这个更细的事件赋概率，所以它不是<strong>这个概率空间上</strong>的随机变量。若把事件清单扩展到所有子集，它又可以成为随机变量。</p><p>这说明“可测”是在检查<strong>数值规则与当前事件/信息系统是否匹配</strong>。对本章通常使用的完整有限模型，验证很简单；你不需要先研究更复杂的测度论。</p></details>
+<h3 id="cdf-definition">分布函数的定义：每个门槛左边累计了多少概率？</h3><p>现在固定随机变量 X。我们让数值门槛 x 左右移动，每个位置都去算事件“X≤x”的概率。把这个概率作为 x 的一个函数，就叫 X 的<strong>分布函数</strong>，英文简称 CDF，记作 Fₓ(x)。下标 X 说明在研究哪个随机变量；括号里的小写 x 是可以改变的门槛。</p><p class="formula-name">定义公式：把“X 不超过门槛 x 的概率”命名为 Fₓ(x)</p>
+<div class="formula">\[F_X(x)=P(X\le x).\]</div>
+<p>它是描述分布的通用方式，离散、连续或两者混合都能用。它的几条性质不是额外背诵的规定，而是由刚才的概率定义推出：门槛向右移，只会收进更多结果，所以 F 不减；移到越来越左边时概率趋 0，移到越来越右边则趋 1；从右侧逼近 x 时，筛出的事件缩到 {X≤x}，由<a href="#probability-limits">概率连续性</a>得到 F 右连续。</p><p>还可以从 CDF 算区间概率。对 a&lt;b，“X≤b”的结果分成互斥两部分：“X≤a”与“a&lt;X≤b”。因此 F(b)=F(a)+P(a&lt;X≤b)，移项得到下面第一式。第二式则把 x 左边已累计的概率扣掉，只留下恰好落在 x 上的那一份：</p><p class="formula-name">由定义推得的两条取概率公式（不是新的分布假设）</p>\[P(a&lt;X\le b)=F_X(b)-F_X(a),\qquad P(X=x)=F_X(x)-F_X(x-).\]<p>这里 \(F_X(x-)=\lim_{u\uparrow x}F_X(u)=P(X&lt;x)\)，即从 x 的左边逼近时已累计的概率。所以 F 的跳跃高度就是某个点的概率。两次硬币的例子：x&lt;0 时 F=0；0≤x&lt;1 时 F=1/4；1≤x&lt;2 时 F=3/4；x≥2 时 F=1。</p>
+<div class="demo">
+<div class="demo-title">动手看 · 同一个随机量，两种描述</div>
+<label for="cdf-x">移动门槛 x：<output id="cdf-value">
+</output>
+</label>
+<input id="cdf-x" type="range" min="-0.5" max="2.5" step="0.05" value="1">
+<svg id="cdf-svg" viewBox="0 0 640 220" role="img" aria-label="两次硬币正面数的分布函数阶梯图">
+</svg>
+<p id="cdf-result" aria-live="polite">
+</p>
+<p class="muted">到达 1 的瞬间，把 X=1 的概率 1/2 也累计进来；实心点表示取到该值。</p>
+</div>
+<h3>分布律与密度：两种不同的概率记账方法</h3><p><strong>离散型</strong>只在有限个或能逐个编号的数值 x₁、x₂、……上取值。定义 pₖ=P(X=xₖ)，即第 k 个数值占多少概率；全部 pₖ 合起来叫<strong>概率分布律</strong>，每项非负、总和为 1。</p><p><strong>概率密度</strong> f 是另一种描述：对于有密度的连续型变量，区间概率由 f 在区间内的面积给出。f 本身是一个普通非负函数，单位可理解成“每单位长度分配多少概率”。这是一种定义，不是说每个随机变量都必须有密度。以下把两种记账方法并排对照：</p>
+<div class="table-wrap">
+<table>
+<tr>
+<th>
+</th>
+<th>离散型</th>
+<th>连续型（有密度时）</th>
+</tr>
+<tr>
+<td>描述</td>
+<td>\(p_k=P(X=x_k)\)</td>
+<td>\(f(x)\ge0\)，\(F(x)=\int_{-\infty}^x f(u)\,du\)</td>
+</tr>
+<tr>
+<td>归一化</td>
+<td>\(\sum_kp_k=1\)</td>
+<td>\(\int_{-\infty}^{\infty}f(x)\,dx=1\)</td>
+</tr>
+<tr>
+<td>区间概率</td>
+<td>把区间内的点概率相加</td>
+<td>\(P(a&lt;X\le b)=\int_a^bf(x)\,dx\)</td>
+</tr>
+</table>
+</div>
+<p>如果 CDF 可以由密度积分表示，那么在可导且满足通常积分求导条件的位置，f(x)=F′(x)：累计面积的变化率就是当地的密度。反过来，对 f 积分就累回 F；符号 du 表示积分沿数轴变量 u 进行，u 只是积分中的占位字母。</p><div class="note">密度不是点概率。连续型变量有 \(P(X=x)=0\)，但附近一小段的概率约为 \(f(x)\Delta x\)。密度可以大于 1，例如 (0, 0.1) 上均匀分布的密度为 10；总面积仍然是 1。分布函数连续也不一定存在密度，不过本章的常规连续例题都有密度。</div>
+<h3 id="joint-distribution">联合分布、边缘分布、条件分布</h3>
+<p>多个随机变量是对同一结果记录多个分数。例如 X 是第一次骰子点数、Y 是两次点数之和。对 n 个变量 X₁,…,Xₙ，各设一个门槛 x₁,…,xₙ，同时满足所有门槛的概率，定义为它们的<strong>联合分布函数</strong> F。公式中的逗号读作“并且”，不是加法：</p>\[F(x_1,\ldots,x_n)=P(X_1\le x_1,\ldots,X_n\le x_n).\]<p>若变量离散，还可定义联合分布律 p(x,y)=P(X=x,Y=y)；若有联合密度，则用 f(x,y) 记单位小面积上的概率浓度。<b>边缘分布</b>就是不关心其他变量，只看某一项。把其他门槛放到 +∞，或者枚举 Y 的全部可能值并相加，因为不同 Y 值对应互斥事件；连续时同样把 Y 方向的密度全部积分掉。因此得到：</p>\[p_X(x)=\sum_yp(x,y),\qquad f_X(x)=\int_{-\infty}^{\infty}f(x,y)\,dy.\]<p>
+<b>条件分布</b>是选定一个切片，再归一化。离散时除以切片概率；有联合密度时除以边缘密度：</p>\[p_{X\mid Y}(x\mid y)=\frac{p(x,y)}{p_Y(y)},\qquad f_{X\mid Y}(x\mid y)=\frac{f(x,y)}{f_Y(y)}\quad\text{（分母为正）}.\]<p>连续时 P(Y=y)=0，不能直接用这个点概率做分母。先在 Y=y 附近取宽度 Δy 的窄带：其概率约为 fY(y)Δy；再取 X=x 附近宽度 Δx 的小格，联合概率约为 f(x,y)ΔxΔy。用条件概率定义相除，Δy 抵消，条件下小区间概率约为 [f(x,y)/fY(y)]Δx，所以括号内就是条件密度。极限公式在相应的密度条件下、Y 几乎处处成立。多维时完全一样：固定已知坐标，用联合分布除以已知坐标的边缘分布。</p>
+<details open id="joint-table">
+<summary>用一张表，把联合、边缘、条件实际算一遍</summary>
+<div class="table-wrap">
+<table>
+<tr>
+<th>联合概率 p(x,y)</th>
+<th>Y=0</th>
+<th>Y=1</th>
+<th>行和 P(X=x)</th>
+</tr>
+<tr>
+<td>X=0</td>
+<td>0.4</td>
+<td>0.1</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>X=1</td>
+<td>0.2</td>
+<td>0.3</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>列和 P(Y=y)</td>
+<td>0.6</td>
+<td>0.4</td>
+<td>1</td>
+</tr>
+</table>
+</div>
+<p>联合看单元格，例如 P(X=1,Y=1)=0.3；边缘看行列和，例如 P(Y=1)=0.4；条件则只保留 Y=1 这一列并归一化，\(P(X=1\mid Y=1)=0.3/0.4=0.75\)。它不等于 P(X=1)=0.5，所以二者不独立。</p>
+<p>连续联合密度同样按范围积分；若问矩形区域，可从联合 CDF 扣去不需要的两边，再加回重复扣除的角：</p>\[\begin{aligned}P(a&lt;X\le b,c&lt;Y\le d)&amp;=F(b,d)-F(a,d)\\&amp;\quad-F(b,c)+F(a,c).\end{aligned}\]</details>
+<h3 id="independence">随机变量独立的定义：各自的取值限制不互相提供信息</h3><p>如果每个变量分别加上任意取值限制，它们同时满足的概率总能拆成各自概率的乘积，就称这些变量<strong>相互独立</strong>。用“每个变量都不超过各自门槛”的事件表述，等价的检查公式如下。乘积号 ∏ 表示把 j=1 到 n 的所有边缘概率乘起来：</p>\[X_1,\ldots,X_n\text{ 相互独立}\iff F(x_1,\ldots,x_n)=\prod_{j=1}^nF_{X_j}(x_j)\quad\text{对所有门槛}.\]<p>离散型可检查联合分布律是否为边缘乘积；有联合密度时检查 \(f(x,y)=f_X(x)f_Y(y)\) 是否几乎处处成立。<strong>定义域也要一起检查。</strong>只有公式长得像两个函数的乘积、支撑区域却把 x 和 y 绑在一起，仍可能不独立。</p>
+<details>
+<summary>三个变量“两两独立”，还不一定“相互独立”</summary>
+<p>独立公平硬币 X、Y 取 0/1，令 Z=1 表示 X≠Y，否则 Z=0。三个变量的任意一对都独立；例如每个 (X,Z) 组合都占 1/4。但 Z 已由 X、Y 决定：</p>\[P(X=0,Y=0,Z=0)=1/4\ne(1/2)^3.\]<p>所以“每一对看起来独立”还不够。相互独立检查的是完整联合分布能否拆成全部边缘的乘积。</p>
+</details>
+<details>
+<summary>做题补充：求函数的分布，先求“过门槛”的概率</summary>
+<p>令 \(Y=g(X)\)，最稳的入口是 \(F_Y(y)=P(g(X)\le y)\)。若 g 严格单调可微，反函数为 h，常规条件下：</p>\[f_Y(y)=f_X(h(y))|h'(y)|.\]<p>绝对值是防止单调递减时算出负密度。比如 \(U\sim U(0,1)\)，\(T=-\ln U\)，则 \(P(T&gt;t)=P(U&lt;e^{-t})=e^{-t}\)（t≥0），所以 T 是参数 1 的指数分布。非单调函数要按各个反函数分支相加，不能只取一个根。</p>
+</details>
+<div class="takeaway">记忆抓手：联合看“一起”，边缘是“忽略别人”，条件是“已知别人”，独立是“知道也没改变”。</div>
+</section>
+
+
+
+<section id="moments" class="lesson">
+<div class="section-num">03 / 学习指导 1.1 · 第 3 点</div>
+<h2>数字特征：用少量数字概括一个分布</h2>
+<p class="intuition">分布是一张完整地图。期望标出重心，方差描述分散程度，协方差描述两个量的线性联动。</p>
+<h3 id="expectation-definition">数学期望的定义：每个可能的数值，按概率分一份权重</h3>
+<p>普通平均是“每项同样重要”：1、2、6 的平均为 (1+2+6)/3。如果这些值出现的机会不同，就不能各占 1/3。<strong>数学期望</strong>把每个可能值乘上它出现的概率，再全部相加；记号 E 表示执行这种概率加权平均，EX 与 E[X] 是同一写法。</p>
+<p>设 X 可能取 xₖ，概率为 pₖ。k 是取值清单中的编号，不是另一个随机量。按定义：</p>
+<p class="formula-name">定义公式：离散型随机变量的数学期望</p>\[EX=\sum_kx_kp_k.\]
+<p>例如收益 100 元的概率 0.1，收益 0 元的概率 0.9，期望为 100×0.1+0×0.9=10 元。它表示这个分布的平均水平，不保证某一次能得到 10 元，也不是“最可能的值”。</p>
+<p>有密度 f 的连续型变量，把数轴切成小段：x 附近一小段概率约为 f(x)Δx，所以这一段对平均的贡献约为 xf(x)Δx。把小段无限细分，加总就成为积分：</p>
+<p class="formula-name">连续型的期望公式：概率加权求和的积分版本</p>\[EX=\int_{-\infty}^{\infty}xf(x)dx.\]
+<p>还常把两种情况统一记成 \(EX=\int x\,dF(x)\)。dF 不是“d 乘 F”，而是“按分布 F 的概率权重累计”的记号：离散时就是上面的求和，有密度时就是乘 f(x)dx 后积分。</p>
+<p>若希望得到有限的期望，要求 E|X|&lt;∞；|X| 是绝对值，E|X| 是把正负号都去掉后的平均大小。不能拿“正无穷−负无穷”当抵消。非负变量的期望则可定义为 +∞。</p>
+<h3>函数的期望：先算每次的 g(X)，再按原概率平均</h3>
+<p>若收益改成 g(X)，只需把每个可能值 x 改成 g(x)，概率没有改变。因此：</p>\[E[g(X)]=\sum_kg(x_k)p_k\quad\text{或}\quad E[g(X)]=\int g(x)f(x)dx.\]
+<p>统一写法是 \(\int g(x)dF(x)\)。多个变量时，用联合分布的概率来加权：\(E[g(X,Y)]=\sum_x\sum_yg(x,y)p(x,y)\)，有密度就换成二重积分。一般不必先另求 g(X) 的分布。注意这不等于先取平均再代入：例如公平取 ±1 时 EX=0，但 E[X²]=1，而 (EX)²=0。</p>
+<h3 id="variance-definition">方差的定义：平均以后，偏差还剩多大？</h3>
+<p>只知道均值看不出波动。两个分布都可能均值 0，一个永远取 0，另一个等概率取 ±100。我们先把每次值减去均值，再平方消掉正负抵消，最后求平均；得到的量叫<strong>方差</strong>，记作 DX 或 Var(X)。这里设 E[X²] 有限，并用 μ=EX 暂时缩短写法：</p>
+<p class="formula-name">定义公式：方差是“偏离自身均值的平方”的期望</p>\[DX=E[(X-\mu)^2],\qquad\mu=EX.\]
+<p>μ 是确定的平均数，不是另一个随试验变化的变量。展开平方，再按期望平均，便得到常用计算式：</p>\[\begin{aligned}DX&amp;=E[X^2-2\mu X+\mu^2]\\&amp;=E[X^2]-2\mu EX+\mu^2\\&amp;=E[X^2]-(EX)^2.\end{aligned}\]
+<p>所以“先平方再平均”减去“先平均再平方”，是在计算方差，不是另起一个新定义。收益单位是元时方差单位为元²；平方根 √DX 叫<strong>标准差</strong>，单位回到元。D 越大表示整体偏离越强，但不意味着每一次都偏得远。</p>
+<p>同样由定义，平移 b 不改变离均值的距离，缩放 a 会把每个偏差乘 a，再平方：</p>\[D(aX+b)=E[(aX+b-(a\mu+b))^2]=a^2E[(X-\mu)^2]=a^2DX.\]
+<p>因此 DX=0 等价于 X=EX 几乎必然：非负的偏差平方如果在某个正概率事件上为正，其平均不可能为 0。方差为 0 允许概率为 0 的例外，并不要求逐个样本结果完全相同。</p>
+<h3>期望的线性性：拆平均不需要独立</h3>
+<p>a、b 是确定常数，X、Y 有有限期望。每次先算 aX+bY 再平均，与把两个平均分别缩放后相加相同。这条性质叫<strong>期望的线性性</strong>：</p>\[E[aX+bY]=aEX+bEY.\]
+<p>例如离散情形按联合概率展开：\(\sum_{x,y}(ax+by)p(x,y)\) 拆成两个和；把第一个和里的 Y 求完得到 X 的边缘概率，第二个同理。这一步没把联合概率拆成乘积，故不需要独立。</p>
+<h3 id="covariance-definition">协方差的定义：两个量的偏差是同向还是反向？</h3>
+<p>设 μX=EX、μY=EY，X、Y 的二阶矩有限。一次试验里，若 X、Y 都高于各自均值，或都低于各自均值，偏差乘积为正；若一个高一个低，乘积为负。把这个乘积平均，定义为<strong>协方差</strong> cov(X,Y)：</p>\[\operatorname{cov}(X,Y)=E[(X-\mu_X)(Y-\mu_Y)].\]
+<p>展开两个括号，μX、μY 都是可提出平均之外的常数，所以：</p>\[\operatorname{cov}(X,Y)=E[XY]-\mu_YEX-\mu_XEY+\mu_X\mu_Y=E[XY]-EX\,EY.\]
+<p>它主要量化线性同向变化，正负偏差也可能互相抵消；协方差 0 不代表任何关系都没有。下面会给出一个非线性反例。</p>
+<h3>为什么“和的方差”里要多出一项？</h3>
+<p>对 aX+bY，去掉均值后的偏差是 a(X−μX)+b(Y−μY)。对它平方，除了两个平方，还会多出两倍交叉乘积，因此：</p>\[D(aX+bY)=a^2DX+b^2DY+2ab\operatorname{cov}(X,Y).\]
+<p>独立时 E[XY]=EX·EY，协方差为 0，可以直接相加；其实只要协方差为 0 就能这么加，并不必须独立。这解释了为什么“平均可直接拆，方差却要先检查关系”。</p>
+<h3 id="correlation-coefficient">相关系数：给协方差去掉单位</h3>
+<p>如果 X 从米换成厘米，协方差的数值会随之改变。为了只看线性关系强弱，而不受单位影响，把协方差除以两边各自的标准差，定义<strong>相关系数</strong> ρXY（希腊字母 rho）：</p>\[\rho_{XY}=\frac{\operatorname{cov}(X,Y)}{\sqrt{DX}\sqrt{DY}},\qquad DX&gt;0,\ DY&gt;0.\]
+<p>分母的两个标准差消除了尺度。由<a href="#second-moment-bound">本节稍后的 Cauchy–Schwarz 不等式</a>，协方差平方≤DX·DY，所以 −1≤ρ≤1。ρ&gt;0 表示总体同向，ρ&lt;0 表示总体反向，ρ=0 叫<strong>不相关</strong>。若 |ρ|=1，两量在概率 1 意义下具有精确线性关系；若某一方方差为 0，这个比值没有定义。</p>
+<div class="note">
+<b>不相关不等于独立。</b>取 \(X\sim U(-1,1)\)，\(Y=X^2\)。由对称性 EX=EX³=0，所以 cov(X,Y)=0。直接检验：事件 |X|&lt;1/2 与 Y&lt;1/4 是同一事件，概率为 1/2，它们同时发生的概率是 1/2，而不是独立时应有的 1/4，所以不独立。联合正态是能把不相关升级为独立的重要额外条件；一般分布不能这样推。</div>
+<p>k 阶<strong>原点矩</strong>是 \(E[X^k]\)，k 阶<strong>中心矩</strong>是 \(E[(X-EX)^k]\)；二阶中心矩就是方差。多变量还有混合矩，比如 \(E[X^2Y]\)。需要相应的绝对矩有限时，再进行下面的求导、换序等操作。</p>
+<h3 id="indicator">指示变量：把“发生没发生”变成 0/1</h3>\[I_A=\mathbf1_A=\begin{cases}1,&amp;A\text{ 发生},\\0,&amp;A\text{ 不发生}.\end{cases}\qquad EI_A=1\cdot P(A)+0\cdot P(A^c)=P(A).\]<p>若要统计满足某条件的个数，把每个对象是否满足写成一个 I，再相加。期望的线性性直接给：</p>\[E\left[\sum_{j=1}^nI_{A_j}\right]=\sum_{j=1}^nP(A_j).\]<p>各事件即使相互影响，这个等式仍成立，因为拆<strong>期望</strong>不需要独立。比如一副打乱的 n 顶帽子，第 j 人拿对概率 1/n，拿对总人数的期望就是 n×(1/n)=1；这和例 1.2 的 Poisson(1) 极限相呼应。例 1.3 也用同一招数孤立点。</p>
+<details id="tail-expectation"><summary>非负量的另一个均值公式：按高度一层层累计</summary><p>若 K 是非负整数，K=k 时，“K&gt;0、K&gt;1、……、K&gt;k−1”恰好有 k 件成立，所以 K=∑ⱼ₌₀∞1{K&gt;j}。取期望得到：</p>\[EK=\sum_{j=0}^{\infty}P(K&gt;j).\]<p>连续的非负 T 也类似：每次实现值为 t 时，下面 0 到 t 的每层都贡献高度 1，故 \(T=\int_0^\infty\mathbf1_{\{T&gt;u\}}du\)。平均后得到 \(ET=\int_0^\infty P(T&gt;u)du\)。非负项没有正负抵消，可这样交换累计顺序。几何与指数分布会实际用到它。</p></details>
+<h3 id="covariance-matrix">均值向量与协方差矩阵</h3>\[\boldsymbol\mu=(EX_1,\ldots,EX_n)^\top,\qquad B_{jk}=\operatorname{cov}(X_j,X_k).\]<p>B 把所有配对的联动整理成表：对角线是各自方差，非对角线是协方差。B 对称且半正定，因为任意加权和的方差 \(\boldsymbol a^\top B\boldsymbol a\ge0\)。它不代表所有分布信息，但在联合正态情形下，均值与 B 就足以确定分布。</p>
+<p>矩阵的作用是把多项方差公式压缩成一行。任意确定权重 a₁,…,aₙ 都满足：</p>\[D\left(\sum_ja_jX_j\right)=\sum_ja_j^2DX_j+2\sum_{j&lt;k}a_ja_k\operatorname{cov}(X_j,X_k)=\boldsymbol a^\top B\boldsymbol a.\]<p>展开 \(E[(\sum_ja_j(X_j-EX_j))^2]\) 就能得到它。第二章把 Xⱼ 换成若干时刻的 X(tⱼ)，使用的还是同一公式。</p>
+<details id="second-moment-bound">
+<summary>二阶矩有限，为什么相关与一阶矩也算得动？</summary>
+<p>对二阶矩有限的实随机变量 U,V，先由 2|UV|≤U²+V² 知道 E|UV| 有限。此时有 Cauchy–Schwarz 不等式：</p>\[|E[UV]|^2\le E[U^2]E[V^2].\]<p>当 EV²&gt;0，展开非负量 \(E[(U-cV)^2]\)，取 \(c=E[UV]/E[V^2]\)，便得到上式；EV²=0 时 V=0 几乎必然，结论同样成立。复变量把一个因子取共轭，平方改成模长平方，也成立。</p>
+<p>令 U=|X|、V=1，得到 \(E|X|\le\sqrt{E|X|^2}\)。令 U=|X|、V=|Y|，说明两个二阶矩有限时 E|XY| 也有限。因此只要各状态有有限二阶矩，就能谈它们的相关和协方差；第二章的二阶矩过程正是利用这点。</p>
+</details>
+<h3>Markov 与 Chebyshev：只知道均值或方差，也能给尾部概率封顶</h3>\[P(|X|\ge\varepsilon)\le\frac{E|X|^r}{\varepsilon^r}\quad(r&gt;0,\ \varepsilon&gt;0),\]\[\boxed{P(|X-EX|\ge\varepsilon)\le\frac{DX}{\varepsilon^2}}.\]<p>第一式的理由：落在“大于门槛”的那一块，每个 \(|X|^r\) 都至少是 εʳ，所以总平均至少为 \(\varepsilon^rP(|X|\ge\varepsilon)\)。第二式把 X 换成 X−EX，取 r=2。概率上界算出大于 1 时，只能说明估计很松，实际可取上界 1。</p>
+<p>例：独立测量噪声的方差为 9，100 次平均的方差为 9/100。平均偏离真实均值至少 1 的概率 ≤0.09。<b>方差趋 0 → 偏离概率趋 0</b>，就是后面大量证明的发动机。</p>
+<div class="takeaway">记忆抓手：期望可直接拆；方差先查协方差；证明“越来越接近均值”，先想 Chebyshev。</div>
+</section>
+<section id="sum-distribution" class="intro">
+<h2>桥接工具：独立随机量相加，为什么出现卷积？</h2>
+<p>设 X、Y 独立，S=X+Y。离散时，S=k 可以由所有 \((X=j,Y=k-j)\) 互斥情况组成，所以：</p>\[P(S=k)=\sum_jP(X=j)P(Y=k-j).\]<p>有密度时同样先固定 X=x；Y 只需补到 s−x，按所有 x 加权积分：</p>\[f_S(s)=\int_{-\infty}^{\infty}f_X(x)f_Y(s-x)dx.\]<p>这叫<strong>卷积</strong>。若两项都非负，s&gt;0 时积分只需从 0 到 s，因为区间外至少一个密度为 0。这里相乘用了独立；不独立时要保留联合密度 \(f_{X,Y}(x,s-x)\)，不能拆开。</p>
+<p>例如两个独立 U(0,1) 相加，密度是满足 0&lt;x&lt;1、0&lt;s−x&lt;1 的区间长度：0&lt;s&lt;1 时为 s，1≤s&lt;2 时为 2−s，其他为 0。独立和的密度要积分，特征函数却只需相乘；这正是下一节变换工具的价值。</p>
+</section>
+<section id="common-distributions" class="intro">
+<div class="section-num">分布实例 / 概率公式、平均与方差怎样得来</div>
+<h2>每一种分布，都从一个明确的问题开始</h2>
+<p>下面不把“密度、均值、方差”当成三个互不相干的结论。先说<strong>变量在记录什么、模型假定什么</strong>，再推导概率，最后用刚学过的期望与方差定义计算。每个小节中的字母重新就地说明。</p>
+<div class="note"><b>先区分三种话：</b>“定义”是在给一种对象起名字；“模型假设”是在决定用什么规律描述现象，并不能由概率公理强迫现实满足；“推导”是在这些条件成立后，把结论算出来。比如正态的钟形是模型选择，而它前面的归一化常数可以计算出来。</div>
+<details open id="binomial-law"><summary>① Bernoulli 与二项：一次成功没成功，n 次共成功几个？</summary>
+<h4>变量、条件与名称</h4><p>先做一次只有两种结果的试验，用随机变量 B 记录：成功取 1，失败取 0。记 p 为成功概率（0≤p≤1），q=1−p 为失败概率。这种 0/1 分布就叫<strong>Bernoulli 分布</strong>，读作伯努利分布。</p>
+<p class="formula-name">Bernoulli 分布律：把模型中规定的两个概率写出来</p>\[P(B=1)=p,\qquad P(B=0)=q=1-p.\]
+<p>这两条不是根据其他信息“算出”p，而是用 p 表示这次试验本来的成功机会。既然只取 0 和 1，按期望定义逐项算：</p>\[EB=0\cdot q+1\cdot p=p,\qquad E[B^2]=0^2q+1^2p=p,\]\[DB=E[B^2]-(EB)^2=p-p^2=p(1-p).\]
+<p>所以成功概率本身就是 0/1 变量的平均；p=0 或 p=1 时没有随机波动，方差为 0。</p>
+<h4>从一次试验到 n 次：二项概率怎样来？</h4><p>现在独立重复 n 次，每次成功概率仍为 p。n 是事先确定的试验总次数；随机变量 K 记录成功总次数；k 是 K 某一个可能取到的整数，0≤k≤n。这时 K 的分布叫<strong>二项分布</strong>，记作 K~Bin(n,p)。</p><p>例如 n=3，恰好 k=2 次成功的序列是“成功成功失败、成功失败成功、失败成功成功”。每个指定序列的概率是 p²q，三种序列互斥，所以总概率是 3p²q。</p><p>一般情形：先从 n 个位置里选出哪 k 个成功，有组合数 C(n,k) 种；每个指定序列由独立性得到 pᵏqⁿ⁻ᵏ；再把互斥序列相加：</p>
+<p class="formula-name">二项分布的概率质量公式（离散点概率）</p>\[P(K=k)=\binom nkp^kq^{n-k},\qquad k=0,1,\ldots,n.\]
+<p>所有概率相加是 (p+q)ⁿ=1，正是二项式展开。p=0、1 时按“永远失败/永远成功”的退化情形理解即可。</p>
+<h4>它的均值与方差怎样算？</h4><p>令 Bⱼ 是第 j 次是否成功，K=B₁+…+Bₙ。每个 EBⱼ=p、DBⱼ=pq；期望直接相加，独立变量的方差也相加：</p>\[EK=\sum_{j=1}^nEB_j=np,\qquad DK=\sum_{j=1}^nDB_j=npq.\]
+<p><b>结论的含义：</b>平均成功次数是“次数×单次概率”。n=3、p=0.4 时，恰好成功 2 次的概率为 3×0.4²×0.6=0.288，平均成功数为 1.2，方差 0.72。平均值允许是小数，但一次真实计数始终是整数。试验不独立或成功概率不同，就不能原样套二项模型。</p></details>
+<details open id="poisson-law"><summary>② Poisson：很多次独立小机会，合起来发生了几次？</summary>
+<h4>变量、参数与模型来源</h4><p>随机变量 K 记录某段范围内发生的总次数，只能取 0,1,2,…。参数 λ（希腊字母 lambda）是这段内的<strong>平均总次数</strong>，λ&gt;0。我们可以从二项模型推导一种极限分布：把范围分成 n 个独立小机会，每次成功概率设为 λ/n，让 n 越来越大，平均次数 n×(λ/n)=λ 始终不变。</p><p>注意，“机会很多且稀疏”还不够，推导还用了独立与相同小概率。不能说任何一段计数都必然服从 Poisson。</p>
+<h4>概率里的 e⁻λ 与 k! 从哪里来？</h4><p>对固定的次数 k，二项概率可以重排为：</p>\[\begin{aligned}P(K_n=k)&amp;=\binom nk(\lambda/n)^k(1-\lambda/n)^{n-k}\\&amp;=\frac{\lambda^k}{k!}\left[\prod_{j=0}^{k-1}(1-j/n)\right](1-\lambda/n)^n(1-\lambda/n)^{-k}.\end{aligned}\]
+<p>n→∞ 时，方括号中只有固定 k 项，每项趋 1；最后一项趋 1；中间的 (1−λ/n)ⁿ 趋 e⁻λ。这条指数极限可由 n·ln(1−λ/n)→−λ 得到。因此极限概率为：</p>
+<p class="formula-name">Poisson 分布律：稀疏二项计数的极限公式</p>\[P(K=k)=e^{-\lambda}\frac{\lambda^k}{k!},\quad k=0,1,2,\ldots\]
+<p>把具有这组概率的分布定义为 Poisson(λ)。它的总概率是 \(e^{-\lambda}\sum_{k=0}^{\infty}\lambda^k/k!=e^{-\lambda}e^\lambda=1\)，所以这确实是一组合法概率。</p>
+<h4>为什么均值和方差都恰好是 λ？</h4><p>先按定义求平均。k=0 没有贡献；k/k!=1/(k−1)!，拿出一个 λ，再令 r=k−1：</p>\[EK=e^{-\lambda}\sum_{k=1}^\infty\frac{k\lambda^k}{k!}=\lambda e^{-\lambda}\sum_{r=0}^\infty\frac{\lambda^r}{r!}=\lambda.\]
+<p>二阶矩直接算 k² 不太简洁，先算 k(k−1)，能再消去两个阶乘因子：</p>\[E[K(K-1)]=e^{-\lambda}\sum_{k=2}^\infty\frac{\lambda^k}{(k-2)!}=\lambda^2.\]
+<p>因为 K²=K(K−1)+K，得到 EK²=λ²+λ，最后减掉均值平方：</p>\[DK=\lambda^2+\lambda-\lambda^2=\lambda.\]
+<p><b>结论的含义：</b>总量平均越大，波动方差也随之增大。若这一段平均发生 3 次，即 λ=3，那么一次都没有的概率是 e⁻³≈0.0498，不是“平均 3 次所以一定有 3 次”。第二章若用每分钟速率 r 描述长度 t 的时间段，这里的参数就应换成 λ=rt；分布的“总次数参数”与过程的“速率”要分开。</p></details>
+<details open id="geometric-law"><summary>③ 几何：一直试到第一次成功，要试几次？</summary>
+<h4>先固定计数约定，再写概率</h4><p>各次试验独立，每次成功概率 p∈(0,1]，q=1−p。随机变量 X 记录第一次成功为止的总试验次数，<strong>包括成功那一次</strong>，所以从 1 开始。</p><p>X=k 的意思恰好是“前 k−1 次全失败，第 k 次成功”。将这个指定序列的概率相乘，就得到：</p>
+<p class="formula-name">从 1 开始的几何分布律</p>\[P(X=k)=q^{k-1}p,\qquad k=1,2,\ldots\]
+<p>这组概率相加为 \(p\sum_{j=0}^\infty q^j=p/(1-q)=1\)。它因使用等比级数而得名“几何”。</p>
+<h4>均值 1/p，不是靠猜“平均成功一次要几次”</h4><p>X&gt;j 意味着前 j 次全失败，概率 qʲ。用<a href="#tail-expectation">非负整数的尾概率均值公式</a>，逐层累加：</p>\[EX=\sum_{j=0}^\infty P(X&gt;j)=\sum_{j=0}^\infty q^j=\frac1{1-q}=\frac1p.\]
+<p>平方同样能逐层拆：整数 k²=1+3+…+(2k−1)，所以 \(EX^2=\sum_{j=0}^\infty(2j+1)P(X&gt;j)\)。对等比级数求导后乘 q，得到 \(\sum_{j=0}^\infty jq^j=q/(1-q)^2\)，于是：</p>\[E[X^2]=\frac{2q}{p^2}+\frac1p=\frac{2-p}{p^2},\qquad DX=\frac{2-p}{p^2}-\frac1{p^2}=\frac{1-p}{p^2}.\]
+<p><b>结论的含义：</b>p 越小，等得越久、波动也越大。p=1/2 时，平均试 2 次、方差 2；恰好第 3 次成功的概率是 (1/2)³=1/8。</p><p>若只数成功前的失败次数，令 Y=X−1，则 P(Y=k)=pqᵏ（k 从 0 开始），EY=1/p−1=q/p，DY=DX。两种都叫几何分布，必须先读计数约定；第二章的随机截止时间计数采用后一种。</p></details>
+<details open id="uniform-law"><summary>④ 均匀：等长区间应有相同概率，公式怎样确定？</summary>
+<h4>模型假设决定密度形状，概率总和决定常数</h4><p>随机变量 X 的取值只在 a 到 b 之间，a、b 是两个固定端点且 a&lt;b。“均匀”是假设区间里每一段等长的小段有相同概率。因此密度应是一个常数 c。令 L=b−a 表示区间长度，总概率为 1 要求 cL=1，所以 c=1/L。</p>
+<p class="formula-name">均匀分布 U(a,b) 的密度公式</p>\[f_X(x)=\begin{cases}1/(b-a),&amp;a&lt;x&lt;b,\\0,&amp;\text{其他}.\end{cases}\]
+<p>fX(x) 是位置 x 的密度，不是 P(X=x)。在 a≤u&lt;v≤b 时，区间概率是高度乘长度：\(P(u&lt;X&lt;v)=(v-u)/(b-a)\)。对门槛 x 左边的面积累计，得到 CDF：</p>\[F_X(x)=\begin{cases}0,&amp;x&lt;a,\\(x-a)/(b-a),&amp;a\le x\le b,\\1,&amp;x&gt;b.\end{cases}\]
+<h4>均值与方差实际积分一次</h4>\[EX=\frac1L\int_a^b x\,dx=\frac{b^2-a^2}{2L}=\frac{a+b}{2}.\]
+<p>均值是区间中点。计算方差时以中点为原点，令 z=x−(a+b)/2，积分范围就变成 −L/2 到 L/2：</p>\[DX=\frac1L\int_{-L/2}^{L/2}z^2dz=\frac1L\left[\frac{z^3}{3}\right]_{-L/2}^{L/2}=\frac{L^2}{12}.\]
+<p><b>结论的含义：</b>区间整体平移只改变均值，不改变方差；长度放大 2 倍，方差放大 4 倍。例如 U(0,10) 中，落在 (2,4) 的概率是 2/10，平均为 5，方差为 100/12。U(0,1) 的特殊便利是 F(x)=x（0≤x≤1），概率与数值门槛恰好一致。</p></details>
+<details open id="exponential-law"><summary>⑤ 指数：假设等待没有记忆，为什么会得到 e⁻λt？</summary>
+<h4>先规定变量与无记忆假设</h4><p>随机变量 T 是非负等待时间，t 是我们已等待的固定时长。定义<strong>生存函数</strong> S(t)=P(T&gt;t)，意思是“等了 t 还没发生”。假设刚开始不会瞬间发生，S(0)=1，S 连续，并假设等待最终会结束且一单位后仍有正概率继续等待，即 0&lt;S(1)&lt;1；无记忆性表示“已经等了 s，接下来再等 t 的机会和刚开始相同”：</p>\[P(T&gt;s+t\mid T&gt;s)=P(T&gt;t).\]
+<p>左边按条件概率定义等于 S(s+t)/S(s)，所以无记忆要求变成 S(s+t)=S(s)S(t)。这里 s、t 是任意非负固定时长，不是随机变量。</p>
+<h4>由这条要求推导生存函数</h4><p>以选定的一单位时间记作 1：重复相乘得到 S(n)=S(1)ⁿ；因为 S(1)=S(1/n)ⁿ，有 S(1/n)=S(1)¹⁄ⁿ；进而对任意非负有理数 m/n，S(m/n)=S(1)ᵐ⁄ⁿ。连续性把它扩展到全部非负实数。</p><p>记 λ=−ln S(1)&gt;0，就有 S(t)=e⁻λt。λ 叫<strong>速率参数</strong>，单位是 1/时间。这是由无记忆模型推出来的形状，不是在说所有寿命或等待都无记忆。</p>
+<p class="formula-name">指数分布 Exp(λ) 的生存函数、CDF 与密度</p>\[S(t)=e^{-\lambda t},\quad F_T(t)=1-e^{-\lambda t}\quad(t\ge0),\]\[f_T(t)=F_T'(t)=\lambda e^{-\lambda t}\quad(t&gt;0),\qquad f_T(t)=0\quad(t&lt;0).\]
+<p>导数前的 λ 来自对 e⁻λt 使用链式法则；同样保证密度积分为 1。</p>
+<h4>均值与方差如何分部积分？</h4><p>先按期望定义计算，边界项 t·e⁻λt 在 0 与 ∞ 都为 0：</p>\[ET=\int_0^\infty t\lambda e^{-\lambda t}dt=[-te^{-\lambda t}]_0^\infty+\int_0^\infty e^{-\lambda t}dt=\frac1\lambda.\]
+<p>二阶矩再做一次同样操作：</p>\[E[T^2]=\int_0^\infty t^2\lambda e^{-\lambda t}dt=2\int_0^\infty te^{-\lambda t}dt=\frac2{\lambda^2},\]\[DT=E[T^2]-(ET)^2=\frac2{\lambda^2}-\frac1{\lambda^2}=\frac1{\lambda^2}.\]
+<p><b>结论的含义：</b>速率越大，平均等待越短。λ=2/分钟时，平均等待 1/2 分钟，仍等超过 1 分钟的概率为 e⁻²≈0.1353。无记忆性也可代回验证：e⁻λ(s+t)/e⁻λs=e⁻λt，第二章的指数时钟竞争用的就是它。</p></details>
+<details open id="univariate-normal"><summary>⑥ 正态：钟形是一种模型，前面的常数与均值方差可以推出来</summary>
+<h4>先说明我们选择了什么形状</h4><p>先用 Z 表示一个以 0 为中心、左右对称的误差。选择 g(z)=c·e⁻ᶻ²⁄² 作为密度形状：偏差平方越大，密度下降越快。这个钟形选择叫<strong>标准正态模型</strong>；概率公理并不要求所有误差都长成它。c 是未知正数，要用总面积为 1 算出来。</p>
+<details open id="gaussian-integral"><summary>√(2π) 从哪里来？把一维积分平方后变成平面面积</summary><p>令 \(I=\int_{-\infty}^{\infty}e^{-z^2/2}dz\)。I² 等于 x、y 平面上的积分。改用半径 r 与角度 θ：x=r cosθ、y=r sinθ，小扇形的面积为 r·dr·dθ：</p>\[\begin{aligned}I^2&amp;=\int_{\mathbb R^2}e^{-(x^2+y^2)/2}dxdy\\&amp;=\int_0^{2\pi}d\theta\int_0^\infty e^{-r^2/2}r\,dr=2\pi.\end{aligned}\]<p>r 的积分换元 u=r²/2 后就是 ∫₀∞e⁻ᵘdu=1。I 为正，所以 I=√(2π)，总面积 cI=1 要求 c=1/√(2π)。这里 x、y 仅是平面积分坐标，r 是到原点的距离，θ 是角度，不是新加的随机量。</p></details>
+<p class="formula-name">标准正态 N(0,1) 的密度：把钟形归一化</p>\[g(z)=\frac1{\sqrt{2\pi}}e^{-z^2/2},\qquad z\in\mathbb R.\]
+<h4>为什么名称中的 0、1 恰好是均值与方差？</h4><p>z·g(z) 在 0 两边大小相同、符号相反，积分抵消，所以 EZ=0。又因为 g′(z)=−zg(z)，分部积分得到：</p>\[E[Z^2]=\int_{-\infty}^{\infty}z^2g(z)dz=-[zg(z)]_{-\infty}^{\infty}+\int_{-\infty}^{\infty}g(z)dz=1.\]
+<p>因此 DZ=1−0²=1。现在希望中心为某个固定 μ（mu），标准差为固定 σ&gt;0（sigma），就令 X=μ+σZ。由均值线性性与方差缩放公式，EX=μ、DX=σ²；按变量变换，z=(x−μ)/σ，每段长度还要除以 σ：</p>
+<p class="formula-name">一般正态 N(μ,σ²) 的密度：标准钟形的平移与缩放</p>\[f_X(x)=\frac1\sigma g\!\left(\frac{x-\mu}{\sigma}\right)=\frac1{\sqrt{2\pi\sigma^2}}\exp\!\left[-\frac{(x-\mu)^2}{2\sigma^2}\right].\]
+<p><b>结论的含义：</b>μ 控制钟形中心；σ 控制宽度，名称的第二个参数写的是方差 σ²，不是标准差 σ。把 (X−μ)/σ 变回 Z，叫<strong>标准化</strong>。</p><p>标准正态的分布函数另外命名为 Φ（大写 phi）：\(\Phi(x)=\int_{-\infty}^x g(z)dz\)。它表示标准钟形在 x 左边的面积，不是密度 g。后面的多维正态、例 1.8 的混合分布反例会用到这个名字。</p></details>
+<details open id="gamma-law"><summary>⑦ Gamma：等够 n 次指数等待，密度怎样累积出来？</summary>
+<h4>先从整数 n 的明确场景推起</h4><p>T₁,…,Tₙ 是相互独立、速率相同为 β&gt;0 的指数等待。β 读 beta；Sₙ=T₁+…+Tₙ 表示等够 n 段的总时间。第一段密度 f₁(x)=βe⁻βx。现在用<a href="#sum-distribution">独立和的卷积</a>，假定 n−1 段的密度已经求出，再加上最后一段：</p>\[\begin{aligned}f_n(x)&amp;=\int_0^x\frac{\beta^{n-1}u^{n-2}e^{-\beta u}}{(n-2)!}\,\beta e^{-\beta(x-u)}du\\&amp;=\frac{\beta^ne^{-\beta x}}{(n-2)!}\int_0^xu^{n-2}du\\&amp;=\frac{\beta^nx^{n-1}e^{-\beta x}}{(n-1)!},\quad x&gt;0.\end{aligned}\]
+<p>这一步适用于 n≥2，n=1 已经是起点，所以归纳得到了全部正整数 n。xⁿ⁻¹ 来自对多个等待相加时出现的积分，不是凭空放进去的项。</p>
+<h4>为什么引入 Γ 函数与形状参数 α？</h4><p>想把这组密度推广到不只整数的形状 α&gt;0（alpha），就需要把 (n−1)! 延伸成一个函数。定义<strong>Gamma 函数</strong>：</p>\[\Gamma(\alpha)=\int_0^\infty v^{\alpha-1}e^{-v}dv.\]
+<p>这是一个以 α 为输入、以正数为输出的普通函数，Γ 不是随机变量。分部积分给出：</p>\[\Gamma(\alpha+1)=[-v^\alpha e^{-v}]_0^\infty+\alpha\int_0^\infty v^{\alpha-1}e^{-v}dv=\alpha\Gamma(\alpha).\]
+<p>Γ(1)=1，逐次递推便有 Γ(n)=(n−1)!。对候选形状 xᵅ⁻¹e⁻βx，令 v=βx，可以算出总面积 Γ(α)/βᵅ。因此前面的常数应取 βᵅ/Γ(α)，使总面积等于 1：</p>
+<p class="formula-name">Gamma(α,β) 的密度定义（形状 α，速率 β）</p>\[f(x)=\frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-\beta x},\quad x&gt;0;\qquad f(x)=0\quad x\le0.\]
+<p>α=n 是前面真正等待 n 次的模型；α 不是整数时，同一个密度家族仍合法，但不能硬解释成“等待非整数个事件”。</p>
+<h4>均值与方差：让 Γ 的输入各提高一次、两次</h4><p>密度积分里多乘一次 x，幂次提高 1；将同一个 Γ 积分的参数从 α 换成 α+1：</p>\[EX=\frac{\beta^\alpha}{\Gamma(\alpha)}\frac{\Gamma(\alpha+1)}{\beta^{\alpha+1}}=\frac\alpha\beta.\]
+<p>多乘 x² 就把输入提高 2：</p>\[E[X^2]=\frac{\Gamma(\alpha+2)}{\beta^2\Gamma(\alpha)}=\frac{\alpha(\alpha+1)}{\beta^2},\quad DX=\frac{\alpha(\alpha+1)-\alpha^2}{\beta^2}=\frac\alpha{\beta^2}.\]
+<details id="gamma-addition-proof"><summary>补足 χ² 要用的工具：同速率 Gamma 相加，形状为什么相加？</summary><p>若 U、V 独立，分别为 Gamma(a,β)、Gamma(b,β)，a、b 是两个正形状，β 是共同速率。卷积先给出：</p>\[f_{U+V}(x)=\frac{\beta^{a+b}e^{-\beta x}}{\Gamma(a)\Gamma(b)}\int_0^xu^{a-1}(x-u)^{b-1}du.\]
+<p>令 v=u/x，这个积分等于 \(x^{a+b-1}\int_0^1v^{a-1}(1-v)^{b-1}dv\)。最后这个积分等于 Γ(a)Γ(b)/Γ(a+b)，原因也可以在此验证：把 Γ(a)Γ(b) 写成两个正变量 u,w 的二重积分，再取总量 r=u+w 和比例 v=u/(u+w)，小面积缩放为 r·dr·dv：</p>\[\begin{aligned}\Gamma(a)\Gamma(b)&amp;=\int_0^\infty\!\int_0^\infty u^{a-1}w^{b-1}e^{-(u+w)}dudw\\&amp;=\left(\int_0^\infty r^{a+b-1}e^{-r}dr\right)\left(\int_0^1v^{a-1}(1-v)^{b-1}dv\right).\end{aligned}\]
+<p>第一个括号就是 Γ(a+b)。代回卷积，分母约掉 Γ(a)Γ(b)，恰好留下 Gamma(a+b,β) 的密度。这证明了相加规则；共同速率与独立两个条件都不能丢。</p></details><p><b>结论的含义：</b>整数 n 时，平均总等待为 n 倍的单段平均，方差也因独立相加为 n 倍的单段方差。例如等 3 次、每次速率 2/分钟，平均等待 3/2 分钟、方差 3/4 分钟²。注意本套教程的第二参数始终是速率 β；若用“尺度”参数 θ，它等于 1/β。</p></details>
+<details open id="chi-square-law"><summary>⑧ χ²：把独立标准正态平方后相加，为什么也是 Gamma？</summary>
+<h4>先给出这个分布的定义</h4><p>取 n 个相互独立的标准正态 Z₁,…,Zₙ，令 Q=Z₁²+…+Zₙ²。<strong>χ²(n)</strong>（卡方分布）定义为这个 Q 的分布，n 叫自由度，在这里就是独立平方项的个数。</p><p>先只看 W=Z²。w&gt;0 时，Z²≤w 等价于 −√w≤Z≤√w，因此 CDF 是这个区间的标准正态概率。对 w 求导，两侧端点各贡献一项：</p>\[f_W(w)=\frac{g(\sqrt w)+g(-\sqrt w)}{2\sqrt w}=\frac{e^{-w/2}}{\sqrt{2\pi w}},\quad w&gt;0.\]
+<p>它正是 Gamma(1/2,1/2) 的密度，因为 Γ(1/2)=√π（对 Γ 积分作 v=z²/2 的换元，也能由刚才的高斯积分得到）。</p><p>同速率的独立 Gamma 相加，形状参数相加：上一小节已给出<a href="#gamma-addition-proof">卷积的完整证明</a>。所以 n 个这样的平方相加，得到 Gamma(n/2,1/2)，即：</p>\[\chi^2(n)=\operatorname{Gamma}(n/2,1/2).\]
+<p>最后将 α=n/2、β=1/2 代入<strong>刚刚推导的</strong> Gamma 均值方差式，而不是另背一对数：</p>\[EQ=\frac{n/2}{1/2}=n,\qquad DQ=\frac{n/2}{(1/2)^2}=2n.\]
+<p><b>结论的含义：</b>标准正态本来能正能负，平方和却只能非负。χ² 适合描述这种“标准化误差的平方总量”，不是描述正负误差本身。</p></details>
+<p class="takeaway">现在这些公式可以串起来了：一次成功 → Bernoulli；成功总数 → 二项；稀疏二项极限 → Poisson；第一次成功的试验数 → 几何；无记忆等待 → 指数；指数等待之和 → Gamma；正态误差平方和 → χ²。均匀与正态则是先明确形状模型，再计算归一化、均值和方差。</p>
+</section>
+
+<section id="transforms" class="lesson">
+<div class="section-num">04 / 学习指导 1.1 · 第 4 点</div>
+<h2>特征函数：给一个分布换一种编码</h2>
+<p class="intuition">两个独立随机量相加时，密度要做卷积，很麻烦。换成特征函数后，直接相乘。它像一种不会丢信息的“换语言”。</p>
+<details id="complex-exponential">
+<summary>复指数不是新概率：先用欧拉公式看懂它</summary>\[e^{iv}=\cos v+i\sin v,\quad |a+ib|=\sqrt{a^2+b^2},\quad\overline{a+ib}=a-ib.\]<p>所以 \(|e^{iv}|=1\)，可视为单位圆上角度 v 的箭头。共轭把虚部反号，相当于关于实轴翻转；\(e^{-iv}=\overline{e^{iv}}\)。含复数的期望分别平均实部与虚部即可，不会额外改变概率规则。</p>
+<p>对实参数 t 求导仍用链式法则：\(\frac d{dt}e^{itx}=ixe^{itx}\)。二次求导出现 i²=−1，正是后面二阶矩负号的来源。</p>
+</details>
+<h3 id="characteristic-definition">特征函数的定义：把每个可能数值变成箭头，再平均</h3><p>给定实随机变量 X。另取一个<strong>人为选择的实数参数 t</strong>，它在本章不是时间、也不是另一个随机变量。先算每次结果对应的复数 eⁱᵗˣ，再按 X 的概率分布求期望。把得到的确定函数命名为<strong>X 的特征函数</strong>，记作 φX(t)（小写 phi）。下标 X 说明编码的是哪个变量。</p><p class="formula-name">特征函数定义；第二个等号来自欧拉公式与期望线性性</p>\[\boxed{\varphi_X(t)=E[e^{itX}]=E[\cos(tX)]+iE[\sin(tX)]},\qquad t\in\mathbb R.\]<p>固定一个 t，把每个可能的 X 变成单位圆上一个箭头 \(e^{itX}\)，然后按概率把这些箭头平均。t 改变，箭头旋转快慢改变。一个 t 只给两个实数；<strong>所有 t 的结果合在一起，完整编码整个分布。</strong>
+</p>
+<p>两点分布 P(X=0)=1−p、P(X=1)=p 中，X=0 对应箭头 e⁰=1，X=1 对应箭头 eⁱᵗ，因此按期望定义得到 φ(t)=(1−p)×1+p×eⁱᵗ。因为 \(|e^{itX}|=1\)，这个期望对任何实随机变量都存在；期望 EX 却可能不存在。这是它比矩母函数 \(M(s)=E[e^{sX}]\) 更通用的原因。两者别混用。</p>
+<div class="demo">
+<div class="demo-title">动手看 · 概率加权的两个箭头</div>
+<label for="cf-t">t：<output id="cf-t-value">
+</output>
+</label>
+<input id="cf-t" type="range" min="-6.28" max="6.28" value="1.57" step="0.01">
+<label for="cf-p">P(X=1)=p：<output id="cf-p-value">
+</output>
+</label>
+<input id="cf-p" type="range" min="0" max="1" value="0.5" step="0.01">
+<svg id="cf-svg" viewBox="0 0 640 250" role="img" aria-label="特征函数的单位圆箭头图">
+</svg>
+<p id="cf-result" aria-live="polite">
+</p>
+<p class="muted">灰箭头：1 与 eⁱᵗ；绿色箭头：(1−p)·1+p·eⁱᵗ。平均箭头始终在单位圆内。</p>
+</div>
+<h3>一维特征函数：每条性质都在干什么</h3>
+<div class="table-wrap">
+<table>
+<tr>
+<th>性质</th>
+<th>为什么 / 用在哪</th>
+</tr>
+<tr>
+<td>\(\varphi(0)=1,\ |\varphi(t)|\le1\)</td>
+<td>t=0 时箭头全为 1；单位箭头的平均不会长于 1。用于排除假候选。</td>
+</tr>
+<tr>
+<td>\(\varphi(-t)=\overline{\varphi(t)}\)</td>
+<td>把旋转方向反过来，关于实轴镜像。对称分布的特征函数是实偶函数。</td>
+</tr>
+<tr>
+<td>\(\varphi_{aX+b}(t)=e^{itb}\varphi_X(at)\)</td>
+<td>把指数展开：\(e^{it(aX+b)}=e^{itb}e^{i(at)X}\)。平移多一个相位，缩放改变 t。</td>
+</tr>
+<tr>
+<td>在实轴上一致连续</td>
+<td>\(|\varphi(t+h)-\varphi(t)|\le E|e^{ihX}-1|\to0\)，界与 t 无关。被平均的量趋 0 且一直≤2，下面的小工具解释为何可把极限移到期望外。</td>
+</tr>
+<tr>
+<td>独立时 \(\varphi_{X+Y}(t)=\varphi_X(t)\varphi_Y(t)\)</td>
+<td>\(E[e^{itX}e^{itY}]\) 借独立拆成两个期望。做求和分布的主力。</td>
+</tr>
+<tr>
+<td>正定/非负定</td>
+<td>任意复系数、任意采样点形成的下面二次型都非负，是能代表概率分布的结构条件。</td>
+</tr>
+<tr>
+<td>\(\varphi^{(k)}(0)=i^kE[X^k]\)</td>
+<td>若 n 阶绝对矩有限，k≤n 时可求导到期望里；在 0 处读出矩。</td>
+</tr>
+</table>
+</div>\[\sum_{j,k=1}^m c_j\overline{c_k}\varphi(t_j-t_k)=E\left|\sum_{j=1}^m c_je^{it_jX}\right|^2\ge0.\]<p>“正定”<strong>不是</strong>每个 \(\varphi(t)\ge0\)（它可能是复数），而是这整个二次型非负。判定定理说：一个在实轴连续、\(\varphi(0)=1\) 的复值函数，是特征函数<strong>当且仅当它正定</strong>。仅仅模长≤1并不够。</p>
+<details id="bounded-limit">
+<summary>“可以交换极限与期望”的一个安全使用条件</summary>
+<p>若随机量 Zₙ 几乎处处趋 Z，而且始终有 \(|Z_n|\le H\)、EH&lt;∞，则 \(EZ_n\to EZ\)。这叫支配收敛：所有可能的巨大值都被同一个可积的 H 控住，便不会出现“极少数巨大值撑住平均”的漏洞。</p>
+<p>这里 \(|e^{ihX}-1|\le2\)，H=2 就是可积上界，所以它的期望随 h→0 也趋 0。反之，仅仅逐结果趋 0，不加这个条件，期望未必趋 0；<a href="#convergence-counterexamples">收敛反例</a>会实际展示。</p>
+</details>
+<h3 id="characteristic-moments">在 0 求导，怎样把矩读出来？</h3>
+<p>如果 E|X|² 有限，可在期望内对 t 求两次导数：</p>\[\varphi'(t)=E[iXe^{itX}],\qquad\varphi''(t)=E[-X^2e^{itX}].\]<p>因为指数模长为 1，所需上界分别是 |X| 和 X²，已有相应可积性。让 t=0，指数因子变 1，就得到 \(\varphi'(0)=iEX\)、\(\varphi''(0)=-E[X^2]\)。更高阶同理。只有满足所需矩条件后，才用这条求导捷径。</p>
+<p id="characteristic-uniqueness">分布与特征函数一一对应，故两个特征函数完全相同就能断定两个分布相同。若特征函数绝对可积，可用反演式恢复一个连续版本的密度：</p>\[f(x)=\frac1{2\pi}\int_{-\infty}^{\infty}e^{-itx}\varphi(t)\,dt.\]<p>算 EX 与 DX 时尤其注意负号：\(EX=\varphi'(0)/i\)，\(E[X^2]=-\varphi''(0)\)，\(DX=-\varphi''(0)-(\varphi'(0)/i)^2\)。</p>
+<h3>多维特征函数的定义：给每个随机量配一个参数</h3><p>现在 X₁,…,Xₙ 是 n 个随机变量，粗体 X 表示由它们组成的向量；粗体 t=(t₁,…,tₙ) 是我们指定的 n 个实数参数。把 tⱼXⱼ 全部相加、放进复指数再求平均，定义为它们的联合特征函数：</p>\[\varphi_{\boldsymbol X}(\boldsymbol t)=E\exp\!\left(i\sum_{j=1}^nt_jX_j\right).\]<p>仍满足在原点为 1、模长≤1、\(\varphi(-\boldsymbol t)=\overline{\varphi(\boldsymbol t)}\)、在 \(\mathbb R^n\) 上一致连续。其余性质可以直接从定义读出来：</p>
+<ul>
+<li>
+<b>线性组合：</b>\(Y=\sum_ja_jX_j\Rightarrow\varphi_Y(t)=\varphi_{\boldsymbol X}(a_1t,\ldots,a_nt)\)。</li>
+<li>
+<b>边缘：</b>只留下前 k 个坐标的 t，其他 t 设 0；因为相应的指数因子变成 1。</li>
+<li>
+<b>相互独立：</b>当且仅当对所有向量 t，有 \(\varphi_{\boldsymbol X}(\boldsymbol t)=\prod_j\varphi_{X_j}(t_j)\)。只在 \(t_1=\cdots=t_n\) 这条线上检查乘积不够。</li>
+<li>
+<b>混合矩：</b>在相应可换序的矩存在条件下，对所需坐标求偏导，然后让所有 t=0。</li>
+</ul>\[E\left[\prod_{j=1}^nX_j^{k_j}\right]=i^{-K}\left.\frac{\partial^K\varphi(\boldsymbol t)}{\partial t_1^{k_1}\cdots\partial t_n^{k_n}}\right|_{\boldsymbol t=0},\qquad K=\sum_jk_j.\]<p>一个方便的充分条件是 \(E\|\boldsymbol X\|^K&lt;\infty\)。例如 \(E[XY]=-\partial_{t_1}\partial_{t_2}\varphi(0,0)\)。</p>
+<h3>Laplace 变换的定义：给非负量的较大取值较小权重</h3><p>设 X≥0。选 s&gt;0，把数值 x 换成权重 e⁻ˢˣ 后求平均，得到函数 LX(s)，叫<strong>X 的分布的 Laplace 变换</strong>。较大的 x 被衰减得更多。这与特征函数的单位圆箭头是不同的编码。公式也允许 s 为复数，此时 Re s 表示它的实部，要求 Re s&gt;0 以保证衰减：</p>\[L_X(s)=E[e^{-sX}]=\int_{[0,\infty)}e^{-sx}\,dF_X(x),\qquad X\ge0,\ \operatorname{Re}s&gt;0.\]<p>指数变成衰减权重，对寿命、等待时间等非负变量很自然。对独立非负变量的和仍可相乘，\(L_{X+Y}=L_XL_Y\)。若有密度，它就是 \(\int_0^\infty e^{-sx}f_X(x)dx\)；若有原点的概率质量，必须用 dF 的定义把它计入。</p>
+<details open>
+<summary>普通 Laplace 变换的 6 条运算规则</summary>
+<p>这里转换对象是一个普通函数 h，不再直接写成随机变量的分布。设 \(H(s)=\mathcal Lh(s)=\int_0^\infty e^{-sx}h(x)dx\)。一个方便的使用条件是：h 在有限区间分段光滑，且 |h(x)|≤Meᵃˣ（x 足够大），并取 Re s&gt;a。涉及 h′ 的运算还要保证该导数在对应衰减权重下可积。</p>
+<div class="table-wrap">
+<table>
+<tr>
+<th>规则</th>
+<th>直观解释</th>
+</tr>
+<tr>
+<td>\(\mathcal L\{h'\}=sH(s)-h(0+)\)</td>
+<td>分部积分；别漏初始值。</td>
+</tr>
+<tr>
+<td>\(\mathcal L\{\int_0^xh(u)du\}=H(s)/s\)</td>
+<td>积分变成除 s。</td>
+</tr>
+<tr>
+<td>\(\mathcal L\{e^{-ax}h(x)\}=H(s+a)\)</td>
+<td>两个衰减指数合并。</td>
+</tr>
+<tr>
+<td>\(\mathcal L\{h(x-a)\mathbf1_{x\ge a}\}=e^{-as}H(s),\ a\ge0\)</td>
+<td>把整个信号向后延迟 a。</td>
+</tr>
+<tr>
+<td>\(\mathcal L(h*g)=H(s)G(s)\)</td>
+<td>这里 G(s)=ℒg(s)。卷积 \((h*g)(x)=\int_0^xh(u)g(x-u)du\) 变乘法；<a href="#sum-distribution">独立和的密度</a>就是这种结构。</td>
+</tr>
+<tr>
+<td>\(h(x)=\frac1{2\pi i}\int_{c-i\infty}^{c+i\infty}e^{sx}H(s)ds\)</td>
+<td>在上述分段光滑与指数增长条件下，取 c&gt;a；对 x&gt;0 的连续点恢复 h(x)，跳点则取左右极限平均。积分沿复平面的竖直线进行。</td>
+</tr>
+</table>
+</div>
+<p>本章做题优先掌握“换元、乘法、识别分布”。最后一条知道是恢复原函数的工具即可，不能把积分误读成沿实轴积分。</p>
+</details>
+<h3 id="pgf">概率母函数的定义：让每个整数概率占据一个幂次</h3><p>X 只取非负整数，记 pₖ=P(X=k)。选择参数 z，把取值 k 变成 zᵏ 后平均，得到 GX(z)，称<strong>概率母函数</strong>。它就是“常数项放 p₀，z 项放 p₁，z² 项放 p₂……”这份概率清单的编码：</p>\[G_X(z)=E[z^X]=\sum_{k=0}^\infty p_kz^k,\qquad X\in\{0,1,2,\ldots\},\quad |z|\le1.\]<p>它的好处是：每个概率就是对应幂次的系数。约定 \(z^0=1\)，即使 z=0。这里写 z，是为了和 Laplace 的参数 s 区分。z 可以取单位圆盘内的复数，特别包含实数区间 [−1,1]。</p>
+<ol>
+<li>
+<b>唯一性与取系数：</b>\(p_k=G^{(k)}(0)/k!\)，\(|G(z)|\le G(1)=1\)。分母的 k! 不可漏。</li>
+<li>
+<b>仿射变换：</b>若 a,b 为非负整数，\(G_{aX+b}(z)=z^bG_X(z^a)\)。</li>
+<li>
+<b>独立和：</b>\(G_{X_1+\cdots+X_n}(z)=\prod_jG_{X_j}(z)\)；同分布时为 \([G(z)]^n\)。</li>
+<li>
+<b>求矩：</b>\(G^{(k)}(1-)=E[X(X-1)\cdots(X-k+1)]\)，相应矩有限时成立。因此 \(EX=G'(1-)\)，\(E[X^2]=G''(1-)+G'(1-)\)。</li>
+<li>
+<b>随机项数的和：</b>N 与整个 \(X_j\) 序列独立、各项独立同分布且非负整数时，\(S=\sum_{j=1}^NX_j\) 的母函数为 \(G_S(z)=G_N(G_X(z))\)。N=0 时和为 0。</li>
+</ol>
+<details open id="pgf-coefficients"><summary>母函数里，为什么求导能取概率和矩？</summary><p>看 G(z)=p₀+p₁z+p₂z²+…：第 k 项求 k 次导数后变成 k!pₖ；更低次项导没了，更高次项还含 z。再设 z=0，只留下 k!pₖ，所以 \(p_k=G^{(k)}(0)/k!\)。</p><p>在 z=1 附近则是在读取矩。逐项求导：</p>\[G'(z)=\sum_{k=1}^\infty kp_kz^{k-1},\qquad G''(z)=\sum_{k=2}^\infty k(k-1)p_kz^{k-2}.\]<p>让 z 从左侧趋 1，幂次都趋 1，因此 G′(1−)=EX、G″(1−)=E[X(X−1)]。因为 X²=X(X−1)+X，二阶原点矩才等于 G″(1−)+G′(1−)，不是单独的二阶导数。有限矩条件保证相应结果有限。</p></details><p>最后一条为什么是“套函数”？先知道 N=n，得到 \([G_X(z)]^n\)；再按 N 的分布加权，恰好把 \(G_X(z)\) 塞进 \(G_N\)。例 1.7 用特征函数做同一件事。</p>
+<details id="distribution-table">
+<summary>常用分布速查：概率、均值方差与特征函数</summary>
+<p>各模型的场景、参数和支持范围已在<a href="#common-distributions">分布工具箱</a>讲解。以下集中列出编码，便于理解后回忆。未写明的概率或密度取值均为 0；n 为正整数，λ、α、β、σ² 为正数。</p>
+<div class="table-wrap">
+<table>
+<tr>
+<th>分布与约定</th>
+<th>概率 / 密度</th>
+<th>EX / DX</th>
+<th>特征函数 φ(t)</th>
+</tr>
+<tr>
+<td>Bernoulli(p)</td>
+<td>\(P(X=0)=1-p,\ P(X=1)=p\)</td>
+<td>\(p,\ p(1-p)\)</td>
+<td>\(1-p+pe^{it}\)</td>
+</tr>
+<tr>
+<td>Bin(n,p)</td>
+<td>\(\binom nkp^k(1-p)^{n-k},\ k=0,\ldots,n\)</td>
+<td>\(np,\ np(1-p)\)</td>
+<td>\((1-p+pe^{it})^n\)</td>
+</tr>
+<tr>
+<td>Poisson(λ)</td>
+<td>\(e^{-\lambda}\lambda^k/k!,\ k\ge0\)</td>
+<td>\(\lambda,\lambda\)</td>
+<td>\(e^{\lambda(e^{it}-1)}\)</td>
+</tr>
+<tr>
+<td>几何(p)，从 1 开始</td>
+<td>\(p(1-p)^{k-1},\ k\ge1\)</td>
+<td>\(1/p,\ (1-p)/p^2\)</td>
+<td>\(pe^{it}/(1-(1-p)e^{it})\)</td>
+</tr>
+<tr>
+<td>U(a,b)，a&lt;b</td>
+<td>\(1/(b-a),\ a&lt;x&lt;b\)</td>
+<td>\((a+b)/2,\ (b-a)^2/12\)</td>
+<td>\((e^{itb}-e^{ita})/[it(b-a)]\)</td>
+</tr>
+<tr>
+<td>Exp(λ)，λ 是速率</td>
+<td>\(\lambda e^{-\lambda x},\ x&gt;0\)</td>
+<td>\(1/\lambda,\ 1/\lambda^2\)</td>
+<td>\(\lambda/(\lambda-it)\)</td>
+</tr>
+<tr>
+<td>Gamma(α,β)，β 是速率</td>
+<td>\(\beta^\alpha x^{\alpha-1}e^{-\beta x}/\Gamma(\alpha),\ x&gt;0\)</td>
+<td>\(\alpha/\beta,\alpha/\beta^2\)</td>
+<td>\((1-it/\beta)^{-\alpha}\)</td>
+</tr>
+<tr>
+<td>χ²(n)</td>
+<td>Gamma(n/2,1/2)</td>
+<td>\(n,\ 2n\)</td>
+<td>\((1-2it)^{-n/2}\)</td>
+</tr>
+<tr>
+<td>N(μ,σ²)</td>
+<td>\(e^{-(x-\mu)^2/(2\sigma^2)}/\sqrt{2\pi\sigma^2}\)</td>
+<td>\(\mu,\sigma^2\)</td>
+<td>\(e^{i\mu t-\sigma^2t^2/2}\)</td>
+</tr>
+</table>
+</div>
+<p>均匀分布公式在 t=0 时取极限 1。Gamma 的 \(\Gamma(\alpha)=\int_0^\infty u^{\alpha-1}e^{-u}du\)，且 \(\Gamma(\alpha+1)=\alpha\Gamma(\alpha)\)。参数写“速率”是因为另一些书用尺度 1/β；先看密度再套公式。</p>
+</details>
+<details open id="distribution-characteristic-derivations"><summary>速查表中的特征函数，也逐项说明怎么来的</summary><p><b>Bernoulli 与二项：</b>一次 0/1 试验按定义有 φB(t)=q+peⁱᵗ。n 次独立试验相加，把 n 个这样的函数相乘，得到 (q+peⁱᵗ)ⁿ。独立相乘的原因是 eⁱᵗ⁽ˣ⁺ʸ⁾=eⁱᵗˣeⁱᵗʸ，而独立让乘积期望拆开。</p><p><b>Poisson：</b>把分布律代入定义，直接识别指数级数：</p>\[\varphi_K(t)=\sum_{k=0}^\infty e^{itk}e^{-\lambda}\frac{\lambda^k}{k!}=e^{-\lambda}\sum_{k=0}^\infty\frac{(\lambda e^{it})^k}{k!}=e^{\lambda(e^{it}-1)}.\]
+<p><b>几何：</b><a href="#ex5">例 1.5</a>完整把 pqᵏ⁻¹ 代入、提出首项、求等比级数，得到 peⁱᵗ/(1−qeⁱᵗ)。</p><p><b>均匀：</b>按常数密度直接积分，t≠0 时：</p>\[\varphi_X(t)=\frac1{b-a}\int_a^b e^{itx}dx=\frac{e^{itb}-e^{ita}}{it(b-a)}.\]<p>t=0 时应按定义等于 E1=1，式中 0/0 形式通过取极限补上，不表示特征函数不存在。</p><p><b>标准正态：</b>用 g 表示前面推导的标准正态密度，令 H(t)=∫eⁱᵗᶻg(z)dz。已有 g′(z)=−zg(z)，对 t 求导后分部积分：</p>\[H'(t)=i\int ze^{itz}g(z)dz=-i\int e^{itz}g'(z)dz=-tH(t).\]<p>边界项 eⁱᵗᶻg(z) 在 ±∞ 为 0。H(0)=1，于是一阶方程的解是 H(t)=e⁻ᵗ²⁄²。对 X=μ+σZ，再把平移缩放代入，得到：</p>\[\varphi_X(t)=e^{i\mu t}H(\sigma t)=e^{i\mu t-\sigma^2t^2/2}.\]
+<p><b>指数、Gamma、χ²：</b>下一段给出一般 Gamma 的积分推导。代入 α=1 得到指数，代入 α=n/2、β=1/2 得到 χ²，因此不再需要把三个公式分别硬记。</p></details>
+<details id="gamma-transform-proof">
+<summary>Gamma 的特征函数怎样算？不靠猜，也不必用复数换元</summary>
+<p>令 X~Gamma(α,β)，取 \(\varphi(t)=\frac{\beta^\alpha}{\Gamma(\alpha)}\int_0^\infty x^{\alpha-1}e^{-(\beta-it)x}dx\)。指数衰减保证各阶矩有限。对 \(x^\alpha e^{-(\beta-it)x}\) 的导数在 0 到 ∞ 积分，边界项为 0：</p>\[(\beta-it)\int_0^\infty x^\alpha e^{-(\beta-it)x}dx=\alpha\int_0^\infty x^{\alpha-1}e^{-(\beta-it)x}dx.\]<p>左边积分恰好出现在 φ′(t) 里，因此：</p>\[\varphi'(t)=\frac{i\alpha}{\beta-it}\varphi(t),\qquad\varphi(0)=1.\]<p>解这个一阶方程，或直接求导核验，得到唯一解：</p>\[\boxed{\varphi(t)=(1-it/\beta)^{-\alpha}}.\]<p>复数幂选取从 t=0 的值 1 连续延伸的分支。α=1 是 Exp(β) 的特征函数；n 个独立 Exp(β) 相加，特征函数就是它的 n 次方，于是确实得到 Gamma(n,β)。α=n/2、β=1/2 则是例 1.6 的 χ² 特征函数。</p>
+</details>
+<div class="takeaway">记忆抓手：求独立和 → 乘特征函数；求矩 → 在 0 求导；随机个数 → 先固定个数再平均。</div>
+</section>
+<section id="normal" class="lesson">
+<div class="section-num">05 / 学习指导 1.1 · 第 5 点</div>
+<h2>多维正态：多个量一起服从“钟形规律”</h2>
+<p class="intuition">一维正态是一座钟形山；二维正态是铺在平面上的一座山。均值决定山中心，协方差矩阵决定它往哪个方向伸长。</p>
+<h3>联合正态的定义：任意加权相加后，仍是一维正态</h3>
+<p>n 个随机量 X₁,…,Xₙ <strong>联合正态</strong>的定义是：任取确定的实数权重 a₁,…,aₙ，线性组合 a₁X₁+…+aₙXₙ 都服从一维正态，允许方差为 0 的常数。这句话限制了它们一起变化的方式，比“每个 Xⱼ 单独正态”强得多。</p>
+<p>把这些变量竖着排成列，记为粗体 X；小写粗体 x 是这组变量某次可能的数值向量。用 μ（粗体 mu）记录每个分量的均值，用 B 记录协方差矩阵，即第 j 行 k 列是 cov(Xⱼ,Xₖ)。记号 X~Nₙ(μ,B) 就是在给这个联合分布命名，n 是变量个数。</p><p>当 B 正定时，任何非零加权组合都有正方差，随机向量不挤在低维平面上，可以写出普通 n 维密度。先说明符号：上标 T 是转置，B⁻¹ 是逆矩阵，|B| 是行列式。这些量合起来形成下面的<strong>多元正态密度公式</strong>：</p>\[f(\boldsymbol x)=\frac{1}{(2\pi)^{n/2}|B|^{1/2}}\exp\!\left[-\frac12(\boldsymbol x-\boldsymbol\mu)^\top B^{-1}(\boldsymbol x-\boldsymbol\mu)\right].\]<p>\(|B|\) 是行列式，\(B^{-1}\) 是逆矩阵。括号里的二次型相当于“按各方向实际波动大小校准过的距离平方”。B 奇异时没有这个 n 维普通密度，但仍可定义退化正态，其概率集中在更低维的平面上。</p><details open id="normal-density-derivation"><summary>长密度公式怎样来？从相互独立的标准钟形出发</summary><p>先取 n 个独立标准正态 Zⱼ，联合密度是各自 g(zⱼ) 的乘积：</p>\[f_{\boldsymbol Z}(\boldsymbol z)=(2\pi)^{-n/2}\exp[-(z_1^2+\cdots+z_n^2)/2].\]<p>用一个确定的可逆矩阵 A 对它们缩放、混合，再平移：X=μ+AZ。A 是一张系数表，第 j 行说明 Xⱼ 用哪些 Z、各取多大权重，不是随机量。均值为 μ，协方差为 B=AAᵀ。任意正定 B 都可用这种方式得到。</p><p>变量变换反过来为 z=A⁻¹(x−μ)。小体积会被 A 放大 |det A| 倍，所以密度要除以这个倍数：</p>\[f_{\boldsymbol X}(\boldsymbol x)=\frac{f_{\boldsymbol Z}(A^{-1}(\boldsymbol x-\boldsymbol\mu))}{|\det A|}.\]<p>接下来只是两个矩阵恒等式：|B|=(det A)²，且 B⁻¹=A⁻ᵀA⁻¹。因此标准钟形里的 z₁²+…+zₙ²，替换后就是 (x−μ)ᵀB⁻¹(x−μ)；分母 |det A| 替换为 |B|¹⁄²。这就得到前面的完整密度。</p><p><b>公式说明什么：</b>它仍然是“按校准后的偏差平方衰减”，只是不同方向的宽度与倾斜由协方差 B 决定。B 奇异时不能作这个可逆体积变换，故没有这种全维密度，而不是随机向量不再存在。</p></details>
+<p class="formula-name">多元正态的特征函数公式：把同一个线性构造换成编码</p><p>粗体 t=(t₁,…,tₙ) 是特征函数的参数向量。由 X=μ+AZ，指数中的 tᵀX=tᵀμ+(Aᵀt)ᵀZ；再用独立标准正态的特征函数相乘，便得到：</p>\[\varphi_{\boldsymbol X}(\boldsymbol t)=\exp\!\left(i\boldsymbol t^\top\boldsymbol\mu-\frac12\boldsymbol t^\top B\boldsymbol t\right).\]<p>具体地，乘积中的指数平方和是 \(\|A^\top\boldsymbol t\|^2=\boldsymbol t^\top AA^\top\boldsymbol t=\boldsymbol t^\top B\boldsymbol t\)，所以密度与特征函数都使用同一个协方差结构。这个特征函数公式在 B 奇异时仍有效。</p><h3>4 个核心结论</h3>
+<ol>
+<li>
+<b>线性组合仍正态：</b>\(Y=\boldsymbol a^\top\boldsymbol X\sim N(\boldsymbol a^\top\boldsymbol\mu,\boldsymbol a^\top B\boldsymbol a)\)。展开方差就是 \(\sum_{j,k}a_ja_k\operatorname{cov}(X_j,X_k)\)。</li>
+<li>
+<b>抽出部分分量仍联合正态：</b>均值抽出相应坐标，B 抽出相应行与列的子矩阵。丢掉其他分量不用重新积分。</li>
+<li>
+<b>线性变换仍联合正态：</b>若 \(\boldsymbol Y=A\boldsymbol X+\boldsymbol b\)，则 \(\boldsymbol Y\sim N_m(A\boldsymbol\mu+\boldsymbol b,ABA^\top)\)。若改用行向量写 \(Y=XC\)，对应的协方差写成 \(C^\top BC\)；这只是向量摆放方式不同。本套教程固定用列向量公式。</li>
+<li>
+<b>联合正态时，不相关等价于独立：</b>B 的所有非对角元为 0，就能把联合特征函数拆成各边缘特征函数的乘积。</li>
+</ol>
+<p>这些性质的来源也能逐条说明：第一条就是联合正态的定义，加权均值和方差来自<a href="#moments">数字特征公式</a>；抽取部分分量，是把不需要的权重设为 0；对 Y=AX+b 的任意线性组合，又是 X 的线性组合，因此 Y 仍联合正态，均值协方差逐项展开得到。</p><p>最后一条利用特征函数：若所有非对角协方差为 0，则 \(\boldsymbol t^\top B\boldsymbol t=\sum_jB_{jj}t_j^2\)，上面的指数就拆成每个坐标各一项，特征函数分解成边缘乘积，因而独立。反向由一般的“独立推出协方差 0”即可。</p><p>
+<b>算一个：</b>\(EX=1,EY=2,DX=4,DY=9,\operatorname{cov}(X,Y)=1\)，且 (X,Y) 联合正态。则 \(2X-Y\) 的均值为 0，方差为 \(4\cdot4+9-4\cdot1=21\)，所以 \(2X-Y\sim N(0,21)\)。这里 X,Y 不独立，绝不能把交叉项丢掉。</p>
+<details id="normal-matrix">
+<summary>矩阵符号看不清时，用一个二元例子展开</summary>
+<p>上面例子的均值向量与协方差矩阵是：</p>\[\boldsymbol\mu=\begin{pmatrix}1\\2\end{pmatrix},\quad B=\begin{pmatrix}4&amp;1\\1&amp;9\end{pmatrix},\quad |B|=4\cdot9-1^2=35,\quad B^{-1}=\frac1{35}\begin{pmatrix}9&amp;-1\\-1&amp;4\end{pmatrix}.\]<p>对 \(d_1=x-1,d_2=y-2\)，密度指数里的距离平方为 \((9d_1^2-2d_1d_2+4d_2^2)/35\)。它把两个坐标的尺度和相关性都考虑进去。aᵀBa 则表示先矩阵相乘再得到一个标量，不是逐元素平方。</p>
+<p>“半正定”要求任意 a 都有 aᵀBa≥0；“正定”还要求每个非零 a 都严格大于 0。这正是任意非零线性组合的方差是否严格为正。</p>
+<p>若 Y=X 且 X~N(0,1)，则 B 的四个元素都为 1，行列式为 0，随机向量全落在 y=x 直线上。它仍联合正态，但没有铺满平面的二维密度；特征函数和线性变换公式仍有效。这就是退化正态。</p>
+</details>
+<details>
+<summary>为什么“各自正态”还不够？一个反例</summary>
+<p>令 \(Z\sim N(0,1)\)，S 独立地等概率取 ±1，取 X=Z，Y=SZ。X,Y 各自标准正态，且 \(E[XY]=E[S]E[Z^2]=0\)。但 \(|X|=|Y|\)，彼此有明显依赖，不独立。它们不是联合正态：X+Y 有 1/2 的概率恰好为 0，另外一半连续波动，不是正态。</p>
+</details>
+<div class="takeaway">记忆抓手：“不相关 ⇒ 独立”前面，必须看见“联合正态”四个字。</div>
+</section>
+<section id="conditional" class="lesson">
+<div class="section-num">06 / 学习指导 1.1 · 第 6 点</div>
+<h2>条件期望：知道一条线索后，重新估计平均值</h2>
+<p class="intuition">普通期望只给一个总平均；条件期望给一张“如果知道 Y，就该怎样预测 X”的对照表。</p>
+<h3>先按组平均，再按组的大小平均</h3>
+<p>设 Y 记录天气，X 记录销量。雨天平均卖 20，晴天平均卖 80。若雨天概率 1/4、晴天概率 3/4，则总平均是 \(20\cdot1/4+80\cdot3/4=65\)。</p>
+<p>这里 \(E[X\mid Y=\text{雨}]\) 是一个数 20。\(E[X\mid Y]\) 则是一个随机变量：天气未揭晓时，它可能是 20，也可能是 80。<strong>竖线后的信息还随机，得到的预测也随机。</strong>
+</p>\[g(y)=E[X\mid Y=y]=\sum_xx\,p_{X\mid Y}(x\mid y)\quad\text{或}\quad\int_{-\infty}^\infty xf_{X\mid Y}(x\mid y)\,dx,\]\[E[X\mid Y]=g(Y).\]<p>一般写法是 \(\int x\,dF_{X\mid Y}(x\mid y)\)。有多个条件变量时只是把 y 换成向量，比如 \(E[X_i\mid X_1,\ldots,X_{i-1},X_{i+1},\ldots,X_n]\)。以下恒等式在相应可积条件下成立，随机变量间的等式理解为几乎处处相等。</p>
+<h3 id="total-expectation">全期望公式：分组没有丢失或增加权重</h3>\[EX=E[E(X\mid Y)]=\sum_yE[X\mid Y=y]p_Y(y)\quad\text{（离散 Y）},\]\[EX=\int E[X\mid Y=y]f_Y(y)dy\quad\text{（Y 有密度）}.\]<p>离散情形可以把它完全展开：</p>\[\sum_y\left(\sum_xx\frac{p(x,y)}{p_Y(y)}\right)p_Y(y)=\sum_xx\sum_yp(x,y)=EX.\]<p>概率为 0 的组不影响总平均，跳过即可。E|X| 有限保证换序与相减安全；非负 X 时也可允许结果为 +∞。这条公式是第二章按人数、随机时长或随机强度取条件的基础。</p>
+<h3>四条性质：用“知道多少信息”理解</h3>
+<div class="table-wrap">
+<table>
+<tr>
+<th>性质</th>
+<th>为什么</th>
+</tr>
+<tr>
+<td>\(E[E(X\mid Y)]=EX\)</td>
+<td>先算每组平均，再按组概率平均，不会改变总平均。这是全期望公式。</td>
+</tr>
+<tr>
+<td>独立时 \(E[X\mid Y]=EX\)</td>
+<td>新线索不改变 X 的分布，因此也不改变均值。反过来不成立。</td>
+</tr>
+<tr>
+<td>\(E[Xh(Y)\mid Y]=h(Y)E[X\mid Y]\)</td>
+<td>已知 Y 后，h(Y) 就是已知数，可提出条件平均之外。不是任意随机量都能提出去。</td>
+</tr>
+<tr>
+<td>\(E[E(X\mid Y,Z)\mid Y]=E[X\mid Y]\)</td>
+<td>先按更细的信息预测，再退回较粗的信息，等于直接按较粗信息预测，称塔式性质。</td>
+</tr>
+</table>
+</div>
+<p>同样，把条件扩展到多个变量，就是从 \((X_1,\ldots,X_{n-1})\) 的细信息，退回 \((X_1,\ldots,X_k)\) 的粗信息。<strong>两层信息必须有包含关系</strong>，不能对两个无关条件任意“消掉里面一层”。</p>
+<p>另有常用的线性性 \(E[aX+bZ\mid Y]=aE[X\mid Y]+bE[Z\mid Y]\)。</p>
+<details open>
+<summary>一眼看懂连续条件：沿着切片重新分配密度</summary>
+<p>可以先限制在 \(y-\varepsilon&lt;Y\le y+\varepsilon\) 的窄带里，再让 ε 趋 0。在有联合密度且满足常规条件时，就是：</p>\[F_{X\mid Y}(x\mid y)=\int_{-\infty}^x\frac{f(u,y)}{f_Y(y)}\,du\quad(f_Y(y)&gt;0).\]<p>别把 \(E[X\mid Y]\) 理解成“直接把 X 的表达式里的字母替换一下”。一般要先找到条件分布，再按该分布求平均。例 1.9 会完整做一遍。</p>
+</details>
+<h3 id="total-variance">全方差公式：组内波动 + 组与组的均值差异</h3>
+<p>设 EX² 有限，记 g(Y)=E[X|Y]。条件方差是组内的平均平方偏差：</p>\[D(X\mid Y)=E[(X-g(Y))^2\mid Y].\]<p>把总偏差拆成 \(X-EX=(X-g(Y))+(g(Y)-EX)\)。平方后出现的交叉项期望为 0，因为给定 Y 时，g(Y)−EX 已知，且 \(E[X-g(Y)\mid Y]=0\)。所以：</p>\[\boxed{DX=E[D(X\mid Y)]+D(E[X\mid Y])}.\]<p>第一项平均“同一组内部有多散”，第二项衡量“不同组的平均值相差多大”。第二章混合 Poisson 的额外方差，正来自第二项。</p>
+<details>
+<summary>用四个等概率结果核对一次</summary>
+<p>第一组的 X 为 0 或 2，第二组的 X 为 2 或 4，各组概率 1/2，组内各值也各占一半。两组均值分别 1、3，组内方差都为 1。总均值 2，总方差可以直接算成 \((4+0+0+4)/4=2\)，也可以算成组内平均方差 1，加组均值的方差 \(((1-2)^2+(3-2)^2)/2=1\)，结果相同。</p>
+</details>
+<h3 id="random-sum">为什么随机个数求和，要先知道个数？</h3>
+<p>令 N 是一小时顾客数，\(X_j\) 是第 j 位顾客消费额，各消费额独立同分布，N 与整个消费额序列独立，且 \(E|X_1|&lt;\infty,EN&lt;\infty\)。总消费 \(S=\sum_{j=1}^NX_j\) 看起来项数都不固定；但知道 N=n 后，它就是普通 n 项和。</p>\[E[S\mid N=n]=n\mu,\quad E[S\mid N]=N\mu,\quad ES=E[N\mu]=\mu EN,\qquad\mu=EX_1.\]<p>进一步设 \(E[X_1^2]&lt;\infty, E[N^2]&lt;\infty\)，记 σ²=DX₁。给定 N=n，独立性给出 D(S|N=n)=nσ²；用刚证明的全方差公式：</p>\[DS=E[D(S\mid N)]+D(E[S\mid N])=\sigma^2EN+\mu^2DN.\]<p>两项分别是“同样个数时每笔消费的波动”与“顾客个数本身的波动”。若 N 为 Poisson(λ)，得到 \(ES=\lambda\mu\)、\(DS=\lambda(\sigma^2+\mu^2)\)。例 1.7 会继续求完整特征函数。</p>
+<div class="takeaway">记忆抓手：把最让你头疼的随机量暂时固定；算完后再对它平均。条件期望的本质就是分组。</div>
+</section>
+<section id="convergence" class="lesson">
+<div class="section-num">07 / 学习指导 1.1 · 第 7 点</div>
+<h2>收敛：你说“越来越接近”，到底是哪一种？</h2>
+<p class="intuition">把随机变量序列想成很多观众同时观看的连续剧：n 是集数，每位观众的一整条剧情是一条样本路径。不同收敛方式，在检查不同的东西。</p>
+<h3>四种收敛的定义：先说清每个字母是谁</h3><p>X₁、X₂、……是一列随机变量，n 是序号，n→∞ 表示沿序列继续往后看。X 是我们想比较的候选极限随机变量，它可以随机，也可以是一个常数。ε（epsilon）是我们自己规定的正误差门槛。下面四种定义用了不同方式判断“接近”：</p>
+<div class="table-wrap">
+<table>
+<tr>
+<th>方式</th>
+<th>精确定义</th>
+<th>人话</th>
+</tr>
+<tr>
+<td>依分布 \(X_n\xrightarrow d X\)</td>
+<td>\(F_n(x)\to F_X(x)\)，对 F 的每个连续点 x</td>
+<td>只看每一集所有观众的分数直方图，形状趋于目标分布；不管某个观众的值是否接近 X。</td>
+</tr>
+<tr>
+<td>依概率 \(X_n\xrightarrow P X\)</td>
+<td>任意 ε&gt;0，\(P(|X_n-X|\ge\varepsilon)\to0\)</td>
+<td>集数很大时，随机抓一个观众，看见明显偏差的概率很小。</td>
+</tr>
+<tr>
+<td>r 阶 / \(L^r\) 收敛</td>
+<td>\(E|X_n-X|^r\to0\)，r&gt;0，相关绝对矩有限</td>
+<td>不只看偏离的人占多少，也把偏离幅度的 r 次方计入平均。</td>
+</tr>
+<tr>
+<td>几乎处处 / 几乎必然</td>
+<td>\(P(\lim_{n\to\infty}X_n=X)=1\)</td>
+<td>对概率 1 的观众，各自的整条剧情最终会稳定靠近目标。</td>
+</tr>
+</table>
+</div>
+<p>
+<b>分布函数的弱收敛：</b>在极限 F 的连续点满足 \(F_n(x)\to F(x)\)，就记 \(F_n\Rightarrow F\)。用它定义依分布收敛时，F 必须是某个随机变量的分布函数。这里必须要求 F 是合法的分布函数。比如 Xₙ=n 时，每个固定有限 x 的 Fₙ(x) 最终都为 0，但恒为 0 的函数右端不趋 1，不能当作一个实随机变量的极限分布；这些概率质量“跑到越来越远”了。</p>
+<p>为什么只要求连续点？常数 \(X_n=1/n\to0\)，但在 x=0，\(F_n(0)=0\)，目标 \(F_X(0)=1\)，永远不相等。跳点处不要求，分布收敛依然成立。</p>
+<details id="convergence-quantifiers">
+<summary>依概率与几乎处处，差的是“检查一个时刻”还是“整条路径”</summary>
+<p>依概率收敛：固定容忍误差 ε 和小概率 δ，足够往后看，每一个单独时刻偏离至少 ε 的概率都小于 δ；但偏离者可能每次换一批，或者同一个人仍偶尔偏离。</p>
+<p>几乎处处收敛：对概率 1 的结果 ω，沿这条路径总能找到一个起点 N(ω,ε)，以后<strong>所有</strong>时刻都不会再偏离 ε。不同路径可有不同起点，不要求全体共用同一个 N。</p>
+<p>因此“每集偏离者越来越少”比“几乎每个观众最终不再偏离”弱。下面第三个例子直接证明这点，不需要调用另一本书的定理。</p>
+</details>
+<div class="flow">
+<span>几乎处处收敛</span>
+<b>↘</b>
+<span>依概率收敛</span>
+<b>→</b>
+<span>依分布收敛</span>
+<br>
+<span>r 阶收敛</span>
+<b>↗</b>
+</div>
+<p>前两种强条件都推出依概率，后者推出依分布。r 阶到依概率直接用 Markov：\(P(|X_n-X|\ge\varepsilon)\le E|X_n-X|^r/\varepsilon^r\)。<strong>反向通常不成立；几乎处处与 r 阶之间也没有一般的互推。</strong>依分布收敛到常数 c 是特例：这时也依概率收敛到 c。</p>
+<details open id="convergence-implications"><summary>为什么箭头成立？每条用到的是哪条已讲过的规则？</summary><p><b>r 阶 ⇒ 依概率：</b>对非负误差的 r 次方用 Markov，不再需要猜偏离概率：</p>\[P(|X_n-X|\ge\varepsilon)\le E|X_n-X|^r/\varepsilon^r\to0.\]
+<p><b>几乎处处 ⇒ 依概率：</b>固定 ε，令 A_N 表示“从 N 起，仍有某个时刻偏离至少 ε”。这些事件随 N 增大而缩小。路径几乎处处收敛，说明它们共同留下的事件（永远还会出现这种偏离）概率为 0。由<a href="#probability-limits">概率连续性</a>，P(A_N)→0，而每个 n≥N 的偏离事件都在 A_N 里，所以单次偏离概率也趋 0。</p><p><b>依概率 ⇒ 依分布：</b>若 Xₙ 与 X 的差小于 ε，那么 X≤x−ε 一定保证 Xₙ≤x，而 Xₙ≤x 一定保证 X≤x+ε。只有误差大的那部分可能破坏包含关系，因此：</p>\[F_X(x-\varepsilon)-P(|X_n-X|\ge\varepsilon)\le F_{X_n}(x)\le F_X(x+\varepsilon)+P(|X_n-X|\ge\varepsilon).\]<p>先让 n→∞，两个误差概率趋 0；再让 ε↓0。在 Fₓ 连续的 x 处，左右夹到同一个 Fₓ(x)，所以分布函数收敛。这也解释了定义为何只要求在极限 CDF 的连续点检查。</p></details><details open id="convergence-counterexamples">
+<summary>三个小例子，帮助你真正区分</summary>
+<p>
+<b>① 同分布却不接近：</b>令 X 是公平的 0/1 随机变量，\(X_n=1-X\)。每个 \(X_n\) 都与 X 同分布，因此依分布收敛于 X；但 \(|X_n-X|=1\)，完全不依概率收敛于 X。</p>
+<p>
+<b>② 概率很小但幅度很大：</b>\(U\sim U(0,1)\)，\(X_n=n\mathbf1_{\{U&lt;1/n\}}\)。对固定 U&gt;0，n 足够大后一直是 0，所以几乎处处趋 0，也依概率趋 0；但 \(E|X_n|=1\)，不按一阶平均误差趋 0。<strong>少数巨大值能撑住期望。</strong>
+</p>
+<p>
+<b>③ 单次偏离少，整条路径却不稳定：</b>让 Xₙ 相互独立，P(Xₙ=1)=1/(n+1)，否则为 0。对任意 0&lt;ε≤1，\(P(|X_n|\ge\varepsilon)=1/(n+1)\to0\)，所以依概率趋 0；对任意 r&gt;0 还满足 \(E|X_n|^r=1/(n+1)\to0\)，也是 r 阶收敛。</p>
+<p>但“从某个固定 N 起永远是 0”的概率，利用独立与<a href="#probability-limits">缩小事件取极限</a>可直接算：</p>\[P(X_n=0\text{ 对所有 }n\ge N)=\lim_{m\to\infty}\prod_{n=N}^m\frac{n}{n+1}=\lim_{m\to\infty}\frac N{m+1}=0.\]<p>只取 0/1 的序列若想收敛到 0，就必须从某个 N 起永远为 0。但每一个 N 对应的事件概率都是 0，可数个零概率事件的并仍是 0，所以“最终永远为 0”的概率为 0；它不几乎处处趋 0。这个例子同时说明依概率、甚至 r 阶收敛，都不能一般推出几乎处处收敛。</p>
+</details>
+<h3>大数定律：平均值能不能压住随机波动？</h3>
+<p>令 \(S_n=\sum_{k=1}^nX_k\)。本章“大数定律”通常指：</p>\[\frac{S_n-ES_n}{n}=\frac1n\sum_{k=1}^n(X_k-EX_k)\xrightarrow P0.\]<p>若各项均值相同为 μ，就变成 \(S_n/n\xrightarrow P\mu\)。把“依概率”换成“几乎处处”，就是强大数定律。<strong>“平均稳定”不代表每个 \(X_n\) 本身越来越不随机。</strong>
+</p>
+<h3>4 个弱大数定律：先比对条件，再选工具</h3>
+<div class="table-wrap">
+<table>
+<tr>
+<th>定律</th>
+<th>条件</th>
+<th>结论与理由</th>
+</tr>
+<tr>
+<td>Bernoulli</td>
+<td>独立重复试验，每次成功概率 p，n 次成功数 Nₙ</td>
+<td>\(N_n/n\xrightarrow Pp\)。频率趋近概率；方差 \(p(1-p)/n\to0\)。</td>
+</tr>
+<tr>
+<td>Chebyshev</td>
+<td>两两不相关，方差有限且统一有界 \(DX_k\le M\)</td>
+<td>\((S_n-ES_n)/n\xrightarrow P0\)。平均的方差≤M/n。</td>
+</tr>
+<tr>
+<td>Khintchine（辛钦）</td>
+<td>独立同分布，\(E|X_1|&lt;\infty\)，\(EX_1=\mu\)</td>
+<td>\(S_n/n\xrightarrow P\mu\)。不要求有限方差，不能直接套方差证明。</td>
+</tr>
+<tr>
+<td>Markov</td>
+<td>\(DS_n/n^2\to0\)，不强制独立</td>
+<td>\((S_n-ES_n)/n\xrightarrow P0\)。直接套 Chebyshev。</td>
+</tr>
+</table>
+</div>
+<p class="formula-name">三个方差型弱大数定律的共同计算</p><p>记 Sₙ=X₁+…+Xₙ，设 Aₙ=(Sₙ−ESₙ)/n。它的均值是 0，方差为 DSₙ/n²。对这个 Aₙ 用 Chebyshev：</p>\[P(|A_n|\ge\varepsilon)\le\frac{DS_n}{n^2\varepsilon^2}.\]<p>右边趋 0，就正好满足依概率收敛的定义。Markov 条件直接要求 DSₙ/n²→0；Chebyshev 的统一方差界保证它≤M/n；Bernoulli 成功频率则取每项方差 p(1−p)，得到 p(1−p)/n。它们看似是三个名字，其实共享这个计算。辛钦定律还允许没有有限方差，下面另有截断解释。</p><p>Markov 条件中 \(DS_n=\sum_kDX_k+2\sum_{j&lt;k}\operatorname{cov}(X_j,X_k)\)，有依赖时必须把协方差算进去。这个条件是<strong>充分条件</strong>：它不满足，只能说此定理用不了，不能直接宣布“大数定律不成立”。例 1.12 还要利用有界性才能反证。</p>
+<details id="weak-law-reason">
+<summary>辛钦定律不要求有限方差，为什么仍能平均稳定？</summary>
+<p>直觉是：先把极端大值暂时截掉，剩下的有界变量就能用 Chebyshev；再证明被截掉部分的平均贡献很小。设 Xₖ 独立同分布，E|X₁| 有限，EX₁=μ。固定一个截断门槛 K：</p>\[U_k=X_k\mathbf1_{\{|X_k|\le K\}},\quad R_k=X_k-U_k,\quad\mu_K=EU_k.\]<p>Uₖ 仍独立同分布，DUₖ≤K²，所以它们的样本平均 \(\overline U_n\) 依概率趋 μK。尾部的绝对平均满足：</p>\[E|\overline R_n|\le E|R_1|=E[|X_1|\mathbf1_{\{|X_1|&gt;K\}}]\longrightarrow0\quad(K\to\infty).\]<p>最后一步是“可积变量的尾部贡献趋 0”，也可由前面给出的支配收敛得到。Markov 因而能控制 \(\overline R_n\) 的偏离概率，且 \(|\mu-\mu_K|\le E|R_1|\)。由三角不等式：</p>\[|\overline X_n-\mu|\le|\overline U_n-\mu_K|+|\overline R_n|+|\mu_K-\mu|.\]<p>先选 K 大，让后两部分可忽略；再选 n 大，让第一部分稳定，便得到辛钦定律。这解释了为何“方差可无限，但绝对期望必须有限”仍足以保证弱大数定律。</p>
+</details>
+<h3>3 个强大数定律：把路径稳定也保证下来</h3>
+<ol>
+<li>
+<b>Borel：</b>独立同概率 p 的 Bernoulli 试验，成功频率 \(N_n/n\to p\) 几乎处处。</li>
+<li>
+<b>Kolmogorov 的方差条件：</b>\(X_n\) 相互独立、具有有限方差，若 \(\sum_{n=1}^{\infty}DX_n/n^2&lt;\infty\)，则 \((S_n-ES_n)/n\to0\) 几乎处处。</li>
+<li>
+<b>Kolmogorov 的独立同分布定理：</b>i.i.d. 情形，样本平均几乎处处收敛到有限常数 μ，当且仅当有限期望存在且为 μ，即 \(E|X_1|&lt;\infty,EX_1=\mu\)。</li>
+</ol>
+<p>第一类适合 0/1 频率；第二类适合独立但不必同分布、方差容易算的序列；第三类直接覆盖所有有有限期望的 i.i.d. 序列。别因为它们“更强”就把各自条件忘了。</p>
+<div class="demo">
+<div class="demo-title">动手看 · 公平硬币的频率为什么会稳定？</div>
+<label for="lln-n">观察前 n 次：<output id="lln-n-value">
+</output>
+</label>
+<input id="lln-n" type="range" min="10" max="2000" step="10" value="200">
+<button id="lln-redraw">重新抛一条路径</button>
+<svg id="lln-svg" viewBox="0 0 640 240" role="img" aria-label="硬币正面频率随抛掷次数变化的样本路径">
+</svg>
+<p id="lln-result" aria-live="polite">
+</p>
+<p class="muted">实线只是一次有限模拟，帮助理解，不是定理的证明。阴影是 0.5±0.1；偏离至少 0.1 的概率上界由 Chebyshev 给出。</p>
+</div>
+<div class="takeaway">记忆抓手：分布看形状，概率看偏离比例，r 阶看平均误差，几乎处处看整条路径；大数定律讨论的是平均。</div>
+</section>
+<section id="examples" class="examples">
+<div class="section-num">学习指导 §1.2 · 完整例题解析</div>
+<h2>12 道例题，把工具用起来</h2>
+<p>每题依次看“题目 → 入口 → 为什么这样做 → 推导 → 检验”。第一次可以遮住解答自己想一步，第二次再尝试完整复述。</p>
+<div class="example-index">
+<a href="#ex1">1.1 选票领先</a>
+<a href="#ex2">1.2 帽子错排</a>
+<a href="#ex3">1.3 孤立点</a>
+<a href="#ex4">1.4 识别密度</a>
+<a href="#ex5">1.5 几何分布</a>
+<a href="#ex6">1.6 χ² 分布</a>
+<a href="#ex7">1.7 随机项数和</a>
+<a href="#ex8">1.8 F(X) 变换</a>
+<a href="#ex9">1.9 条件期望</a>
+<a href="#ex10">1.10 加权平均</a>
+<a href="#ex11">1.11 非同分布大数</a>
+<a href="#ex12">1.12 反证不收敛</a>
+</div>
+<article id="ex1" class="example">
+<div class="example-kicker">例 1.1 · 学习指导书页 8—9</div>
+<h3>票数最终领先，怎样才能一路都领先？</h3>
+<p class="problem">A 有 n 张选票，B 有 m 张，n&gt;m。所有计票排列等可能。求从第一票起，每一步 A 都严格领先的概率。</p>
+<p class="entry">
+<b>入口：</b>“每一步”是路径限制，别只算最终结果。按最后一票属于谁分情况，把长序列变成短序列。</p>
+<details open>
+<summary>逐步解答</summary>
+<p>记 \(p_{n,m}\) 为所求概率。如果最后一票是 A（概率 n/(n+m)），前面是 n−1 张 A、m 张 B，且前面必须始终领先；如果最后一票是 B（概率 m/(n+m)），前面是 n 张 A、m−1 张 B。于是 n&gt;m≥1 时：</p>\[p_{n,m}=\frac n{n+m}p_{n-1,m}+\frac m{n+m}p_{n,m-1}.\]<p>边界很重要：\(p_{n,0}=1\)（n≥1），\(p_{m,m}=0\)（m≥1，最后就打平，不可能始终严格领先）。最后一票是 A 且 n=m+1 时，会用到这个“打平”边界，不能漏。</p>
+<p>猜测 \(p_{n,m}=(n-m)/(n+m)\)，按总票数归纳。两项的分母都变成 n+m−1：</p>\[p_{n,m}=\frac{n(n-1-m)+m(n-m+1)}{(n+m)(n+m-1)}=\boxed{\frac{n-m}{n+m}}.\]<p>分子展开是 \((n-m)(n+m-1)\)。配合边界，归纳完成。这里“等可能排列”是所有 A/B 序列等可能，不是把所有可能领先路径赋予相同概率后再重新筛选。</p>
+</details>
+<p class="check">
+<b>检验：</b>n=2,m=1 时三种排列 AAB、ABA、BAA 中只有 AAB 合格，概率 1/3；ABA 在第二票打平，不能算。最终领先远远不等于一路领先。</p>
+<div class="method">带走方法：能按第一步或最后一步拆分的问题，先建立递推，再找边界。</div>
+</article>
+<article id="ex2" class="example">
+<div class="example-kicker">例 1.2 · 学习指导书页 9</div>
+<h3>随机拿帽子，恰好 k 人拿对</h3>
+<p class="problem">n 人的帽子混在一起，每人随机取一顶，等价于所有 n! 个排列等可能。求恰好 k 人取到自己帽子的概率。</p>
+<p class="entry">
+<b>入口：</b>先选谁拿对，再要求剩下的人全部拿错。第二步是“错排”。</p>
+<details open>
+<summary>逐步解答</summary>
+<p>记 \(D_r\) 为 r 人全拿错的排列数，\(q_r=D_r/r!\)。约定 \(D_0=1\)：零个人全部拿错是空条件，算一种排法；\(D_1=0\)。</p>
+<p>先理解容斥：总共有 r! 种，减去至少指定一人拿对的排法；两人都拿对的排法被多减了一次，要加回来；再依次减加。因此：</p>\[D_r=\sum_{j=0}^r(-1)^j\binom rj(r-j)!=r!\sum_{j=0}^r\frac{(-1)^j}{j!}.\]<p>于是挑出恰好 k 个拿对的人有 \(\binom nk\) 种，剩余 n−k 人错排：</p>\[P(K=k)=\frac{\binom nkD_{n-k}}{n!}=\boxed{\frac1{k!}\sum_{j=0}^{n-k}\frac{(-1)^j}{j!}},\qquad k=0,\ldots,n.\]<p>这比一开始追踪每个人的帽子容易。也可以沿递推路线计算错排数：</p>\[D_r=(r-1)(D_{r-1}+D_{r-2}),\quad q_r=\frac{r-1}{r}q_{r-1}+\frac1r q_{r-2}.\]<p>为什么？第一个人拿了第 j 人帽子，有 r−1 种选法。若 j 又拿第一个人的帽子，两人配成环，剩 r−2 人错排；若 j 没拿第一个人的帽子，删掉第一个人后，剩下 r−1 个人；第 j 顶帽子已经被拿走，但第 1 顶还在，把“第 1 顶”重新标成“第 j 顶”。因为第 j 人原本没拿它，其他人的正确帽子也没变，剩下就对应 r−1 人全部拿错。这个过程能反向恢复原排列，所以确实有 Dᵣ₋₁ 种。两种情况互斥且穷尽，得到递推，和容斥给出同样结果。</p>
+<p>n 很大而 k 固定时，括号趋于 \(e^{-1}\)，故 \(P(K=k)\to e^{-1}/k!\)，也就是 Poisson(1)。</p>
+</details>
+<p class="check">
+<b>检验：</b>n=3 时，P(K=0)=1/3，P(K=1)=1/2，P(K=2)=0，P(K=3)=1/6，总和为 1。恰好 n−1 人拿对不可能，因为最后一人也只能拿自己的。</p>
+<div class="method">带走方法：“恰好 k 个满足”常拆成选 k 个 + 其余全部不满足；涉及“没有任何一个”时想容斥。</div>
+</article>
+<article id="ex3" class="example">
+<div class="example-kicker">例 1.3 · 学习指导书页 10—11</div>
+<h3>相邻点成对消去，最后平均剩几个孤立点？</h3>
+<p class="problem">直线上原有 n 个点。每次等概率抽取原来的一对相邻点 (i,i+1)。若任一点已被取走，则本次作废；否则取走这两个点。一直做到再无可取的相邻点，求最后孤立点数的期望。</p>
+<p>这里的“相邻”始终指原编号相邻；删点后不会把跨过空隙的两个点接成新邻居。忽略作废的抽取，等价于每一步在仍可用的边里均匀选一条。</p>
+<p class="entry">
+<b>入口：</b>求总数期望不必求总数分布。给每个点设 0/1 指示变量，再把“该点剩下的概率”加起来。</p>
+<details open>
+<summary>逐步解答</summary>
+<p>令 \(I_i=1\) 表示第 i 点最后孤立，否则为 0。则 \(R_n=\sum_iI_i\)，所以 \(ER_n=\sum_iP(I_i=1)\)，<b>不需要各点独立</b>。</p>
+<p>先求一段长度为 r 的链，其端点最终孤立的概率 \(a_r\)。\(a_1=1,a_2=0\)。若第一对抽到 (j,j+1)，取走后左右分开。看右端点 n：j=n−1 时已被取走；j≤n−2 时，它在长度 n−j−1 的右侧小段里，仍是端点。因此：</p>\[a_n=\frac1{n-1}\sum_{r=1}^{n-2}a_r\quad(n\ge3).\]<p>写出 n−1 的同类式，相减得 \((n-1)a_n-(n-2)a_{n-1}=a_{n-2}\)，即：</p>\[a_n-a_{n-1}=-\frac{a_{n-1}-a_{n-2}}{n-1},\qquad\boxed{a_n=\sum_{j=0}^{n-1}\frac{(-1)^j}{j!}}.\]<p>所以 \(a_3=1/2,a_4=1/3\)，n 大时 \(a_n\to e^{-1}\)。端点比内部点更容易剩下，因为它只需躲过一侧。</p>
+<p>再看内部第 i 点。它要同时躲过左侧与右侧，具体概率为：</p>\[P(I_i=1)=a_i\,a_{n-i+1}.\]<p>这个“乘法”值得解释：可以事先给每条原始边分配独立连续随机优先级，按从早到晚尝试配对。这与均匀随机选择剩余可用边等价。以第 i 点为界，两侧边的优先级彼此独立；第 i 点在完整链中活下来，当且仅当它在两侧单独配对过程中都活下来。因为只要一侧最先想配走它，而另一侧尚未配走，它就会被取走；若两侧都从不配走它，则它存活。乘的是这两个由独立边集决定的存活事件，不是随便假设所有孤立点独立。</p>\[\boxed{ER_n=\sum_{i=1}^na_i\,a_{n-i+1}}.\]<p>这就是精确答案，可以直接递推计算。再把 aᵢ 的有限级数代进去，按总次数 k 合并，得到一个更方便计算的等价式：</p>\[ER_n=\sum_{k=0}^{n-1}(n-k)\frac{(-2)^k}{k!}.\]<p>为什么多出 n−k？如果左右级数分别取到 r 次和 l 次，r+l=k，能容纳它们的中心点 i 有 n−k 个；而 \(\sum_{r=0}^k1/[r!(k-r)!]=2^k/k!\)，来自二项式展开。现在只剩有限和，不需要额外学习生成函数。</p>
+<p>当 n 很大，把上限延伸到 ∞，用<a href="#series-tools">指数级数</a>：</p>\[\sum_{k=0}^\infty\frac{(-2)^k}{k!}=e^{-2},\quad\sum_{k=0}^\infty\frac{k(-2)^k}{k!}=-2e^{-2}.\]<p>所以大 n 时 \(ER_n\approx(n+2)e^{-2}\)。近似遗漏的尾部绝对值不超过 \(2\sum_{j=n}^{\infty}2^j/j!\)，它趋于 0；不是只凭“每个内部点约 e⁻²”就猜出常数 2。</p>
+</details>
+<p class="check">
+<b>检验：</b>n=3 时无论选哪对都剩 1 点；公式给 1/2+0+1/2=1。n=4 时第一对选中间会剩 2 点（概率 1/3），选两端会剩 0 点（概率 2/3），所以期望 2/3。</p>
+<div class="method">带走方法：总数期望 → 指示变量；遇到一维局部删除 → 按第一步切成小段。</div>
+</article>
+<article id="ex4" class="example">
+<div class="example-kicker">例 1.4 · 从特征函数构造分布</div>
+<h3>给定 φ(t)=1/(1+t²)，怎样有依据地找到密度？</h3>
+<p class="problem">X 的特征函数为 \(\varphi_X(t)=1/(1+t^2)\)。求 X 的概率密度 f(x)。</p>
+<p class="entry">
+<b>入口：</b>先分解 \(1+t^2=(1-it)(1+it)\)。这两个因子对应一个指数变量与另一个指数变量的相反数，不必凭空猜密度。</p>
+<details open>
+<summary>逐步解答</summary>
+<p>取 U、V 为两个独立 Exp(1) 随机变量。直接按密度积分：</p>\[\varphi_U(t)=\int_0^\infty e^{itx}e^{-x}dx=\frac1{1-it},\qquad\varphi_{-V}(t)=\frac1{1+it}.\]<p>独立和的特征函数相乘，得到：</p>\[\varphi_{U-V}(t)=\frac1{(1-it)(1+it)}=\frac1{1+t^2}=\varphi_X(t).\]<p>借<a href="#characteristic-uniqueness">唯一性</a>，X 与 U−V 同分布。现在用<a href="#sum-distribution">卷积</a>求这个差的密度：当 x≥0，U=V+x，所以把 V=v 从 0 积到 ∞：</p>\[f_{U-V}(x)=\int_0^\infty e^{-(x+v)}e^{-v}dv=\frac12e^{-x}.\]<p>交换 U、V 不改变联合分布，所以 U−V 关于 0 对称，x&lt;0 时密度为 eˣ/2。合起来：</p>\[\boxed{f(x)=\tfrac12e^{-|x|},\quad x\in\mathbb R}.\]<p>这叫标准 Laplace（双边指数）分布。也能用前面给出的 Fourier 反演积分得到它；这里的“构造 + 唯一性 + 卷积”直接利用已经解释过的工具。</p>
+</details>
+<p class="check">
+<b>检验：</b>密度非负，总面积为 \(2\int_0^\infty e^{-x}/2\,dx=1\)。EU=EV=1，所以 EX=0；独立差的方差为 DU+DV=2，与 φ″(0)=−2 相符。</p>
+<div class="method">带走方法：把目标特征函数分解成已知独立变量的编码，比硬猜一个密度更有方向。</div>
+</article>
+<article id="ex5" class="example">
+<div class="example-kicker">例 1.5 · 学习指导书页 11</div>
+<h3>等到第一次成功：几何分布的特征函数</h3>
+<p class="problem">\(P(X=k)=pq^{k-1}\)，k=1,2,…，q=1−p，0&lt;p≤1。求 X 的特征函数。</p>
+<p class="entry">
+<b>入口：</b>离散变量直接按取值求和，识别等比级数。</p>
+<details open>
+<summary>逐步解答</summary>\[\begin{aligned}\varphi_X(t)&amp;=\sum_{k=1}^\infty e^{itk}pq^{k-1}\\&amp;=pe^{it}\sum_{r=0}^\infty(qe^{it})^r\\&amp;=\boxed{\frac{pe^{it}}{1-qe^{it}}}.\end{aligned}\]<p>等比级数公比 \(qe^{it}\) 的模是 q&lt;1，所以可以求和。p=1 时 X=1，公式直接退化为 \(e^{it}\)。</p>
+<p>如果另一门课把几何分布定义为“成功之前失败了几次”，它从 0 开始，变量是这里的 X−1，特征函数就变为 \(p/(1-qe^{it})\)。少的那个 \(e^{it}\) 对应的是少计了成功那一次。</p>
+</details>
+<p class="check">
+<b>检验：</b>t=0 时 p/(1−q)=1；求导可得 EX=1/p。先检查从 0 还是从 1 开始，是这题最容易失分的地方。</p>
+<div class="method">带走方法：离散分布的特征函数 → 定义求和 → 找熟悉的级数。</div>
+</article>
+<article id="ex6" class="example">
+<div class="example-kicker">例 1.6 · 学习指导书页 12</div>
+<h3>χ² 分布：求编码、求矩、再求独立和</h3>
+<p class="problem">\(X\sim\chi^2(n)\)，其密度为 \(f(x)=x^{n/2-1}e^{-x/2}/[2^{n/2}\Gamma(n/2)]\)（x&gt;0，其他处为 0）。求 φ、EX、DX；若独立的 \(X_1\sim\chi^2(n_1),X_2\sim\chi^2(n_2)\)，求和的分布。</p>
+<p class="entry">
+<b>入口：</b>χ² 是 Gamma 的特例。积分里把两个指数合并；求和则乘特征函数。</p>
+<details open>
+<summary>逐步解答</summary>
+<p>设 α=n/2。它是 Gamma(α,1/2)，<a href="#gamma-transform-proof">Gamma 特征函数的分部积分推导</a>已给出；代入速率 1/2，或把同一计算直接写成密度积分：</p>\[\varphi_X(t)=\frac1{2^\alpha\Gamma(\alpha)}\int_0^\infty x^{\alpha-1}e^{-(1/2-it)x}dx=(1-2it)^{-n/2}.\]<p>这里复数幂取与 t=0 处值为 1 连续衔接的分支。求导时先保留因子：</p>\[\varphi'_X(t)=ni(1-2it)^{-n/2-1},\qquad\varphi''_X(t)=-n(n+2)(1-2it)^{-n/2-2}.\]\[EX=\frac{\varphi'(0)}i=n,\quad E[X^2]=-\varphi''(0)=n(n+2),\quad\boxed{DX=2n}.\]<p>独立时：</p>\[\varphi_{X_1+X_2}(t)=(1-2it)^{-n_1/2}(1-2it)^{-n_2/2}=(1-2it)^{-(n_1+n_2)/2}.\]<p>识别出 χ² 的特征函数并用唯一性得：</p>\[\boxed{X_1+X_2\sim\chi^2(n_1+n_2)}.\]</details>
+<p class="check">
+<b>检验：</b>和的均值是 n₁+n₂，方差是 2(n₁+n₂)，与独立相加吻合。分布相加结论依赖独立，不能只因两项各自是 χ² 就直接使用。</p>
+<div class="method">带走方法：参数能相加，通常是因为特征函数的指数能相加。</div>
+</article>
+<article id="ex7" class="example">
+<div class="example-kicker">例 1.7 · 学习指导书页 12</div>
+<h3>总量 = 随机次数 × 每次随机贡献？</h3>
+<p class="problem">\(N\sim\operatorname{Poisson}(\lambda)\)，\(X_1,X_2,\ldots\) 独立同分布，具有特征函数 φ(t)，且 N 与整个序列独立。令 \(Z=\sum_{j=1}^NX_j\)，求 Z 的特征函数。N=0 时 Z=0。</p>
+<p class="entry">
+<b>入口：</b>不要把 Z 当成 \(NX_1\)。先给定 N=k，此时是 k 个独立随机量的和。</p>
+<details open>
+<summary>逐步解答</summary>\[E[e^{itZ}\mid N=k]=\prod_{j=1}^kE[e^{itX_j}]=[\varphi(t)]^k.\]<p>k=0 时空乘积为 1，恰好对应 Z=0 的情况。再对 N 平均：</p>\[\begin{aligned}\varphi_Z(t)&amp;=\sum_{k=0}^\infty[\varphi(t)]^k e^{-\lambda}\frac{\lambda^k}{k!}\\&amp;=e^{-\lambda}\exp(\lambda\varphi(t))\\&amp;=\boxed{\exp\{\lambda[\varphi(t)-1]\}}.\end{aligned}\]<p>这叫复合 Poisson 分布。你可以想成一小时订单数随机，每个订单金额也随机。“复合”指两层随机，先固定外层，内层就好算。</p>
+<p>如果 \(EX_1=\mu,DX_1=\sigma^2\) 有限，则 \(EZ=\lambda\mu\)、\(DZ=\lambda(\sigma^2+\mu^2)\)。不是只有 λσ²，因为订单数本身也波动。</p>
+</details>
+<p class="check">
+<b>检验：</b>若每次贡献都恰好等于 1，φ(t)=eⁱᵗ，则 Z=N，得到 Poisson 的特征函数。若每次贡献都为 0，特征函数 φZ(t) 恒为 1，对应随机变量 Z 恒为 0。</p>
+<div class="method">带走方法：随机项数和 → 先按项数取条件 → 指数级数求和。</div>
+</article>
+<article id="ex8" class="example">
+<div class="example-kicker">例 1.8 · 学习指导书页 13</div>
+<h3>把 X 放进自己的分布函数，会发生什么？</h3>
+<p class="problem">X 的分布函数 F 连续且严格递增。求 (1) \(Y=aF(X)+b\)（a≠0）的特征函数；(2) \(Z=\ln F(X)\) 的特征函数和 \(E[Z^k]\)。</p>
+<div class="correction">
+<b>使用条件：</b>这里明确要求 F <strong>连续</strong>。仅“严格递增”不能排除跳跃，因此不能保证 F(X) 均匀；下面还给出完整反例。连续但不严格递增时，概率积分变换本身也成立，这一题额外给出的严格性只是方便使用普通反函数。</div>
+<p class="entry">
+<b>入口：</b>先认出概率积分变换 \(U=F(X)\sim U(0,1)\)。之后原来的 F 形状完全不重要了。</p>
+<details open>
+<summary>逐步解答</summary>
+<p>连续且严格单调时，对 0&lt;u&lt;1：</p>\[P(F(X)\le u)=P(X\le F^{-1}(u))=F(F^{-1}(u))=u.\]<p>于是 U 均匀。第一问直接在 (0,1) 上积分：</p>\[\varphi_Y(t)=e^{itb}\int_0^1e^{itau}du=\boxed{e^{itb}\frac{e^{ita}-1}{ita}}\quad(t\ne0),\qquad\varphi_Y(0)=1.\]<p>a&lt;0 也成立；此时 Y 在 (b+a,b) 上均匀。别误以为 a 必须为正。</p>
+<p>第二问 Z=ln U≤0，所以 −Z=−ln U 服从参数 1 的指数分布：</p>\[\varphi_Z(t)=\int_0^1u^{it}du=\boxed{\frac1{1+it}}.\]<p>求 k 阶矩，可以求导，也可以令 v=−ln u：</p>\[E[Z^k]=\int_0^1(\ln u)^kdu=(-1)^k\int_0^\infty v^ke^{-v}dv=\boxed{(-1)^kk!}.\]<p>因此 EZ=−1，EZ²=2，DZ=1。这里 U=0 的事件概率为 0，不影响几乎处处定义的 ln U。</p>
+</details>
+<p class="check">
+<b>检验：</b>Z 总是非正，奇数阶矩应为负，偶数阶矩应为正。如果算出 1/(1−it)，那是 −Z 的特征函数，符号弄反了。</p>
+<details>
+<summary>为什么“严格单调”还不够？</summary>
+<p>取<a href="#univariate-normal">标准正态（CDF 记为 Φ）</a>与原点质量的混合：\(F(x)=\frac12\Phi(x)+\frac12\mathbf1_{\{x\ge0\}}\)。它严格递增，但在 0 跳跃 1/2。X 有 1/2 的概率等于 0，于是 F(X) 有 1/2 的概率等于 F(0)=3/4，不可能是连续的均匀分布。</p>
+</details>
+<div class="method">带走方法：出现 F(X)，先检查 F 是否连续；出现 −ln U，联想到指数分布。</div>
+</article>
+<article id="ex9" class="example">
+<div class="example-kicker">例 1.9 · 学习指导书页 13—14</div>
+<h3>同一个联合密度，为什么两个方向的条件期望不同？</h3>
+<p class="problem">联合密度 \(f(x,y)=\frac12e^{-y}\)（y&gt;|x|），其余处为 0。求 \(E[X\mid Y]\) 和 \(E[Y\mid X]\)。</p>
+<p class="entry">
+<b>入口：</b>先画范围 y&gt;|x|：一个向上的 V 形区域。固定 y 看横切片；固定 x 看竖切片。切片不同，条件分布就不同。</p>
+<div class="demo">
+<div class="demo-title">动手看 · 固定 Y=y 后，X 只能在 (−y,y) 内</div>
+<label for="cond-y">已知 y：<output id="cond-y-value">
+</output>
+</label>
+<input id="cond-y" type="range" min="0.3" max="4" step="0.1" value="2">
+<svg id="cond-svg" viewBox="0 0 640 270" role="img" aria-label="联合密度支撑区域和已知Y后的水平切片">
+</svg>
+<p id="cond-result" aria-live="polite">
+</p>
+</div>
+<details open>
+<summary>逐步解答</summary>
+<p>
+<b>第一步：求边缘。</b>固定 x 时 y 从 |x| 到 ∞；固定 y 时 x 从 −y 到 y，且 y&gt;0：</p>\[f_X(x)=\int_{|x|}^\infty\tfrac12e^{-y}dy=\tfrac12e^{-|x|},\]\[f_Y(y)=\int_{-y}^y\tfrac12e^{-y}dx=ye^{-y}\quad(y&gt;0).\]<p>fY 积分为 1，也顺便核对原联合密度的归一化。</p>
+<p>
+<b>第二步：求 X|Y=y。</b>用联合密度除以 fY：</p>\[f_{X\mid Y}(x\mid y)=\frac{(1/2)e^{-y}}{ye^{-y}}=\frac1{2y},\quad -y&lt;x&lt;y.\]<p>也就是以 0 为中心的均匀分布，不用硬积分也知道均值为 0：</p>\[\boxed{E[X\mid Y]=0}.\]<p>
+<b>第三步：求 Y|X=x。</b>
+</p>\[f_{Y\mid X}(y\mid x)=\frac{(1/2)e^{-y}}{(1/2)e^{-|x|}}=e^{-(y-|x|)},\quad y&gt;|x|.\]<p>这是 \(|x|+\operatorname{Exp}(1)\)，所以平均为 |x|+1，最后把小写 x 换回随机变量 X：</p>\[\boxed{E[Y\mid X]=|X|+1}.\]</details>
+<p class="check">
+<b>检验：</b>由全期望 EX=0，EY=E|X|+1=2，其中 E|X|=∫₀∞xe⁻ˣdx=1；也与 Y~Gamma(2,1) 的均值 2 吻合。尽管 E[X|Y]=EX，X 与 Y 仍不独立：X 的可取范围随着 y 改变。条件均值不变只说明平均不变，不说明整个条件分布不变。</p>
+<div class="method">带走方法：联合密度题先看支撑范围，再求边缘、除法归一化，最后求条件平均。</div>
+</article>
+<article id="ex10" class="example">
+<div class="example-kicker">例 1.10 · 学习指导书页 14</div>
+<h3>后面的观测更重要：加权平均还会趋近均值吗？</h3>
+<p class="problem">\(X_i\) 独立同分布，\(EX_i=\mu,DX_i=\sigma^2&lt;\infty\)。令 \(Y_n=\frac{2}{n(n+1)}\sum_{i=1}^niX_i\)，证明 \(Y_n\xrightarrow P\mu\)。</p>
+<p class="entry">
+<b>入口：</b>它不是普通等权平均，不能原样套样本平均定律。检查权重和，再算均值与方差，用 Chebyshev。</p>
+<details open>
+<summary>逐步解答</summary>
+<p>设 \(w_{n,i}=2i/[n(n+1)]\)。由于 \(\sum_{i=1}^ni=n(n+1)/2\)，权重和为 1：</p>\[EY_n=\sum_iw_{n,i}\mu=\mu.\]<p>独立让交叉协方差为零，方差里权重必须平方：</p>\[DY_n=\frac{4\sigma^2}{n^2(n+1)^2}\sum_{i=1}^ni^2=\frac{4\sigma^2}{n^2(n+1)^2}\cdot\frac{n(n+1)(2n+1)}6=\frac{2(2n+1)\sigma^2}{3n(n+1)}\to0.\]<p>于是对每个固定 ε&gt;0：</p>\[P(|Y_n-\mu|\ge\varepsilon)\le\frac{DY_n}{\varepsilon^2}=\frac{2(2n+1)\sigma^2}{3n(n+1)\varepsilon^2}\to0.\]<p>这就是依概率收敛定义。实际上均方误差 \(E|Y_n-\mu|^2=DY_n\to0\)，还得到二阶收敛。</p>
+</details>
+<p class="check">
+<b>检验：</b>最大权重是 2/(n+1)，也趋 0，没有哪一次观测长期独占平均。若权重总和不为 1，均值可能一开始就不对；若权重过度集中，方差可能压不下去。</p>
+<div class="method">带走方法：加权平均收敛 → 均值到目标 + 方差到 0。</div>
+</article>
+<article id="ex11" class="example">
+<div class="example-kicker">例 1.11 · 学习指导书页 14—15</div>
+<h3>取值能变得很大，也能服从大数定律</h3>
+<p class="problem">\(X_n\) 相互独立，\(P(X_n=2^n)=P(X_n=-2^n)=2^{-(2n+1)}\)，\(P(X_n=0)=1-2^{-2n}\)。证明序列服从大数定律。</p>
+<p class="entry">
+<b>入口：</b>数值幅度大不等于方差大。先让“幅度平方 × 出现概率”相乘，看是否抵消。</p>
+<details open>
+<summary>逐步解答</summary>
+<p>两个非零值的概率之和是 \(2\cdot2^{-(2n+1)}=2^{-2n}\)，加上取 0 的概率正好为 1。由于正负对称：</p>\[EX_n=0,\qquad DX_n=E[X_n^2]=2\cdot2^{2n}\cdot2^{-(2n+1)}=1.\]<p>虽然 n 增大时非零值越来越夸张，但出现概率以更快的速度变小，方差一直等于 1。</p>
+<p>令 \(A_n=n^{-1}\sum_{k=1}^nX_k\)，独立给出：</p>\[EA_n=0,\quad DA_n=\frac1{n^2}\sum_{k=1}^nDX_k=\frac1n.\]<p>于是 \(P(|A_n|\ge\varepsilon)\le1/(n\varepsilon^2)\to0\)，大数定律成立。它们不是同分布，所以不该套 i.i.d. 的辛钦定律；Chebyshev 的统一方差上界正合适。</p>
+<p>若希望更进一步，\(\sum_nDX_n/n^2=\sum_n1/n^2&lt;\infty\)，由 Kolmogorov 方差条件还得到强大数定律。</p>
+</details>
+<p class="check">
+<b>检验：</b>n=1 时非零两端各 1/8、零点 3/4；方差 4×(1/4)=1。要区分指数 2n 和 2n+1：两端概率相加是 2⁻²ⁿ，零点概率必须补成 1−2⁻²ⁿ，不能写成 1−2⁻ⁿ。直接检查总概率为 1 即可排除这个错误。</p>
+<div class="method">带走方法：不凭取值大小猜收敛，算二阶矩；非同分布也可以有大数定律。</div>
+</article>
+<article id="ex12" class="example">
+<div class="example-kicker">例 1.12 · 学习指导书页 15</div>
+<h3>平均的波动始终很大，怎样证明大数定律不成立？</h3>
+<p class="problem">\(S_n=\sum_{j=1}^n\xi_j\)，存在常数 c,a&gt;0，使 \(|S_n|&lt;nc\)、\(DS_n&gt;an^2\)。证明 \(\xi_n\) 序列不服从大数定律。</p>
+<p class="entry">
+<b>入口：</b>光有“方差不趋 0”一般不够。本题多给了有界性，可以把大方差转成“偏离概率有正的下界”。</p>
+<details open>
+<summary>逐步解答</summary>
+<p>设 \(W_n=(S_n-ES_n)/n\)。因为 \(|S_n|&lt;nc\)，\(|ES_n|\le E|S_n|\le nc\)，所以 \(|W_n|\le2c\)。同时：</p>\[E[W_n^2]=\frac{DS_n}{n^2}&gt;a.\]<p>任选一个足够小的固定 ε&gt;0，将平均平方误差按“小于 ε”和“至少 ε”拆成两块：</p>\[\begin{aligned}E[W_n^2]&amp;=E[W_n^2\mathbf1_{\{|W_n|&lt;\varepsilon\}}]+E[W_n^2\mathbf1_{\{|W_n|\ge\varepsilon\}}]\\&amp;\le\varepsilon^2+4c^2P(|W_n|\ge\varepsilon).\end{aligned}\]<p>第一块每个平方都不超过 ε²；第二块每个平方都不超过 4c²。合起来得到：</p>\[P(|W_n|\ge\varepsilon)&gt;\frac{a-\varepsilon^2}{4c^2}.\]<p>例如取 \(\varepsilon=\sqrt{a/2}\)，右侧为正常数 a/(8c²)，不随 n 缩小。因此偏离概率不可能趋 0，\(W_n\not\xrightarrow P0\)，即不服从大数定律。</p>
+<p>也可以用反证法理解同一拆分：若偏离概率趋 0，有界性会迫使平方平均也趋 0，与方差下界矛盾。这里直接写出正下界，便能看见“不收敛”的原因。</p>
+</details>
+<p class="check">
+<b>检验：</b>为什么不能反用 Chebyshev？因为它只说“概率≤某个数”；上界不小不意味着概率真大。本题由有界性得到的是<strong>下界</strong>，逻辑方向才对。</p>
+<div class="method">带走方法：证明不依概率收敛，要找到某个固定 ε，使偏离概率始终不小；不要把充分条件误当必要条件。</div>
+</article>
+</section>
+<section id="review" class="lesson">
+<div class="section-num">主动回忆 / 学完后再做</div>
+<h2>先合上公式，试着回答</h2>
+<p>这里测的是你能否说明理由。每题选一个答案后立即看到解释；全部答完后可以重做。</p>
+<div id="quiz">
+</div>
+<p id="quiz-score" role="status">
+</p>
+<button id="quiz-reset">清空答案，重新自测</button>
+<h3>遇到题目，先决定从哪里入手</h3>
+<div class="table-wrap">
+<table>
+<tr>
+<th>题目问什么</th>
+<th>第一步</th>
+<th>本章对应</th>
+</tr>
+<tr>
+<td>分阶段概率 / 递推路径概率</td>
+<td>按一次关键选择取条件；写边界</td>
+<td>例 1.1、1.2</td>
+</tr>
+<tr>
+<td>个数的期望</td>
+<td>写成指示变量之和，用线性性</td>
+<td>例 1.3</td>
+</tr>
+<tr>
+<td>已知特征函数反求分布</td>
+<td>识别家族，计算候选的特征函数；必要时反演</td>
+<td>例 1.4</td>
+</tr>
+<tr>
+<td>求特征函数</td>
+<td>按定义求和/积分；找等比级数或 Gamma 积分</td>
+<td>例 1.5、1.6</td>
+</tr>
+<tr>
+<td>独立随机量的和</td>
+<td>乘特征函数，识别参数</td>
+<td>例 1.6</td>
+</tr>
+<tr>
+<td>随机个数的和</td>
+<td>先固定项数，再全期望</td>
+<td>例 1.7</td>
+</tr>
+<tr>
+<td>出现 F(X)</td>
+<td>检查连续性，再用概率积分变换</td>
+<td>例 1.8</td>
+</tr>
+<tr>
+<td>条件期望</td>
+<td>看支撑区域 → 求边缘 → 除得条件密度 → 平均</td>
+<td>例 1.9</td>
+</tr>
+<tr>
+<td>证明依概率收敛</td>
+<td>算均值与方差；尝试 Chebyshev</td>
+<td>例 1.10、1.11</td>
+</tr>
+<tr>
+<td>证明大数定律不成立</td>
+<td>找偏离概率正下界，检查能否借助有界性</td>
+<td>例 1.12</td>
+</tr>
+</table>
+</div>
+<details>
+<summary>最后复习：一页公式速查（先理解，再展开）</summary>
+<div class="formula-sheet">\[F(x)=P(X\le x),\quad f_X(x)=\int f(x,y)dy,\quad f_{X\mid Y}(x\mid y)=\frac{f(x,y)}{f_Y(y)}.\]\[EX=\int x\,dF,\quad DX=E[X^2]-(EX)^2,\quad\operatorname{cov}(X,Y)=EXY-EX\,EY.\]\[D\!\left(\sum_ja_jX_j\right)=\sum_{j,k}a_ja_k\operatorname{cov}(X_j,X_k).\]\[P(|X-EX|\ge\varepsilon)\le DX/\varepsilon^2,\qquad P(|X|\ge\varepsilon)\le E|X|^r/\varepsilon^r.\]\[\varphi(t)=Ee^{itX},\quad\varphi^{(k)}(0)=i^kEX^k,\quad\varphi_{aX+b}(t)=e^{itb}\varphi_X(at).\]\[X\perp Y\Rightarrow\varphi_{X+Y}=\varphi_X\varphi_Y,\quad\varphi_{\sum_{j=1}^NX_j}(t)=e^{\lambda(\varphi_X(t)-1)}\quad(N\sim\operatorname{Pois}(\lambda)).\]\[L_X(s)=Ee^{-sX},\quad G_X(z)=Ez^X,\quad p_k=G^{(k)}(0)/k!,\quad EX=G'(1-).\]\[\boldsymbol X\sim N(\boldsymbol\mu,B)\Rightarrow A\boldsymbol X+\boldsymbol b\sim N(A\boldsymbol\mu+\boldsymbol b,ABA^\top).\]\[E[E(X\mid Y)]=EX,\quad E[Xh(Y)\mid Y]=h(Y)E[X\mid Y].\]\[E[E(X\mid Y,Z)\mid Y]=E[X\mid Y],\qquad DS=E[D(S\mid N)]+D(E[S\mid N]).\]\[\text{a.s.}\Rightarrow P\Rightarrow d,\quad L^r\Rightarrow P,\qquad \frac{D(S_n)}{n^2}\to0\Rightarrow\frac{S_n-ES_n}{n}\xrightarrow P0.\]<p>使用条件请回正文核对：特别是独立性、可积性、条件密度的分母为正、联合正态、N 与整个序列独立。速查式不替代条件。</p>
+</div>
+</details>
+</section>
+<section id="sources" class="lesson sources">
+<div class="section-num">知识覆盖 / 教程内部导航</div>
+<h2>这一章的内容，都已写在教程里</h2>
+<p>本套 HTML 是完整的学习材料，不需要配合书本。下面按知识组列出本章入口；第一章为后续章节准备分布、条件期望和收敛工具。</p>
+<div class="table-wrap">
+<table>
+<tr>
+<th>知识组</th>
+<th>包含内容</th>
+<th>本页入口</th>
+</tr>
+<tr>
+<td>概率空间</td>
+<td>σ 域、概率公理、条件概率、全概率、贝叶斯</td>
+<td>
+<a href="#space">概率空间</a>
+</td>
+</tr>
+<tr>
+<td>随机变量与分布</td>
+<td>可测性、CDF、分布律、密度、联合/边缘/条件分布、独立；补足常见模型与卷积</td>
+<td>
+<a href="#distribution">分布</a>
+</td>
+</tr>
+<tr>
+<td>数字特征</td>
+<td>期望、方差、协方差、矩、指示变量、协方差矩阵、二阶矩界、Markov 与 Chebyshev</td>
+<td>
+<a href="#moments">数字特征</a>
+</td>
+</tr>
+<tr>
+<td>特征函数及变换</td>
+<td>一维/多维定义与性质、唯一性、正定判定、Laplace、概率母函数</td>
+<td>
+<a href="#transforms">特征函数</a>
+</td>
+</tr>
+<tr>
+<td>多维正态</td>
+<td>密度、特征函数、线性组合、边缘、线性变换、不相关与独立</td>
+<td>
+<a href="#normal">多维正态</a>
+</td>
+</tr>
+<tr>
+<td>条件数学期望</td>
+<td>分组理解、条件分布、全期望完整展开、提出已知量、塔式性质、全方差推导与随机项数和</td>
+<td>
+<a href="#conditional">条件期望</a>
+</td>
+</tr>
+<tr>
+<td>收敛与大数定律</td>
+<td>四种收敛、蕴含关系、弱收敛、4 个弱定律与 3 个强定律</td>
+<td>
+<a href="#convergence">收敛</a>
+</td>
+</tr>
+<tr>
+<td>完整例题</td>
+<td>例 1.1—1.12 的条件、入口、完整推导和检验</td>
+<td>
+<a href="#examples">12 道例题</a>
+</td>
+</tr>
+</table>
+</div>
+<h3>复习时注意的细节</h3>
+<ul>
+<li>母函数取系数要除以 k!；G″(1) 给 E[X(X−1)]，不是 EX²。<a href="#transforms">回到公式与解释</a>。</li>
+<li>概率积分变换需要 F 连续，严格单调本身不排除跳跃。<a href="#ex8">例 1.8 已给出补正和反例</a>。</li>
+<li>例 1.11 的零点概率为 1−2⁻²ⁿ，所有概率之和为 1。<a href="#ex11">回看推导</a>。</li>
+<li>多维正态的普通密度要求协方差矩阵正定；退化正态仍可用特征函数描述。<a href="#normal">回看说明</a>。</li>
+<li>证明概率不趋 0 要找下界，不能反用 Chebyshev 的上界。<a href="#ex12">回看例 1.12</a>。</li>
+</ul>
+<p class="muted">知识范围依据同步学习指导第一章，例题与解释均已在本页完整重写；Ross 仅作为编写时的解释参考，不是额外阅读要求。</p>
+<p>
+<a href="../chapter2/index.html">继续第二章：随机过程的基本概念 →</a>
+</p>
+</section>
+<footer>
+<p>第一章读完后，你应该能说清楚：</p>
+<p class="footer-line">“这个量怎么分布？知道信息后怎样预测？观察变多后会不会稳定？”</p>
+<a href="../chapter2/index.html">继续第二章 →</a> · <a href="../index.html">教程目录</a> · <a href="#start">回到开头 ↑</a>
+</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,915 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="随机过程第二章完整教程：样本函数、有限维分布、数字特征、复过程、高斯与Wiener过程、Poisson及其推广，含15道完整例题。">
+<title>第二章 · 从随机变量走向随机过程</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="style.css">
+<script defer src="assets/katex/katex.min.js">
+</script>
+<script defer src="assets/katex/contrib/auto-render.min.js">
+</script>
+<script defer src="app.js">
+</script>
+</head>
+<body>
+<div id="reading-progress" aria-hidden="true">
+</div>
+<aside class="sidebar">
+<a class="brand" href="../index.html">
+<span class="brand-icon">∿</span> 随机过程 · 理解笔记</a>
+<p class="side-label">CHAPTER 02 / 随机过程的基本概念</p>
+<nav aria-label="章节目录">
+<a href="#start">从这里开始</a>
+<a href="#concept">01 过程与样本函数</a>
+<a href="#finite">02 有限维分布</a>
+<a href="#statistics">03 均值、相关与协方差</a>
+<a href="#joint">04 两个过程的关系</a>
+<a href="#complex">05 复随机过程</a>
+<a href="#classes">06 几类重要过程</a>
+<a href="#poisson">↳ Poisson 过程</a>
+<a href="#variants">↳ Poisson 的四种推广</a>
+<a href="#examples">15 道例题逐题拆解</a>
+<a href="#review">自测与速查</a>
+<a href="#coverage">知识覆盖与符号说明</a>
+</nav>
+<div class="side-bottom">
+<label for="search">查找知识点或例题</label>
+<input id="search" type="search" placeholder="例如：增量 / 例 2.9">
+<button id="search-button">查找</button>
+<p id="search-status" role="status">
+</p>
+<button id="print">打印 / 保存为 PDF</button>
+<p>
+<a href="../chapter1/index.html">← 第一章：概率论基础</a>
+</p>
+<p class="muted">整套 HTML 自成体系，无需配合书本。</p>
+</div>
+</aside>
+<main>
+<header id="start" class="hero">
+<div class="eyebrow">随机过程速通 · 第二站</div>
+<h1>一个随机数，<br>
+<em>变成一段故事。</em>
+</h1>
+<p class="lead">上一章研究“这次得到什么”。<br>这一章开始研究“它随时间怎样变化”。</p>
+<div class="hero-meta">
+<span>6 组完整知识点</span>
+<span>15 道完整例题</span>
+<span>离线可用 · 可打印</span>
+</div>
+<a class="primary" href="#concept">开始理解 →</a>
+<svg class="hero-art" viewBox="0 0 400 240" role="img" aria-label="三条不同样本路径共享一条时间轴">
+<path d="M20 210H390M35 20V220" stroke="currentColor" opacity=".2"/>
+<path d="M35 200H85V166H155V132H220V98H290V64H370" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M35 200H55V166H125V132H155V98H310V64H345V30H380" fill="none" stroke="currentColor" stroke-width="2" opacity=".35"/>
+<path d="M35 200H135V166H210V132H320V98H370" fill="none" stroke="currentColor" stroke-width="2" opacity=".55"/>
+<path d="M220 25V210" stroke="currentColor" stroke-dasharray="5 6" opacity=".4"/>
+</svg>
+</header>
+<section class="intro">
+<h2>这一章只抓住两件事</h2>
+<p>
+<strong>第一件：一整条随机曲线，怎样描述它的规律？</strong>你可以逐条看样本路径、在若干时刻取联合分布，也可以先算均值与协方差。它们像不同精度的镜头，保留的信息不同。</p>
+<p>
+<strong>第二件：遇到累计到达，怎样把“数了多少个”变成可计算的问题？</strong>Poisson 过程连接了计数、等待时间、随机总量和实际安排问题。先把这套关系想清楚，后面的题会反复使用它。</p>
+<div class="route">
+<div>
+<b>先看曲线</b>
+<p>读 01—05，分清随机变量、样本函数和有限维分布。不要把“相关函数”当相关系数。</p>
+</div>
+<div>
+<b>再看增量</b>
+<p>读 06 和 Poisson 部分。牢记：独立的是不重叠时间段的新增量。</p>
+</div>
+<div>
+<b>最后把题串起来</b>
+<p>前 7 题练过程描述，后 8 题练到达模型。每题都有完整题意、推导与检查。</p>
+</div>
+</div>
+<div class="note">本套 HTML 是完整学习材料。本章把第二章的全部知识点和 15 道例题写在页面内；前置知识只链接到已经完成的第一章教程。以下不要求你翻阅任何书本。课后“习题全解”不属于这里的 15 道例题，本次范围沿用第一章。</div>
+<details>
+<summary>需要时再复习：本章用到第一章的哪些工具？</summary>
+<ul>
+<li>
+<a href="../chapter1/index.html#distribution">随机变量、联合分布与独立</a>：把多个时刻的状态当成一个随机向量。</li>
+<li>
+<a href="../chapter1/index.html#moments">期望、方差、协方差</a>：均值直接相加；方差要检查交叉项。</li>
+<li>
+<a href="../chapter1/index.html#transforms">特征函数</a>与<a href="../chapter1/index.html#common-distributions">常见分布的建模解释</a>：不只查公式，也区分“计数”和“等待”、强度与速率参数。</li>
+<li>
+<a href="../chapter1/index.html#normal">联合正态</a>：均值向量与协方差矩阵决定分布；不相关推出独立的使用条件。</li>
+<li>
+<a href="../chapter1/index.html#conditional">条件期望</a>、<a href="../chapter1/index.html#total-expectation">全期望</a>与<a href="../chapter1/index.html#total-variance">全方差</a>：先分组；波动还要计入组间均值差异，三者在第一章都有完整推导。</li>
+</ul>
+<p>这些链接只在本套教程内部跳转。下面的新术语、图示和所有例题的解答都已完整写出。</p>
+</details>
+</section>
+<section id="concept" class="lesson">
+<div class="section-num">01 / 知识组 1 · 随机过程的定义与分类</div>
+<h2>随机过程：随机抽到一整条时间曲线</h2>
+<p class="intuition">随机变量像抽一张卡，再读卡上的一个数字。随机过程像抽一段完整录像，再查看录像中每个时刻的状态。</p>
+<h3>随机过程的文字定义：把同一次试验各时刻的随机变量放在一起</h3><p>第一章的随机变量只需要一条完整结果 ω，就能读出一个数。现在还要指定<strong>观察时刻 t</strong>。同一条完整记录中，t=1 与 t=2 的读数可以不同，所以规则 X 需要两个输入。对每个固定的 t，如果它关于 ω 都是同一概率空间上的随机变量，就把这一整组规则叫<strong>随机过程</strong>。</p><p>写法里，Ω 仍是全部完整试验记录的集合，T 是允许的时刻集合，ℝ 是实数集合；Ω×T 表示“取一条记录 ω，再取一个时刻 t”形成的所有输入配对。箭头表示把这对输入变成数值：</p><p class="formula-name">随机过程定义的符号写法</p>\[X:\Omega\times T\longrightarrow\mathbb R,\qquad(\omega,t)\longmapsto X(\omega,t).\]<p>这里不是 Ω 与 T 的数值乘法。固定 t 时，X(·,t) 中的点号是“这个位置仍可输入不同 ω”的占位符；要求它是随机变量，意思是满足<a href="../chapter1/index.html#random-variable-definition">第一章已经逐个符号解释的可测性定义</a>。常把 ω 藏起来写成 X(t)，但不表示随机性消失了。</p><div class="table-wrap">
+<table>
+<tr>
+<th>固定什么</th>
+<th>剩下什么</th>
+<th>它的名字</th>
+</tr>
+<tr>
+<td>固定 t，让 ω 变化</td>
+<td>同一时刻，不同试验可能出现不同数值</td>
+<td>随机变量 X(t)，即时刻 t 的状态</td>
+</tr>
+<tr>
+<td>固定 ω，让 t 变化</td>
+<td>这次试验从头到尾走过的确定曲线</td>
+<td>样本函数 \(x_\omega(t)\)，图像叫样本路径/轨道/实现</td>
+</tr>
+<tr>
+<td>ω 和 t 都固定</td>
+<td>一个普通数值</td>
+<td>这条路径在这个时刻的值</td>
+</tr>
+</table>
+</div>
+<p>例如：X(t) 是开门后 t 分钟累计进入商场的人数。抽到哪条“进店时间记录”，整条阶梯曲线就确定了；但你只知道现在是第 10 分钟，并不知道这天进店记录，X(10) 仍是随机变量。</p>
+<div class="demo">
+<div class="demo-title">动手看 · 横着看一条路径，竖着看一个随机变量</div>
+<label for="path-t">固定观察时刻 t：<output id="path-t-value">
+</output>
+</label>
+<input id="path-t" type="range" min="0" max="6" step="0.1" value="3">
+<label for="path-choice">选择一条样本路径：<output id="path-choice-value">
+</output>
+</label>
+<input id="path-choice" type="range" min="1" max="4" step="1" value="1">
+<svg id="path-svg" viewBox="0 0 640 280" role="img" aria-label="四条示意样本路径与固定时刻截面">
+</svg>
+<p id="path-result" aria-live="polite">
+</p>
+<p class="muted">四条曲线仅作概念示意，不代表只有四种结果，也不是理论分布。</p>
+</div>
+<h3>状态空间与时间参数，分别判断</h3>
+<p>状态空间 S 是过程在各时刻所有可能状态的集合。时间连续不代表状态连续，状态连续也不要求路径连续：温度过程可取连续值；累计顾客数只取非负整数，时间却可以精确到任意实数。</p>
+<div class="table-wrap">
+<table>
+<tr>
+<th>时间参数 T</th>
+<th>状态空间 S</th>
+<th>例子</th>
+</tr>
+<tr>
+<td>离散：0,1,2,…</td>
+<td>离散</td>
+<td>每次掷硬币后所在的随机游动位置</td>
+</tr>
+<tr>
+<td>离散</td>
+<td>连续</td>
+<td>每天中午测量的一次温度</td>
+</tr>
+<tr>
+<td>连续：t≥0</td>
+<td>离散</td>
+<td>随时可观察的累计到达人数 N(t)</td>
+</tr>
+<tr>
+<td>连续</td>
+<td>连续</td>
+<td>Wiener 过程 W(t)，或连续记录的随机电压</td>
+</tr>
+</table>
+</div>
+<div class="takeaway">记忆抓手：时间轴是一种“连续/离散”，数值集合是另一种；样本路径是否连续，是第三个问题。</div>
+</section>
+<section id="finite" class="lesson">
+<div class="section-num">02 / 知识组 2 · 有限维分布与特征函数族</div>
+<h2>别只看每一帧，还要知道帧与帧怎样联系</h2>
+<p class="intuition">两段录像可以每一帧看起来都服从相同分布，却有完全不同的剧情。一维分布只说明“这一刻怎样”，联合分布才说明“这些时刻怎样一起出现”。</p>
+<h3>有限维分布的定义：只挑有限个时刻，问它们同时满足什么条件</h3><p>先只挑一个固定时刻 t，X(t) 就是一个普通随机变量。另设一个数值门槛 x，“这个时刻的状态不超过 x”的概率定义为<strong>一维分布函数</strong> F(t;x)。分号左边放时刻，右边放数值门槛：</p>\[F(t;x):=P(X(t)\le x).\]<p>再挑两个时刻 t₁、t₂，分别设门槛 x₁、x₂。要求它们<strong>同时</strong>满足，得到<strong>二维分布函数</strong>；n 个时刻同理：</p>\[F(t_1,t_2;x_1,x_2):=P(X(t_1)\le x_1\text{ 且 }X(t_2)\le x_2),\]\[F(t_1,\ldots,t_n;x_1,\ldots,x_n):=P\left(\bigcap_{j=1}^n\{X(t_j)\le x_j\}\right).\]<p>最后的 ∩ 表示“全部这些事件都发生”，j 是从 1 到 n 的编号。n 维是因为取到了 n 个随机数，不表示时间有 n 个方向。“有限维分布函数族”就是让 n 和这些时刻任意变化后，收集到的<strong>全部</strong>联合分布；“族”只是“一整套”的数学说法。</p><h3>同一维分布，不同的时间依赖</h3>
+<p>令 \(B_n\) 是独立的公平 0/1 硬币。过程 A 每次都用同一枚结果：\(X_n=B_1\)；过程 B 每次用新的结果：\(Y_n=B_n\)。各自每个时刻都以 1/2 概率取 0 或 1。但 A 永远不变，B 会跳来跳去。比如：</p>\[P(X_1=0,X_2=0)=\tfrac12,\qquad P(Y_1=0,Y_2=0)=\tfrac14.\]<p>所以<strong>只给所有一维分布，还没有描述完整的过程规律</strong>。后面 Gaussian 过程能用均值与协方差描述，是一种特殊的便利，不是普遍事实。</p>
+<h3>两条必须满足的一致性要求</h3>
+<ol>
+<li>
+<b>对称性：</b>同时交换时刻及其门槛，不改变事件。\(F(t_2,t_1;x_2,x_1)=F(t_1,t_2;x_1,x_2)\)。只交换时间不交换门槛，一般不对。</li>
+<li>
+<b>相容性：</b>不再限制某些坐标，把它们的门槛放到 +∞，就必须退回相应的边缘分布：</li>
+</ol>\[F(t_1,\ldots,t_m;x_1,\ldots,x_m)=F(t_1,\ldots,t_n;x_1,\ldots,x_m,+\infty,\ldots,+\infty).\]<p>若时刻重复，例如 \(t_1=t_2=t\)，那是同一个随机变量被写了两次，联合事件等于 \(X(t)\le\min(x_1,x_2)\)，不能当成两次独立抽样。</p>
+<h3>有限维特征函数族的定义：给选出的随机向量作编码</h3><p>这里 tⱼ 是选定的观察时刻，uⱼ 是另行选择的实数编码参数，两者不是同一种东西。将 X(t₁),…,X(tₙ) 代入第一章的<a href="../chapter1/index.html#characteristic-definition">特征函数定义</a>，把每个 uⱼX(tⱼ) 相加后取复指数的平均，就定义：</p>\[\varphi(t_1,\ldots,t_n;u_1,\ldots,u_n)=E\exp\!\left(i\sum_{j=1}^nu_jX(t_j)\right).\]<p>u 是特征函数的频率参数，t 是过程的时间参数，别混用。它也可写成 \(\int_{\mathbb R^n}e^{i\sum_j u_jx_j}\,dF(t_1,\ldots,t_n;\boldsymbol x)\)。所有时刻组合的 φ 合起来就是有限维特征函数族；借助<a href="../chapter1/index.html#characteristic-uniqueness">特征函数唯一性</a>，它与有限维分布族表达同样的信息。某些 u 设为 0，就提取相应边缘。</p>
+<div class="note">完整的有限维分布描述任意有限次观测的统计规律。但“样本路径必然连续”这样的全时间轴性质仍需要单独说明，不能只凭各时刻的边缘分布臆测。本章 Wiener 过程会明确补上路径的连续性。</div>
+<div class="takeaway">记忆抓手：一个时刻看边缘，多个时刻看联合；看上去同样“随机”，并不意味着有同样的时间结构。</div>
+</section>
+<section id="statistics" class="lesson">
+<div class="section-num">03 / 知识组 3 · 随机过程的数字特征</div>
+<h2>均值看中心，协方差看时刻之间的联动</h2>
+<p class="intuition">把所有试验在同一时刻的值堆起来，你可以算平均和方差。再同时拿两个时刻的值，就能问“这一刻偏高，另一刻是否也偏高”。</p>
+<p>下面是在<strong>定义名称</strong>，先把各符号对上：t 是一个观察时刻，s 是另一个观察时刻；E 表示按试验概率平均；D 表示方差。mX(t) 不是某条实际路径，而是“所有试验在 t 时刻的平均”。Φ（大写 phi）用来命名均方值，R 命名相关，C 命名协方差；下标 X 只是提醒属于哪个过程。</p><div class="table-wrap">
+<table>
+<tr>
+<th>名字</th>
+<th>定义（实过程）</th>
+<th>看什么</th>
+</tr>
+<tr>
+<td>均值函数</td>
+<td>\(m_X(t)=E[X(t)]\)</td>
+<td>各时刻的平均位置</td>
+</tr>
+<tr>
+<td>方差函数</td>
+<td>\(D_X(t)=E[(X(t)-m_X(t))^2]\)</td>
+<td>各时刻偏离均值有多分散</td>
+</tr>
+<tr>
+<td>均方值函数</td>
+<td>\(\Phi_X(t)=E[X(t)^2]\)</td>
+<td>各时刻原始数值的平方平均</td>
+</tr>
+<tr>
+<td>相关函数</td>
+<td>\(R_X(s,t)=E[X(s)X(t)]\)</td>
+<td>两个时刻的原始乘积平均</td>
+</tr>
+<tr>
+<td>协方差函数</td>
+<td>\(C_X(s,t)=E[(X(s)-m_X(s))(X(t)-m_X(t))]\)</td>
+<td>两个时刻去掉均值后的联动</td>
+</tr>
+</table>
+</div>
+<p>这些量要求对应的期望存在；有限二阶矩足以保证这里的相关、协方差都有限。注意 \(E[X(t)^2]\) 与 \((E[X(t)])^2\) 不同，前者先平方再平均。</p>
+<div class="formula">\[C_X(s,t)=R_X(s,t)-m_X(s)m_X(t),\]\[D_X(t)=C_X(t,t),\qquad\Phi_X(t)=R_X(t,t)=D_X(t)+m_X(t)^2.\]</div>
+<p>这三条是从表中定义推出的关系式，不是新的模型假设。把协方差定义中的两个括号展开，得 EX(s)X(t)−mX(t)EX(s)−mX(s)EX(t)+mX(s)mX(t)，中间各项合并，就是 R−mXmX。再让 s=t：去均值后的平方平均恰是方差，未去均值的乘积变成 X(t)²，恰是均方值。若均值为 0，R 才与 C 相同。</p>
+<h3>相关函数，不是相关系数</h3>
+<p>这里“相关”指原始乘积的平均，不限制在 −1 到 1 之间。若需要无量纲的线性相关强弱，才另外计算 \(\rho(s,t)=C_X(s,t)/\sqrt{D_X(s)D_X(t)}\)（两个方差为正）。</p>
+<p>例如 X(t)=A+t，A 是同一条路径共享的随机数，EA=0、DA=1。均值 E(A+t)=t，方差 D(A+t)=DA=1；展开乘积 E[(A+s)(A+t)]=EA²+(s+t)EA+st=1+st，因而得到：</p>\[m_X(t)=t,\quad D_X(t)=1,\quad R_X(s,t)=1+st,\quad C_X(s,t)=1.\]<p>后两个公式差了 st，正是均值的乘积；R 可以越来越大，但随机波动本身的协方差一直是 1。</p>
+<h3>实用计算模板：随机系数 × 确定函数</h3>
+<p>若 \(X(t)=Af(t)+Bg(t)\)，其中 A,B 是有有限二阶矩的随机变量，f,g 是普通确定函数，则：</p>\[m_X(t)=EA\,f(t)+EB\,g(t),\]\[C_X(s,t)=DA\,f(s)f(t)+DB\,g(s)g(t)+\operatorname{cov}(A,B)[f(s)g(t)+g(s)f(t)].\]<p>这个模板也由展开直接得到：先去均值，X(t)−mX(t)=(A−EA)f(t)+(B−EB)g(t)。在 s、t 各写一份再相乘，得到两项平方系数与两项交叉系数；分别平均，就依次是 DA、DB 和 cov(A,B)，因此有上式。最后用 R=C+mXmX 与对角线公式求其他数字特征。关键是<strong>同一个 A、B 在所有时刻反复使用</strong>，不是每到一个时刻重新抽一次。</p>
+<div class="takeaway">做数字特征题：先算 m，再展开 R 或 C，最后取 s=t。每一步都写出随机量和确定量的区别。</div>
+</section>
+<section id="joint" class="lesson">
+<div class="section-num">04 / 知识组 4 · 两个过程的联合分布与数字特征</div>
+<h2>两段随机故事，怎样算“没有关系”？</h2>
+<p class="intuition">两支传感器在同一时刻读数互不影响，不代表它们的整段记录彼此独立。一个传感器可能只是另一个的延迟版本。</p>
+<h3>二维过程与联合有限维分布</h3>
+<p>把两个过程配在一起，得到向量过程 \(\{(X(t),Y(t)):t\in T\}\)。可以在 X 里取 m 个时刻，在 Y 里取 n 个不必相同的时刻，联合分布就是：</p>\[P\left(\bigcap_{j=1}^m\{X(t_j)\le x_j\}\cap\bigcap_{k=1}^n\{Y(r_k)\le y_k\}\right).\]<p>边缘分布就是放弃对另一过程的限制。<strong>两个过程独立</strong>，要求对任意这些有限时刻选择，上式都等于：</p>\[P\left(\bigcap_{j=1}^m\{X(t_j)\le x_j\}\right)P\left(\bigcap_{k=1}^n\{Y(r_k)\le y_k\}\right).\]<p>这比“每个 t 下 X(t) 与 Y(t) 独立”强。反例：\(X_n\) 是独立硬币，\(Y_n=X_{n+1}\)。同一时刻的 Xₙ 与 Yₙ 独立，但 Yₙ 与 Xₙ₊₁ 完全相同，所以两个过程并不独立。</p>
+<h3>互相关与互协方差</h3>\[R_{XY}(s,t)=E[X(s)Y(t)],\]\[C_{XY}(s,t)=\operatorname{cov}(X(s),Y(t))=R_{XY}(s,t)-m_X(s)m_Y(t).\]<p>这里第一个下标对应第一个时刻：XY(s,t) 表示 X 在 s、Y 在 t。对实过程 \(R_{XY}(s,t)=R_{YX}(t,s)\)，但一般不能直接交换过程名称而不交换时刻。</p>
+<p>两个过程<strong>不相关</strong>，要求对<strong>所有 s,t</strong> 有 \(C_{XY}(s,t)=0\)。在二阶矩存在时，过程独立 ⇒ 过程不相关；反向一般不成立。只有两个过程在一起构成联合 Gaussian 过程，所有交叉协方差为零才足以推出两个过程独立。</p>
+<p>仍要区分“相关函数为 0”和“不相关”：若 X,Y 独立但均值非零，\(R_{XY}=m_Xm_Y\) 通常不为 0，\(C_{XY}\) 才为 0。</p>
+<div class="takeaway">记忆抓手：过程独立检查“任意一组时刻”；过程不相关检查“任意一对时刻”，不能只查 s=t。</div>
+</section>
+<section id="complex" class="lesson">
+<div class="section-num">05 / 知识组 5 · 复随机过程</div>
+<h2>复过程：把两个实信号装进一个数</h2>
+<p class="intuition">复数不是多加一种神秘随机性，而是同时记录两个实信号：实部 X(t) 与虚部 Y(t)。平方大小应该是 X²+Y²，不能用普通平方把它们相减。</p>\[Z(t)=X(t)+iY(t),\qquad |Z(t)|^2=X(t)^2+Y(t)^2.\]<div class="note">
+<b>共轭约定：</b>本章采用学习指导的“第一个因子取共轭”：\(R_Z(s,t)=E[\overline{Z(s)}Z(t)]\)。有些材料对第二个因子取共轭；两种约定会互为共轭，本套教程在这里保持第一因子取共轭。实过程不受影响。</div>
+<h3>复过程的定义怎样沿用“平均、平方偏差”的思路？</h3><p>先提醒：i²=−1；对 z=a+ib，共轭 z̄=a−ib，模长平方 |z|²=a²+b²。均值仍是逐项平均；方差必须平均<strong>模长平方</strong>，以保证它是非负实数。mZ、DZ、ΦZ、RZ、CZ 分别沿用均值、方差、均方值、相关、协方差的名称。于是按定义与期望线性性：</p>\[m_Z(t)=E[Z(t)]=m_X(t)+im_Y(t),\]\[D_Z(t)=E|Z(t)-m_Z(t)|^2=D_X(t)+D_Y(t),\]\[\Phi_Z(t)=E|Z(t)|^2,\qquad R_Z(s,t)=E[\overline{Z(s)}Z(t)],\]\[C_Z(s,t)=E[\overline{Z(s)-m_Z(s)}(Z(t)-m_Z(t))]=R_Z(s,t)-\overline{m_Z(s)}m_Z(t),\]\[D_Z(t)=C_Z(t,t),\qquad\Phi_Z(t)=R_Z(t,t).\]<p>例如第二式的来由是 |(X−mX)+i(Y−mY)|²=(X−mX)²+(Y−mY)²，再取期望。因此方差相加<strong>不需要实部与虚部独立或不相关</strong>，因为模长平方直接等于两部分平方之和，没有交叉项。与实随机变量的 D(X+Y) 公式不同。</p>
+<p>若要从实部、虚部计算相关函数，直接展开：</p>\[R_Z(s,t)=R_X(s,t)+R_Y(s,t)+i[R_{XY}(s,t)-R_{YX}(s,t)].\]<p>因此 RZ 可能是复数，但对角线上 \(R_Z(t,t)=E|Z(t)|^2\) 必定是非负实数。</p>
+<h3>两个复过程的互相关、互协方差</h3>\[R_{Z_1Z_2}(s,t)=E[\overline{Z_1(s)}Z_2(t)],\]\[C_{Z_1Z_2}(s,t)=E[\overline{Z_1(s)-m_{Z_1}(s)}(Z_2(t)-m_{Z_2}(t))]\]\[=R_{Z_1Z_2}(s,t)-\overline{m_{Z_1}(s)}m_{Z_2}(t).\]<p>例如 \(Z(t)=Ae^{i\omega t}\)，A 是零均值、\(E|A|^2=v\) 的复随机变量。则 mZ=0、DZ=v，\(R_Z(s,t)=ve^{i\omega(t-s)}\)。把 s,t 交换后，它正好变成共轭，符合下一节的共轭对称性。</p>
+<div class="takeaway">记忆抓手：复过程的平方能量用 |Z|²；相关与协方差要对第一个因子取共轭，均值乘积也不能漏共轭。</div>
+</section>
+<section id="classes" class="lesson">
+<div class="section-num">06 / 知识组 6 · 几类重要的随机过程（前半）</div>
+<h2>用特殊结构，让整条过程变得可计算</h2>
+<h3 id="second-order">6.1 二阶矩过程：可以谈均方与相关</h3>
+<p>如果每个 t 都有 \(E|X(t)|^2&lt;\infty\)，就称为二阶矩过程。<a href="../chapter1/index.html#second-moment-bound">第一章的二阶矩不等式</a>说明它自动保证一阶绝对矩有限，因为 \(E|X(t)|\le\sqrt{E|X(t)|^2}\)。它的相关函数不是任意凑出来的二元函数，至少满足：</p>
+<ol>
+<li>
+<b>共轭对称：</b>\(R_X(t,s)=\overline{R_X(s,t)}\)。实过程退化成普通对称。</li>
+<li>
+<b>非负定：</b>任取时刻 t₁,…,tₙ 和复系数 c₁,…,cₙ，均有：</li>
+</ol>\[\sum_{j,k=1}^n\overline{c_j}c_kR_X(t_j,t_k)=E\left|\sum_{j=1}^nc_jX(t_j)\right|^2\ge0.\]<p>平方大小的平均不可能为负，所以任意有限观测形成的相关矩阵都必须半正定。协方差矩阵也一样。一个方便的检查是 \(|R_X(s,t)|^2\le\Phi_X(s)\Phi_X(t)\)，即两时刻的乘积平均不能超过各自均方根的乘积。</p>
+<h3 id="gaussian">6.2 正态/Gaussian 过程：所有有限次观测联合正态</h3>
+<p>要求对任意 n 和任意时刻 t₁,…,tₙ，随机向量 \((X(t_1),\ldots,X(t_n))\) 都是多维正态。于是它是二阶矩过程，并且：</p>\[\boxed{\text{Gaussian 过程的全部有限维分布，由 }m_X(t)\text{ 和 }C_X(s,t)\text{ 完全确定。}}\]<p>因为取定时刻后，均值向量就是 \((m_X(t_1),\ldots,m_X(t_n))\)，协方差矩阵第 jk 项就是 \(C_X(t_j,t_k)\)，而<a href="../chapter1/index.html#normal">多维正态由这两者决定</a>。允许奇异协方差所对应的退化正态。</p>
+<p>
+<b>别只检查每个时刻单独正态。</b>例如 Z 标准正态，S 独立等概率取 ±1；令 X(0)=Z、X(1)=SZ。这两个时刻各自标准正态，但 \(|X(0)|=|X(1)|\)，不是联合正态。因此不能据此宣布它是 Gaussian 过程。</p>
+<h3 id="increments">6.3 增量：只算一段时间内新增加的部分</h3>\[\Delta X_{(s,t]}=X(t)-X(s),\qquad s&lt;t.\]<p>累计总量包含过去；增量把过去扣掉。N(5) 是前 5 分钟总人数，N(5)−N(3) 才是第 3 到第 5 分钟新增人数。下面几类过程都在说“增量之间是什么关系”。</p>
+<h3 id="orthogonal">6.4 正交增量：不重叠的新增量，其乘积平均为零</h3>
+<p>二阶矩过程若对任意 \(t_1&lt;t_2\le t_3&lt;t_4\) 都满足：</p>\[E[\overline{X(t_2)-X(t_1)}(X(t_4)-X(t_3))]=0,\]<p>就叫正交增量过程。“正交”沿用几何直觉：把随机变量看成向量，\(E[\overline AB]\) 看成内积，内积为 0 就相当于垂直。</p>
+<div class="note">
+<b>正交不等于不相关，除非均值条件合适。</b>不相关要求 \(E[\overline AB]=\overline{EA}EB\)；正交要求左边为 0。当两个增量均值都为 0 时，两者一致。独立增量若均值非零，也不一定正交，例如普通 Poisson 过程的两个非空区间增量均值均为正，其乘积平均大于 0。</div>
+<p>若观察区间为 [a,b]，且 X(a)=0，对 s≤t，把 X(t) 拆成 X(s)+后续增量。前一段 X(s) 与后一段正交：</p>\[R_X(s,t)=E|X(s)|^2+E[\overline{X(s)}(X(t)-X(s))]=\Phi_X(s).\]<p>因此一般写成：</p>\[R_X(s,t)=\Phi_X(\min(s,t)),\]\[C_X(s,t)=D_X(\min(s,t))+|m_X(\min(s,t))|^2-\overline{m_X(s)}m_X(t).\]<p>而 \(\Phi_X(t)=\Phi_X(s)+E|X(t)-X(s)|^2\ge\Phi_X(s)\)，所以均方值函数单调不减。这些结论都使用了 X(a)=0，不能把未知初值直接忽略。零均值实过程则更简单：\(R=C=\Phi(\min)=D(\min)\)。</p>
+<h3 id="independent-increments">6.5 独立增量与平稳增量：两个不同的问题</h3>
+<p>
+<b>独立增量：</b>任取递增时刻 \(t_0&lt;t_1&lt;\cdots&lt;t_n\)，不重叠区间的增量 \(X(t_1)-X(t_0),\ldots,X(t_n)-X(t_{n-1})\) 相互独立。</p>
+<p>
+<b>平稳增量：</b>\(X(t)-X(s)\) 的分布只依赖 t−s，而不依赖这一段放在时间轴上的哪里。例如同样 5 分钟，到达数的分布无论从早上哪一刻开始都相同。</p>
+<p>两者都成立，就叫平稳独立增量过程。<strong>平稳增量不等于过程本身平稳。</strong>即使每段新增量规律不变，累计值的均值与方差仍会随着时间增长，Poisson 与 Wiener 就是例子。</p>
+<div class="table-wrap">
+<table>
+<tr>
+<th>要问的事</th>
+<th>对应概念</th>
+</tr>
+<tr>
+<td>不同时间段的新变化，彼此提供信息吗？</td>
+<td>独立增量</td>
+</tr>
+<tr>
+<td>把同长度时间段平移，新增量的分布变吗？</td>
+<td>平稳增量</td>
+</tr>
+<tr>
+<td>两段新增量的原始乘积平均是否为零？</td>
+<td>正交增量</td>
+</tr>
+</table>
+</div>
+<p>
+<b>如何求有限维分布？</b>在 X(0)=0 的常见情形，先用独立增量构造向量，再累计回各时刻状态：</p>\[X(t_j)=\sum_{k=1}^j\Delta X_k,\qquad\Delta X_k=X(t_k)-X(t_{k-1}),\quad t_0=0.\]<p>一旦各增量分布已知，就能乘出增量的联合分布，再作这个确定的累加变换。更一般地可从一个确定初值时刻开始。<b>若初值本身随机，只知道“初值分布”和“增量分布”还不够，还要知道初值与增量的关系</b>；独立增量的定义自身没有保证初值独立。</p>
+<h3 id="wiener">6.6 Wiener 过程：连续积累的零均值随机扰动</h3>
+<p>参数为 σ²（σ&gt;0）的实 Wiener 过程 W(t)，t≥0，满足：W(0)=0；平稳独立增量；对 0≤s&lt;t，\(W(t)-W(s)\sim N(0,\sigma^2(t-s))\)。通常还明确选取<strong>样本路径以概率 1 连续</strong>的版本，这才是常用的 Brownian/Wiener 过程。σ²=1 时称标准 Wiener 过程。</p>
+<p>短时间扰动的标准差是 \(\sigma\sqrt{\Delta t}\)，不是 σΔt。时间放大 4 倍，波动的标准差放大 2 倍。</p><p class="formula-name">Wiener 的单时刻分布与数字特征：把定义中的 s 设为 0</p><p>σ² 是“每单位时间增加多少方差”的固定参数，不是某个时刻的实际方差。W(0)=0，所以 W(t)=W(t)−W(0) 本来就是一段长度 t 的增量；按定义为 N(0,σ²t)。再使用第一章已推导的正态均值和方差，得到：</p>\[W(t)\sim N(0,\sigma^2t),\quad m_W(t)=0,\quad D_W(t)=\sigma^2t.\]<p>若 s≤t，W(t)=W(s)+[W(t)−W(s)]，后面的增量与 W(s) 独立且均值为 0，所以：</p>\[R_W(s,t)=C_W(s,t)=\boxed{\sigma^2\min(s,t)}.\]<p>Wiener 是 Gaussian 过程：任意多个状态都是独立正态增量的线性组合。又因增量零均值，它也是正交增量过程。<b>但不同时间的 W(s)、W(t) 不是独立的</b>：它们共享从 0 到较早时刻的那段扰动。</p>
+<details>
+<summary>怎样直接写 Wiener 的 n 维分布？</summary>
+<p>对 \(0&lt;t_1&lt;\cdots&lt;t_n\)，设置 \(w_0=0,t_0=0\)，n 维联合密度为：</p>\[f(w_1,\ldots,w_n)=\prod_{j=1}^n\frac{\exp[-(w_j-w_{j-1})^2/(2\sigma^2(t_j-t_{j-1}))]}{\sqrt{2\pi\sigma^2(t_j-t_{j-1})}}.\]<p>独立的是每段差值；从差值变回累计值的 Jacobian 为 1。等价地，特征函数为：</p>\[\varphi(\boldsymbol t;\boldsymbol u)=\exp\!\left[-\frac{\sigma^2}2\sum_{k=1}^n(t_k-t_{k-1})\left(\sum_{j=k}^nu_j\right)^2\right].\]<p>因为第 k 段增量会被加进第 k 个及以后所有状态，所以对应的频率系数是后缀和 \(u_k+\cdots+u_n\)。</p>
+</details>
+<div class="takeaway">记忆抓手：累计状态共享过去；不重叠的增量才可能独立。Wiener 的“min”正是两时刻共享历史的长度。</div>
+</section>
+<section id="poisson" class="lesson">
+<div class="section-num">知识组 6 · Poisson 过程（本章重点）</div>
+<h2>Poisson 过程：随机事件到达，计数器向上跳</h2>
+<p class="intuition">想象一个只加不减的计数器：每来一位顾客就跳 1 格。它记录“到现在一共来了几个”，不是“现在店里还剩几个”。</p>
+<h3 id="counting">计数过程是什么？</h3>
+<p>N(t) 表示从 0 到 t 为止累计发生的事件数，取非负整数，随时间不减；N(t)−N(s) 表示 (s,t] 内的新增事件数。常规的简单计数过程从 N(0)=0 开始，每次事件跳 1，并取右连续路径。</p>
+<h3 id="poisson-definition">齐次 Poisson 过程的三条条件</h3>
+<ol>
+<li>N(0)=0。</li>
+<li>具有平稳独立增量。</li>
+<li>对每个 t≥0，\(N(t)\sim\operatorname{Poisson}(\lambda t)\)，其中 λ&gt;0 是固定到达强度。</li>
+</ol><p class="formula-name">Poisson 过程的单时刻计数概率：把速率换成这段内的总次数参数</p><p>这里 λ 是过程的固定速率，t 是固定观察时长，k 是可能看到的非负整数计数。固定 t 后，N(t) 就是参数 a=λt 的普通 Poisson 随机变量，所以将 a 代入<a href="../chapter1/index.html#poisson-law">第一章从二项极限推导的分布律</a>：</p>\[P(N(t)=k)=e^{-\lambda t}\frac{(\lambda t)^k}{k!},\qquad k=0,1,2,\ldots\]<p>λ 的单位是“次/单位时间”，λt 才是无量纲的期望次数。λ=2 次/分钟，观察 3 分钟，均值就是 6；不是每隔 1/2 分钟恰好来一次，1/λ 是<strong>平均</strong>间隔。</p>\[N(t)-N(s)\sim\operatorname{Poisson}(\lambda(t-s)),\qquad0\le s&lt;t.\]<h3>小时间段：一次是主要可能，多次是更小的量</h3>
+<p>记 h&gt;0 很小，\(o(h)\) 表示满足 \(o(h)/h\to0\) 的量，例如 h² 是 o(h)，h 本身不是。由 Poisson 概率展开：</p>\[P(\Delta N=0)=e^{-\lambda h}=1-\lambda h+o(h),\]\[P(\Delta N=1)=\lambda he^{-\lambda h}=\lambda h+o(h),\qquad P(\Delta N\ge2)=o(h).\]<p>不是说短时间里“绝不可能”多次到达，而是多次概率比 h 还小一阶。上述结论适用于齐次过程，后面非齐次过程把局部 λ 换成 λ(t)。</p>
+<h3>均值、方差、协方差：为什么又出现 min？</h3><p class="formula-name">计数均值与方差：普通 Poisson 分布的结论在每个时刻分别使用</p><p>第一章已逐项求和得到 Poisson(a) 的均值和方差都为 a；这里 a=λt，所以：</p>\[m_N(t)=D_N(t)=\lambda t.\]<p>对 s≤t，N(t)=N(s)+[N(t)−N(s)]；后段增量与 N(s) 独立：</p>\[C_N(s,t)=D_N(s)=\lambda s.\]<p>因此全部二阶特征为：</p>\[\boxed{C_N(s,t)=\lambda\min(s,t),\quad R_N(s,t)=\lambda\min(s,t)+\lambda^2st},\]\[\Phi_N(t)=\lambda t+\lambda^2t^2.\]<p>Wiener 与 Poisson 的协方差都是常数乘 min，不代表它们同分布。Poisson 的状态是整数且均值非零，Wiener 的状态正态、均值为零。</p>
+<h3>多时刻分布：先差分，再相乘</h3>
+<p>对 0=t₀&lt;t₁&lt;…&lt;tₙ，记 k₀=0，若 0≤k₁≤…≤kₙ 是整数：</p>\[P(N(t_1)=k_1,\ldots,N(t_n)=k_n)=\prod_{j=1}^ne^{-\lambda(t_j-t_{j-1})}\frac{[\lambda(t_j-t_{j-1})]^{k_j-k_{j-1}}}{(k_j-k_{j-1})!}.\]<p>否则概率为 0，因为计数不能倒退。特别地：</p>\[P(N(s)=m,N(t)=m+n)=e^{-\lambda t}\frac{(\lambda s)^m[\lambda(t-s)]^n}{m!n!}.\]<p>需要 CDF 时，把满足 \(k_j\le x_j\) 的这些离散概率相加即可。不能把 \(P(N(s)=m)P(N(t)=m+n)\) 当成答案，两个累计值不独立。</p>
+<div class="demo">
+<div class="demo-title">动手看 · 累计计数与区间增量</div>
+<label for="pois-rate">强度 λ（次/时间单位）：<output id="pois-rate-value">
+</output>
+</label>
+<input id="pois-rate" type="range" min="0.5" max="4" step="0.5" value="2">
+<label for="pois-end">观察终点 t（区间左端固定为 s=2）：<output id="pois-end-value">
+</output>
+</label>
+<input id="pois-end" type="range" min="2" max="6" step="0.1" value="4">
+<button id="pois-redraw">重新生成到达记录</button>
+<svg id="pois-svg" viewBox="0 0 640 290" role="img" aria-label="Poisson到达时间、累计阶梯和所选区间计数">
+</svg>
+<p id="pois-result" aria-live="polite">
+</p>
+<p class="muted">绿色竖线是到达时刻，阶梯记录累计值；橙色区间只算 (2,t] 的新增事件。一次模拟的计数不必等于它的期望。</p>
+</div>
+<h3 id="arrivals">到达时刻与到达间隔：不要都叫 T</h3>
+<p>本章用 τₙ 表示<strong>第 n 次事件发生在几点</strong>，用 Tₙ 表示<strong>第 n−1 次到第 n 次等了多久</strong>：</p>\[\tau_0=0,\quad T_n=\tau_n-\tau_{n-1},\quad \tau_n=T_1+\cdots+T_n.\]<p>第一次到达要等超过 x，就等于前 x 时间没有事件：</p>\[P(T_1&gt;x)=P(N(x)=0)=e^{-\lambda x}.\]<p>因此到达间隔是<strong>相互独立、同服从 Exp(λ)</strong> 的随机变量，均值 1/λ、方差 1/λ²。它的无记忆性可以直接计算：</p>\[P(T_1&gt;a+b\mid T_1&gt;a)=\frac{e^{-\lambda(a+b)}}{e^{-\lambda a}}=e^{-\lambda b}.\]<p>已经等了多久，不改变剩余等待时间的分布。这也解释为什么从某个事件发生后重新计时，后续仍遵循同样的规则。</p>
+<details>
+<summary>间隔的“独立”也能从联合密度看出来</summary>
+<p>对 0&lt;r₁&lt;…&lt;rₙ，前 n 次到达时刻的联合密度为 \(\lambda^ne^{-\lambda r_n}\)：每个 rⱼ 的微小窗口恰好来一次，其他截至 rₙ 的间隙都没有事件，指数因子相乘后只剩总时间 rₙ。令 vⱼ=rⱼ−rⱼ₋₁，Jacobian 为 1，就得到：</p>\[f_{T_1,\ldots,T_n}(v_1,\ldots,v_n)=\lambda^ne^{-\lambda\sum_jv_j}=\prod_{j=1}^n\lambda e^{-\lambda v_j},\quad v_j&gt;0.\]<p>乘积分解证明了间隔相互独立，同时每一项都是指数密度。</p>
+</details>
+<p>到达时刻 τₙ 是 n 个独立指数间隔之和，所以使用<a href="../chapter1/index.html#gamma-law">Gamma 的整数形状模型</a>：</p>\[\tau_n\sim\operatorname{Gamma}(n,\lambda),\quad f_{\tau_n}(r)=\frac{\lambda^nr^{n-1}e^{-\lambda r}}{(n-1)!}\quad(r&gt;0),\]\[E\tau_n=n/\lambda,\qquad D\tau_n=n/\lambda^2.\]<p>也可用事件等价式理解：\(\{\tau_n\le t\}=\{N(t)\ge n\}\)，因此 \(P(\tau_n\le t)=1-\sum_{k=0}^{n-1}e^{-\lambda t}(\lambda t)^k/k!\)。</p>
+<h3 id="uniform-arrivals">已知总数后：先在区间里均匀撒点，再排序</h3>
+<p>若已知 N(t)=n，则：</p>\[(\tau_1,\ldots,\tau_n)\mid\{N(t)=n\}\ \overset d=\ (U_{(1)},\ldots,U_{(n)}),\quad U_1,\ldots,U_n\text{ i.i.d. }U(0,t).\]<p>括号下标 (j) 表示从小到大排序后的第 j 个。排序后的到达时刻<strong>有依赖、各自不全是均匀分布</strong>；均匀且独立的是排序前的 n 个点。条件联合密度是：</p>\[f(r_1,\ldots,r_n\mid N(t)=n)=\frac{n!}{t^n},\quad0&lt;r_1&lt;\cdots&lt;r_n&lt;t.\]<p>为什么常数这么简单？指定这些到达点且 t 前无别的事件，密度为 \(\lambda^ne^{-\lambda t}\)；再除以 \(P(N(t)=n)=e^{-\lambda t}(\lambda t)^n/n!\)，λ 和指数全部消掉了。</p>
+<p>对<strong>不依赖顺序的和</strong>可以放心替换：\(\sum_jg(\tau_j)\) 与 \(\sum_jg(U_j)\) 在给定 N(t)=n 时同分布，因此：</p>\[E\left[\sum_{j=1}^ng(\tau_j)\ \middle|\ N(t)=n\right]=\frac nt\int_0^tg(u)du.\]<p>这就是后面脉冲总和、乘客等待题的共同工具。若问“第一个到达者何时到”，不能把它当 U(0,t)，其条件均值是 t/(n+1)，而不是 t/2。</p>
+<h3 id="superposition">叠加、分流与竞争：三种常用操作</h3>
+<ul>
+<li>
+<b>叠加：</b>独立 Poisson 过程相加，仍是 Poisson 过程，强度相加。</li>
+<li>
+<b>分流：</b>每次到达独立地以概率 p 标为 A，否则 B，则 A、B 是相互独立的 Poisson 过程，强度分别 λp、λ(1−p)。标记要独立于到达、彼此也独立。</li>
+<li>
+<b>已知总数：</b>两个独立流强度 λ₁、λ₂，在总数 n 的条件下，第一个流的数量是 \(\operatorname{Bin}(n,\lambda_1/(\lambda_1+\lambda_2))\)。这是条件分布，不是无条件独立被破坏后仍强行相乘。</li>
+<li>
+<b>下一次是谁：</b>指数时钟竞争中，流 j 先到的概率是它的强度占总强度的比例；连续多次的来源标签相互独立，具有相同的比例。</li>
+</ul>
+<p>这些结论的证明与计算分别在例 2.13—2.15 展开，不需要额外查资料。</p>
+<div class="takeaway">记忆抓手：问“几个”用 Poisson；问“等多久到下一次”用指数；问“第 n 次几点到”用 Gamma；已知总数求无序到达点，用均匀撒点。</div>
+</section>
+<section id="variants" class="lesson">
+<div class="section-num">知识组 6 · Poisson 的四种推广</div>
+<h2>四种“更复杂”，分别改了哪一层？</h2>
+<div class="table-wrap">
+<table>
+<tr>
+<th>过程</th>
+<th>改动</th>
+<th>直观场景</th>
+</tr>
+<tr>
+<td>非齐次 Poisson</td>
+<td>λ 变成确定的时间函数 λ(t)</td>
+<td>早高峰来得快，下午来得慢</td>
+</tr>
+<tr>
+<td>条件/混合 Poisson</td>
+<td>整次试验先随机抽一个强度 Λ</td>
+<td>不同日期隐藏的客流旺淡不同</td>
+</tr>
+<tr>
+<td>过滤 Poisson</td>
+<td>每次到达留下一个随年龄变化的响应 h</td>
+<td>每个脉冲到达后逐渐衰减</td>
+</tr>
+<tr>
+<td>复合 Poisson</td>
+<td>每次到达增加随机大小 Y，而非固定 +1</td>
+<td>随机订单数与随机订单金额</td>
+</tr>
+</table>
+</div>
+<h3 id="nonhomogeneous">6.7 非齐次：强度随时间确定地变化</h3>
+<p>N(0)=0，独立增量仍然成立，但通常不再平稳。设确定的局部强度 λ(t)≥0，局部可积。在 λ 连续的时刻，小区间满足：</p>\[P(N(t+h)-N(t)=1)=\lambda(t)h+o(h),\quad P(N(t+h)-N(t)\ge2)=o(h).\]<p>定义累计强度 M(t)，避免与一般过程的均值记号混淆：</p>\[M(t)=\int_0^t\lambda(u)du.\]<p>一段时间内的参数是<strong>面积</strong>，不是简单取末端强度乘时长：</p>\[N(b)-N(a)\sim\operatorname{Poisson}(M(b)-M(a)),\]\[P(N(b)-N(a)=k)=e^{-[M(b)-M(a)]}\frac{[M(b)-M(a)]^k}{k!}.\]<p>均值与方差都等于累计强度；协方差 \(C_N(s,t)=M(\min(s,t))\)。例如 λ(u)=2u 次/时间单位²，则 M(t)=t²，(1,3] 的新增数是 Poisson(8)，不是 Poisson(12)。</p>
+<div class="note">齐次过程中“给定总数，点均匀散布”的结论不能直接搬过来。非齐次过程中，给定 N(t)=n，未排序到达点的密度是 \(\lambda(u)/M(t)\)（0&lt;u&lt;t，M(t)&gt;0），强度较大的地方更容易出现。这个补充帮助你判断例 2.12 的“中间发车最优”为何依赖恒定强度。</div>
+<h3 id="mixed">6.8 条件 Poisson：先抽一天的强度，再按它到达</h3>
+<p>令正随机变量 Λ 的分布为 FΛ。给定 Λ=ℓ 后，整个过程是强度 ℓ 的齐次 Poisson 过程。Λ 是<strong>整条路径共享的一次抽样</strong>，不是每个时刻重新抽一遍。</p>\[P(N(s+t)-N(s)=k)=\int_{(0,\infty)}e^{-\ell t}\frac{(\ell t)^k}{k!}\,dF_\Lambda(\ell).\]<p>这就是把不同强度下的 Poisson 概率加权混合。若 Λ 有密度，dF 就换成密度乘 dℓ；若 Λ 只有有限个值，就用加权求和。</p>
+<p>
+<a href="../chapter1/index.html#total-expectation">全期望</a>与<a href="../chapter1/index.html#total-variance">全方差</a>给出（假设 EΛ² 有限）：</p>\[EN(t)=tE\Lambda,\quad DN(t)=E[\Lambda t]+D[\Lambda t]=tE\Lambda+t^2D\Lambda.\]<p>两项怎样各自算出来？给定 Λ=ℓ，N(t) 是 Poisson(ℓt)，条件均值与条件方差都为 ℓt。把 ℓ 换回随机强度 Λ，条件均值就是随机变量 Λt。于是：</p>\[E[D(N(t)\mid\Lambda)]=E[\Lambda t]=tE\Lambda,\qquad D(E[N(t)\mid\Lambda])=D(\Lambda t)=t^2D\Lambda.\]<p>把这两项相加就是刚才的方差式。t 是确定数，缩放后方差乘 t²；Λ 的均值 EΛ 与方差 DΛ 是不同数字，不能互换。</p><p>比单一 Poisson 多出来的 t²DΛ，是不同路径强度差异造成的额外波动。更一般地：</p>\[C_N(s,t)=\min(s,t)E\Lambda+stD\Lambda.\]<p>
+<b>条件独立不等于无条件独立。</b>两个不相交区间长度 a,b 的计数，在给定 Λ 后独立，未给定时协方差为 abDΛ。前段来了很多人，会让你更相信今天的 Λ 很大，从而提高对后段的预测。混合过程仍有平稳增量，但一般没有独立增量。</p>
+<p>观察到 N(t)=n 后，强度的后验分布（t&gt;0，条件事件概率为正）为：</p>\[P(\Lambda\le x\mid N(t)=n)=\frac{\int_{(0,x]}\ell^ne^{-\ell t}\,dF_\Lambda(\ell)}{\int_{(0,\infty)}\ell^ne^{-\ell t}\,dF_\Lambda(\ell)}.\]<p>推导就是<a href="../chapter1/index.html#bayes">第一章的贝叶斯公式</a>：每个候选强度的先验权重乘上它产生当前计数的可能性，再归一化；共同因子 tⁿ/n! 抵消。</p>
+<p>
+<b>算一个：</b>Λ 等概率取 1 或 3。观察 t=1，\(EN(1)=2,DN(1)=3\)；若恰好看见 n=0，则 \(P(\Lambda=3\mid N(1)=0)=e^{-3}/(e^{-1}+e^{-3})=1/(1+e^2)\)，更偏向“今天到达慢”。</p>
+<h3 id="filtered">6.9 过滤 Poisson：到达不是只跳一下，而是留下响应</h3>
+<p>每个到达时刻 τⱼ 都激发一个普通函数 h。假设 t=0 前没有事件或遗留响应，定义：</p>\[X(t)=\sum_{j=1}^{N(t)}h(t-\tau_j),\qquad t\ge0.\]<p>h(a) 表示“一个脉冲已经发生 a 时间后，还剩多大影响”。例如 \(h(a)=e^{-\alpha a}\)（a≥0），就是每来一个脉冲电压增加 1，之后指数衰减。这里“过滤”是通过线性系统后的输出，不是随机删掉一些事件。</p>
+<p>若 h 在有限观察区间可积、平方可积，相关公式为：</p>\[m_X(t)=\lambda\int_0^th(a)da,\quad D_X(t)=\lambda\int_0^th(a)^2da,\]\[\varphi(t;u)=\exp\left\{\lambda\int_0^t[e^{iuh(a)}-1]da\right\}.\]<p>任意 s,t≥0：</p>\[C_X(s,t)=\lambda\int_0^{\min(s,t)}h(s-r)h(t-r)dr,\quad R_X(s,t)=C_X(s,t)+m_X(s)m_X(t).\]<p>两个时刻的协方差只来自<strong>都能影响它们的早期脉冲</strong>。若写成 t 与 t+τ（τ≥0），变量代换 a=t−r 得：</p>\[C_X(t,t+\tau)=\lambda\int_0^th(a)h(a+\tau)da,\]\[\boxed{R_X(t,t+\tau)=\lambda\int_0^th(a)h(a+\tau)da+\lambda^2\left(\int_0^th(a)da\right)\left(\int_0^{t+\tau}h(a)da\right).}\]<div class="correction">
+<b>公式补正已直接写在上面：</b>学习指导将最后一项误写成 \(\lambda^2(\int_0^th)^2\)。一般 t 与 t+τ 的均值不同，应该是两个时刻均值的乘积；只有两个均值相同等特殊情况，才能写成平方。后面的例题与自测一律使用补正后的公式。</div>
+<details open>
+<summary>均值、方差和特征函数怎样推出？逐步固定到达个数计算</summary>
+<p>给定 N(t)=n，用未排序均匀点 Uⱼ 代替有序到达点计算对称的和。记 \(a=\frac1t\int_0^th(t-r)dr\)，\(b=\frac1t\int_0^th(t-r)^2dr\)，则条件均值为 na，条件二阶矩为 nb+n(n−1)a²。用 EN=λt、E[N(N−1)]=(λt)²：</p>\[EX=\lambda\int_0^th,\quad EX^2=\lambda\int_0^th^2+\lambda^2\left(\int_0^th\right)^2.\]<p>减去均值平方就得到方差。特征函数在条件 N(t)=n 下为 \([t^{-1}\int_0^te^{iuh(t-r)}dr]^n\)，对 Poisson 项数求和，得到上面的指数式。</p>
+<p>互协方差同理：把两时刻响应相乘，同一个脉冲的配对保留一重积分，不同脉冲的配对生成均值乘积。减去均值乘积后，只剩截至 min(s,t) 的共同脉冲积分。</p>
+</details>
+<h3 id="compound">6.10 复合 Poisson：每次加的不是 1，而是随机贡献</h3>
+<p>设 Y₁,Y₂,… 独立同分布，且与整个 Poisson 过程 N 独立，定义：</p>\[S(t)=\sum_{j=1}^{N(t)}Y_j,\qquad S(0)=0.\]<p>每次到达，累计量按本次标记 Yⱼ 跳动。Yⱼ 可以为负，此时 S(t) 就不再是只加不减的计数过程；但仍有平稳独立增量。</p>
+<p>若跳量的特征函数 \(f_Y(u)=Ee^{iuY_1}\)，则固定 t 后它就是第一章随机项数和的模型：</p>\[\varphi_S(t;u)=\exp\{\lambda t[f_Y(u)-1]\}.\]<p>若 \(EY_1^2&lt;\infty\)，令 μ=EY₁、σY²=DY₁：</p>\[m_S(t)=\lambda t\mu,\quad D_S(t)=\lambda tE[Y_1^2]=\lambda t(\sigma_Y^2+\mu^2),\]\[C_S(s,t)=\lambda\min(s,t)E[Y_1^2].\]<p>这里方差用的是<strong>跳量二阶原点矩</strong>，不是单独的跳量方差，因为随机到达次数本身也在波动。若每次 Y=1，就退回普通 Poisson 过程。</p>
+<div class="takeaway">分清四种随机性：λ(t) 是随时间确定变化；Λ 是路径共享的随机强度；h 是每次到达后的确定响应；Y 是每次到达的随机跳量。</div>
+</section>
+<section id="examples" class="examples">
+<div class="section-num">完整例题解析 · 例 2.1—2.15</div>
+<h2>15 道题，按“为什么想到这一步”展开</h2>
+<p>每题的必要条件、目标和解答都在这里。先读“入口”后暂停，试着说出第一步，再展开推导。前 7 题练描述过程，后 8 题把到达模型用于实际计算。</p>
+<div class="example-index">
+<a href="#ex1">2.1 多时刻硬币</a>
+<a href="#ex2">2.2 随机锯齿波</a>
+<a href="#ex3">2.3 共享随机初值</a>
+<a href="#ex4">2.4 随机时间平移</a>
+<a href="#ex5">2.5 相位差与互相关</a>
+<a href="#ex6">2.6 随机相位余弦</a>
+<a href="#ex7">2.7 随机游动</a>
+<a href="#ex8">2.8 随机终点计数</a>
+<a href="#ex9">2.9 Poisson 联合分布</a>
+<a href="#ex10">2.10 到达点求和</a>
+<a href="#ex11">2.11 衰减脉冲</a>
+<a href="#ex12">2.12 加开一班车</a>
+<a href="#ex13">2.13 男女客流</a>
+<a href="#ex14">2.14 三色车流</a>
+<a href="#ex15">2.15 飞机谁先起飞</a>
+</div>
+<article id="ex1" class="example">
+<div class="example-kicker">例 2.1 · 多时刻的联合规律</div>
+<h3>每个时刻抛新硬币，与一枚硬币决定整条路径，完全不同</h3>
+<p class="problem">在不同观察时刻使用相互独立的公平硬币结果：正面时 X(t)=cos(πt)，反面时 X(t)=2t，t≥0。求 t=1/2、t=1 的一维分布，以及这两个时刻的二维分布函数。</p>
+<p class="entry">
+<b>入口：</b>先固定时刻，把两个公式变成两个数；再检查两个时刻用的是同一次随机选择还是不同选择。</p>
+<details open>
+<summary>逐步解答</summary>
+<p>t=1/2 时，正面得到 0、反面得到 1，各概率 1/2。t=1 时，正面得到 −1、反面得到 2，各概率 1/2。因此：</p>\[F(\tfrac12;x)=\begin{cases}0&amp;x&lt;0,\\1/2&amp;0\le x&lt;1,\\1&amp;x\ge1,\end{cases}\qquad F(1;x)=\begin{cases}0&amp;x&lt;-1,\\1/2&amp;-1\le x&lt;2,\\1&amp;x\ge2.\end{cases}\]<p>题设在这两个时刻用独立硬币，所以 (0,−1)、(0,2)、(1,−1)、(1,2) 四种组合各占 1/4：</p>\[F(\tfrac12,1;x_1,x_2)=F(\tfrac12;x_1)F(1;x_2).\]<p>完全展开就是：</p>\[\begin{cases}0,&amp;x_1&lt;0\text{ 或 }x_2&lt;-1,\\1/4,&amp;0\le x_1&lt;1,\ -1\le x_2&lt;2,\\1/2,&amp;0\le x_1&lt;1,\ x_2\ge2\text{；或 }x_1\ge1,\ -1\le x_2&lt;2,\\1,&amp;x_1\ge1,\ x_2\ge2.\end{cases}\]</details>
+<div class="note">
+<b>对照另一种模型：</b>若只抛一次硬币，用它决定整条曲线是 cos(πt) 还是 2t，一维分布仍完全相同，但二维只可能 (0,−1)、(1,2)，各占 1/2。此时 CDF 为 \(\frac12\mathbf1_{\{x_1\ge0,x_2\ge-1\}}+\frac12\mathbf1_{\{x_1\ge1,x_2\ge2\}}\)。两种模型不能混用；本题采用前一种“各时刻独立选择”。</div>
+<p class="check">
+<b>检验：</b>x₁=0.5、x₂=0 时，独立模型的二维 CDF 为 1/4，共享硬币模型为 1/2。只看两张边缘分布表无法辨别它们。</p>
+<div class="method">带走方法：联合分布先问“随机性是否共享”，再决定能否相乘。</div>
+</article>
+<article id="ex2" class="example">
+<div class="example-kicker">例 2.2 · 随机相位与一维密度</div>
+<h3>锯齿波的起点随机，固定时刻会看到什么高度？</h3>
+<p class="problem">每条样本曲线都是同形锯齿波：周期 T&gt;0，从 0 以斜率 A/T 上升到 A 后瞬间回到 0（A&gt;0）。t=0 之后的第一次归零时刻 T₀ 在 [0,T] 均匀分布。求任意固定 t 的概率密度 f(t;x)。</p>
+<p class="entry">
+<b>入口：</b>随机的不是振幅或周期，而是整条波的水平位移。固定 t 后，它在一个周期里的位置仍然均匀。</p>
+<div class="demo">
+<div class="demo-title">动手看 · 同一条锯齿，随机平移一个周期</div>
+<label for="saw-phase">首次归零时刻 T₀/T：<output id="saw-phase-value">
+</output>
+</label>
+<input id="saw-phase" type="range" min="0" max="1" step="0.01" value="0.35">
+<svg id="saw-svg" viewBox="0 0 640 250" role="img" aria-label="随机相位锯齿波及固定时刻的高度">
+</svg>
+<p id="saw-result" aria-live="polite">
+</p>
+<p class="muted">示意取 A=T=1，观察时刻 t=1.4。滑块展示一次相位选择；相位随机均匀时，纵向高度也均匀。</p>
+</div>
+<details open>
+<summary>逐步解答</summary>
+<p>令 \(r=(t-T_0)\bmod T\)，余数取在 [0,T)，归零瞬间约定右连续值为 0，则：</p>\[X(t)=\frac AT[(t-T_0)\bmod T].\]<p>T₀ 在一个完整周期内均匀，把圆周整体旋转或反转不会改变均匀性，所以固定 t 后 \(r\sim U(0,T)\)。高度是 r 的线性缩放，故：</p>\[\boxed{f(t;x)=\begin{cases}1/A,&amp;0&lt;x&lt;A,\\0,&amp;\text{其他}.\end{cases}}\]<p>若按变量变换计算，密度为 \((1/T)|dr/dx|=(1/T)(T/A)=1/A\)。跨越多个周期时用取模表达，避免只在某一段上升线里套公式。端点的密度取值不影响分布。</p>
+</details>
+<p class="check">
+<b>检验：</b>总面积 A×1/A=1，均值 A/2、方差 A²/12，与 t 无关。但各时刻不独立，因为整条路径由同一个 T₀ 决定；一维分布恒定并不等于没有时间联系。</p>
+<div class="method">带走方法：周期信号 + 均匀随机相位 → 固定时刻的相位仍均匀；用模运算处理所有周期。</div>
+</article>
+<article id="ex3" class="example">
+<div class="example-kicker">例 2.3 · 全部时刻共享一个随机偏移</div>
+<h3>给一条过程整体加上同一个随机数，会增加怎样的相关？</h3>
+<p class="problem">实过程 X(t) 是零均值二阶正交增量过程，X(0)=0。ξ~N(0,1)，且对每个 t，ξ 与 X(t) 独立。定义 Y(t)=X(t)+ξ，t≥0，求 Y 的数字特征。</p>
+<p class="entry">
+<b>入口：</b>ξ 在所有时刻是同一个数，所以任意两时刻都共享这份随机偏移，不能把它当作每时刻新生成的独立噪声。</p>
+<details open>
+<summary>逐步解答</summary>
+<p>mY(t)=EX(t)+Eξ=0。展开相关函数：</p>\[R_Y(s,t)=E[(X(s)+\xi)(X(t)+\xi)]\]\[=R_X(s,t)+E[X(s)\xi]+E[X(t)\xi]+E\xi^2.\]<p>前两个交叉项借独立与零均值变为 0，Eξ²=1。正交增量且初值为 0 给出 \(R_X(s,t)=\Phi_X(\min(s,t))\)。于是：</p>\[\boxed{m_Y(t)=0,\quad R_Y(s,t)=C_Y(s,t)=\Phi_X(\min(s,t))+1,}\]\[\boxed{D_Y(t)=\Phi_Y(t)=\Phi_X(t)+1.}\]<p>t=0 也成立：Y(0)=ξ，方差 1。为计算这些二阶量，题设中 ξ 与每个 X(t) 独立即已足够，不必额外假定整个过程与 ξ 的更强联合独立关系。</p>
+</details>
+<p class="check">
+<b>检验：</b>Y 的增量满足 Y(t)−Y(s)=X(t)−X(s)，所以增量结构没变；只是 Y(0) 不再为 0。不能直接给 Y 套“零初值正交过程 R=Φ(min)”而漏掉初始随机量。</p>
+<div class="method">带走方法：共享随机初值会给所有时刻的协方差加上同一个常数。</div>
+</article>
+<article id="ex4" class="example">
+<div class="example-kicker">例 2.4 · 随机平移如何消掉人为的时间原点</div>
+<h3>每 S 时间换一次硬币符号，随机挪动分段起点后怎样相关？</h3>
+<p class="problem">把整条实时间轴按长度 S&gt;0 分段。每段独立抛一次公平硬币，整段 X(t) 恒取 +1 或 −1。取 ξ~U(0,S)，独立于整个 X 过程，令 Y(t)=X(t−ξ)。求 RX(s,t) 与 RY(s,t)。分段端点统一用右连续约定。</p>
+<p class="entry">
+<b>入口：</b>两个时刻落在同一格，就共享同一个符号，乘积为 1；落在不同格，乘积平均为 0。随机平移后只要求“同格的概率”。</p>
+<details open>
+<summary>逐步解答</summary>
+<p>为精确处理端点，可写 \(X(t)=B_{\lfloor t/S\rfloor}\)，其中 Bₙ 独立等概率取 ±1，n 遍历所有整数。则：</p>\[R_X(s,t)=\begin{cases}1,&amp;\lfloor s/S\rfloor=\lfloor t/S\rfloor,\\0,&amp;\text{否则}.\end{cases}\]<p>同格时 X(s)X(t)=Bₙ²=1；异格时用独立得到 EBⱼ EBₖ=0。mX=mY=0，所以相关就是协方差。</p>
+<p>令 d=|t−s|。若 d≥S，两点不可能同格，RY=0（d=S 的边界也为 0）。若 d&lt;S，随机平移让格子的相位在一个周期内均匀，两点之间不穿过格子边界的相位长度为 S−d：</p>\[\boxed{R_Y(s,t)=\begin{cases}1-|t-s|/S,&amp;|t-s|\le S,\\0,&amp;|t-s|&gt;S.\end{cases}}\]<p>这次只依赖两个时刻的间距，而不依赖它们与固定分段原点的位置。可直接想成长度为 S 的两段窗口，相距 d 时重叠长度 S−d，再除以 S。</p>
+</details>
+<p class="check">
+<b>检验：</b>d=0 时相关为 1，d=S/2 时为 1/2，d≥S 时为 0。两个时刻相距很短，也可能恰巧被原先固定的边界隔开；随机化边界后，不再有这个人为位置效应。</p>
+<div class="method">带走方法：先对随机平移取条件，再把相关转成一个几何比例。</div>
+</article>
+<article id="ex5" class="example">
+<div class="example-kicker">例 2.5 · 两信号的互相关</div>
+<h3>共享相位，固定相位差，互相关里哪个符号？</h3>
+<p class="problem">\(X(t)=A\sin(\omega t+\theta)\)，\(Y(t)=B\sin(\omega t+\theta+\psi)\)，A,B,ω,ψ 为实常数，θ~U(0,2π)。求 \(R_{XY}(s,t)\)。</p>
+<p class="entry">
+<b>入口：</b>把两个正弦的乘积变成余弦的差：第一项消掉随机相位，第二项在整圈平均后为 0。</p>
+<details open>
+<summary>逐步解答</summary>
+<p>使用 \(\sin a\sin b=[\cos(a-b)-\cos(a+b)]/2\)，其中 a=ωs+θ，b=ωt+θ+ψ：</p>\[R_{XY}(s,t)=\frac{AB}{2}E[\cos(\omega(s-t)-\psi)-\cos(\omega(s+t)+2\theta+\psi)].\]<p>第一个余弦与 θ 无关；第二个对 0 到 2π 积分为 0。因此：</p>\[\boxed{R_{XY}(s,t)=\frac{AB}{2}\cos(\omega(t-s)+\psi)}.\]<p>余弦是偶函数，把原来 \(\omega(s-t)-\psi\) 整体取负，就得到最后写法。mX=mY=0，所以 CXY=RXY。</p>
+</details>
+<p class="check">
+<b>检验：</b>s=t 时，结果 AB cosψ/2。ψ=π/2 时同一时刻互协方差为 0，但别的时差通常不为 0，不能宣布两个过程不相关，更不能宣布独立。</p>
+<div class="method">带走方法：先写清 RXY(s,t)=E[X(s)Y(t)]，相位差的正负自然就能跟踪。</div>
+</article>
+<article id="ex6" class="example">
+<div class="example-kicker">例 2.6 · 一维密度与全部数字特征</div>
+<h3>随机相位余弦，为何更容易出现在两端？</h3>
+<p class="problem">\(X(t)=A\cos(\omega t+\theta)\)，A,ω&gt;0 为常数，θ~U(−π,π)。求任意固定 t 的一维密度，以及均值、方差、均方值、相关与协方差函数。</p>
+<p class="entry">
+<b>入口：</b>固定 t 后，相位模 2π 仍均匀。余弦不是单调函数，一个内部高度对应两个相位，两个反函数分支都要加。</p>
+<details open>
+<summary>逐步解答</summary>
+<p>对 −A&lt;x&lt;A，令相位为 v，则 x=A cosv 有两个模 2π 的原像，且每个分支：</p>\[\left|\frac{dv}{dx}\right|=\frac1{\sqrt{A^2-x^2}}.\]<p>每个相位分支密度为 1/(2π)，因此：</p>\[\boxed{f(t;x)=\begin{cases}\dfrac1{\pi\sqrt{A^2-x^2}},&amp;-A&lt;x&lt;A,\\0,&amp;\text{其他}.\end{cases}}\]<p>这是反正弦密度，与 t 无关。在 ±A 附近余弦运动得慢，同样长的时间更集中在端点附近，所以密度在那里变大。端点本身没有正的概率质量，发散的密度依然可积。</p>
+<p>均值是完整周期上余弦的平均，mX(t)=0。积化和差给出：</p>\[R_X(s,t)=\frac{A^2}{2}E[\cos(\omega(t-s))+\cos(\omega(t+s)+2\theta)]=\frac{A^2}{2}\cos(\omega(t-s)).\]<p>因此全部数字特征为：</p>\[\boxed{m_X(t)=0,\quad R_X(s,t)=C_X(s,t)=\frac{A^2}2\cos(\omega(t-s)),}\]\[\boxed{D_X(t)=\Phi_X(t)=A^2/2.}\]</details>
+<p class="check">
+<b>检验：</b>把 x=A sinv 代入密度积分，得到总面积 1；对角线 cos0=1，均方值确实 A²/2。它不是 Gaussian 过程，因为每个时刻的分布有界且为反正弦分布，不是正态。</p>
+<div class="method">带走方法：随机相位信号先在圆周上看均匀性；求密度加所有分支，求二阶量用三角恒等式。</div>
+</article>
+<article id="ex7" class="example">
+<div class="example-kicker">例 2.7 · 一维随机游动</div>
+<h3>每步 ±1，n 步后能到哪些位置？</h3>
+<p class="problem">Y₀=0，\(Y_n=\sum_{j=1}^nX_j\)，各步独立，P(Xⱼ=+1)=p、P(Xⱼ=−1)=q，p+q=1。求 P(Yₙ=m)、EYₙ、DYₙ。</p>
+<p class="entry">
+<b>入口：</b>若 n 步里有 K 次向右，则向左 n−K 次，位置是 K−(n−K)=2K−n。于是把位置问题变成二项计数。</p>
+<details open>
+<summary>逐步解答</summary>
+<p>K~Bin(n,p)，其计数由来和组合数已在<a href="../chapter1/index.html#binomial-law">第一章</a>解释。要使 Yₙ=m，需要 \(K=(n+m)/2\)，所以：</p>\[\boxed{P(Y_n=m)=\binom n{(n+m)/2}p^{(n+m)/2}q^{(n-m)/2}},\]\[m\in\{-n,-n+2,\ldots,n-2,n\};\qquad\text{其他 }m\text{ 的概率为 }0.\]<p>n 与 m 必须同奇偶，且 |m|≤n，否则连可行步数都不存在。单步均值 p−q，二阶矩 p+q=1：</p>\[\boxed{EY_n=n(p-q),\quad DY_n=n[1-(p-q)^2]=4npq}.\]<p>若按特征函数做，\(\varphi_{X_j}(u)=pe^{iu}+qe^{-iu}\)，独立使 \(\varphi_{Y_n}(u)=(pe^{iu}+qe^{-iu})^n\)。二项式展开后，\(e^{ium}\) 前的系数正好就是上面的概率。</p>
+</details>
+<p class="check">
+<b>检验：</b>p=q=1/2 时 EYₙ=0、DYₙ=n；n=2 时只能在 −2、0、2，概率分别 q²、2pq、p²。均值为 0 不代表每条路径待在 0。</p>
+<div class="method">带走方法：随机游动的位置 = 2×向右步数−总步数，奇偶与范围先检查。</div>
+</article>
+<article id="ex8" class="example">
+<div class="example-kicker">例 2.8 · 在随机终点停止观察</div>
+<h3>Poisson 到达遇上独立的指数截止时间，计数为何变几何？</h3>
+<p class="problem">N(t) 是强度 λ&gt;0 的 Poisson 过程，T~Exp(μ)，μ&gt;0，且 T 与整个过程独立。求随机时间区间 [0,T] 内事件数 N(T) 的分布律。</p>
+<p class="entry">
+<b>入口：</b>观察终点 T 也是随机的，不能简单把它替换成 ET。先条件于 T=t，问题立即退回普通 Poisson 计数。</p>
+<details open>
+<summary>逐步解答</summary>\[\begin{aligned}P(N(T)=k)&amp;=\int_0^\infty P(N(t)=k\mid T=t)\,\mu e^{-\mu t}dt\\&amp;=\int_0^\infty e^{-\lambda t}\frac{(\lambda t)^k}{k!}\mu e^{-\mu t}dt\\&amp;=\frac{\mu\lambda^k}{k!}\int_0^\infty t^ke^{-(\lambda+\mu)t}dt\\&amp;=\boxed{\frac\mu{\lambda+\mu}\left(\frac\lambda{\lambda+\mu}\right)^k},\qquad k=0,1,2,\ldots\end{aligned}\]<p>积分用 \(\int_0^\infty t^ke^{-at}dt=k!/a^{k+1}\)，a&gt;0。这是<strong>从 0 开始</strong>的几何分布，停止概率 μ/(λ+μ)，对应<a href="../chapter1/index.html#geometric-law">第一章两种几何计数约定</a>中的“停止前发生几次”。</p>
+<p>直观上有两个指数时钟在竞争：一个以速率 λ 触发到达，一个以速率 μ 结束观察。每次若先到达，就多记 1 次并重新开始竞争；若先结束，就停止。因此停止前到达了 k 次的概率正是“连续赢 k 次，再输一次”。</p>
+</details>
+<p class="check">
+<b>检验：</b>概率之和为 1；均值 λ/μ=λET，符合全期望。方差是 λ/μ+λ²/μ²，比固定时间 ET 的 Poisson 方差更大，因为截止时间也在波动。连续模型中到达恰好撞上 T 的概率为 0，不影响端点约定。</p>
+<div class="method">带走方法：随机观察时长 → 按时长取条件；别把随机时间直接用均值替换来求分布。</div>
+</article>
+<article id="ex9" class="example">
+<div class="example-kicker">例 2.9 · 特征函数与两时刻联合概率</div>
+<h3>Poisson 的特征函数很好求，联合概率要先换成增量</h3>
+<p class="problem">N(t) 是强度 λ 的 Poisson 过程。求 (1) 一维特征函数 φ(t;u)；(2) 对 0≤s&lt;t、非负整数 m,n，求 P(N(s)=m,N(t)=m+n)。</p>
+<p class="entry">
+<b>入口：</b>第一问是指数级数；第二问不能拆两个累计值，要改写成“前段 m 次 + 后段 n 次”。</p>
+<details open>
+<summary>逐步解答</summary>\[\begin{aligned}\varphi(t;u)&amp;=\sum_{k=0}^\infty e^{iuk}e^{-\lambda t}\frac{(\lambda t)^k}{k!}\\&amp;=e^{-\lambda t}\sum_{k=0}^\infty\frac{(\lambda te^{iu})^k}{k!}=\boxed{e^{\lambda t(e^{iu}-1)}}.\end{aligned}\]<p>第二问的事件等价于 \(\{N(s)=m,\ N(t)-N(s)=n\}\)。这两个量是相邻不重叠区间的增量，独立，分别服从 Poisson(λs) 与 Poisson(λ(t−s))：</p>\[P(N(s)=m,N(t)=m+n)=e^{-\lambda s}\frac{(\lambda s)^m}{m!}e^{-\lambda(t-s)}\frac{[\lambda(t-s)]^n}{n!}\]\[=\boxed{e^{-\lambda t}\frac{(\lambda s)^m[\lambda(t-s)]^n}{m!n!}}.\]<p>s=0 时 N(0)=0，只有 m=0 有可能；公式中的零次幂按 Poisson 的通常约定取 0⁰=1。</p>
+<p>若还要求二维特征函数，可以把 \(uN(s)+vN(t)=(u+v)N(s)+v[N(t)-N(s)]\)，直接得到：</p>\[\varphi(s,t;u,v)=\exp\{\lambda s(e^{i(u+v)}-1)+\lambda(t-s)(e^{iv}-1)\}.\]</details>
+<p class="check">
+<b>检验：</b>令 v=0，二维特征函数退回 N(s) 的一维函数；令 u=0，两个指数的时长相加，退回 N(t) 的一维函数。这就是边缘相容性。</p>
+<div class="method">带走方法：联合计数先差分；联合特征函数先把各个独立增量的系数合并。</div>
+</article>
+<article id="ex10" class="example">
+<div class="example-kicker">例 2.10 · 按所有到达点求和</div>
+<h3>每个到达点带来贡献 f(τ)，所有贡献的平均是多少？</h3>
+<p class="problem">N(t) 是强度 λ 的 Poisson 过程，到达时刻为 τ₁,τ₂,…。对 [0,∞) 上的可测函数 f，若 \(\int_0^\infty|f(t)|dt&lt;\infty\)，证明：</p>\[E\left[\sum_{k=1}^\infty f(\tau_k)\right]=\lambda\int_0^\infty f(t)dt.\]<p class="entry">
+<b>入口：</b>先对非负函数证明，方便交换求和与积分；再把一般函数拆成正负两部分。</p>
+<details open>
+<summary>逐步解答</summary>
+<p>τₖ 的密度是 Gamma(k,λ)：\(f_{\tau_k}(t)=\lambda e^{-\lambda t}(\lambda t)^{k-1}/(k-1)!\)。若 f≥0，非负项允许交换求和、期望、积分（Tonelli 定理，即非负量怎样累计都不会因抵消而出错）：</p>\[\begin{aligned}E\sum_{k=1}^\infty f(\tau_k)&amp;=\sum_{k=1}^\infty\int_0^\infty f(t)\lambda e^{-\lambda t}\frac{(\lambda t)^{k-1}}{(k-1)!}dt\\&amp;=\lambda\int_0^\infty f(t)e^{-\lambda t}\sum_{j=0}^\infty\frac{(\lambda t)^j}{j!}dt\\&amp;=\boxed{\lambda\int_0^\infty f(t)dt}.\end{aligned}\]<p>因为指数级数之和为 e^λt，与前面的 e⁻λt 抵消。</p>
+<p>一般 f 写成 \(f=f^+-f^-\)，其中 \(f^+=\max(f,0)\)、\(f^-=\max(-f,0)\)。绝对可积保证两部分期望都有限，分别应用已证结论再相减，即得结果。它也保证 \(\sum_k|f(\tau_k)|\) 几乎必然有限，因为这个非负和的期望有限。</p>
+<p>
+<b>直观：</b>长度 dt 的小段平均有 λdt 个点，每个点贡献约 f(t)，所以小段平均贡献 λf(t)dt；所有小段加起来就是积分。这常称为 Poisson 到达点的 Campbell 均值公式，但公式与证明都在本页，不需要另查这个名字。</p>
+</details>
+<p class="check">
+<b>检验：</b>取 f(t)=1_{(a,b]}(t)，左边就是区间计数的平均，右边 λ(b−a)。取 f(t)=e⁻ᵗ，则平均总贡献 λ，即使总到达点无限多，衰减后的总贡献也可积。</p>
+<div class="method">带走方法：随机到达点上的总贡献，期望变成“强度 × 时间积分”。有正负时先查绝对可积。</div>
+</article>
+<article id="ex11" class="example">
+<div class="example-kicker">例 2.11 · 带随机幅度的指数衰减脉冲</div>
+<h3>仪表持续接收脉冲，但旧脉冲在衰减，平均电压会怎样？</h3>
+<p class="problem">脉冲按强度 λ 的 Poisson 过程到达。第 j 个脉冲的初始电压 Dⱼ 独立同分布，与到达过程独立，E|D₁|&lt;∞。每个脉冲在到达后经过年龄 a 衰减为 \(D_je^{-\alpha a}\)，α&gt;0。t=0 时无遗留脉冲，求时刻 t 的总电压均值。</p>
+<p class="entry">
+<b>入口：</b>先把“每个脉冲已经老了多久”写对：年龄是 t−τⱼ，不是 τⱼ。</p>
+<details open>
+<summary>逐步解答</summary>
+<p>总电压是 \(V(t)=\sum_{j=1}^{N(t)}D_je^{-\alpha(t-\tau_j)}\)。令 d=ED₁。</p>
+<p>给定 N(t)=n，幅度与到达时刻独立，可先把每个 Dⱼ 替换成它的均值 d；而衰减项的和不依赖到达点的排列，可用 n 个独立 U(0,t) 点替换：</p>\[E[V(t)\mid N(t)=n]=nd\frac1t\int_0^te^{-\alpha(t-u)}du=nd\frac{1-e^{-\alpha t}}{\alpha t}.\]<p>再用 EN(t)=λt：</p>\[\boxed{EV(t)=\frac{\lambda d}{\alpha}(1-e^{-\alpha t})}.\]<p>t=0 时按连续极限取 0。也可以直接使用例 2.10 的均值公式：固定观察时刻 t，让 \(f(u)=e^{-\alpha(t-u)}\mathbf1_{(0,t]}(u)\)，然后乘以 d，得到同一积分。</p>
+<p>短时间时 \(1-e^{-\alpha t}\approx\alpha t\)，平均约为 λdt；长时间趋于 λd/α。新脉冲持续补充，旧脉冲持续衰减，平均最终平衡。</p>
+<details>
+<summary>补充：平均的增长与衰减也能写成一个方程</summary>
+<p>对结果求导，得到 \(m'(t)=\lambda d-\alpha m(t)\)，m(0)=0。每单位时间新脉冲贡献平均 λd，旧电压以速率 αm 流失。这个方程提供另一种直观核对，不是额外假设。</p>
+</details>
+</details>
+<p class="check">
+<b>检验：</b>α→0 时没有衰减，极限为 λdt；不能把总电压写成 D×N(t)×e⁻αt，因为每个脉冲年龄都不同。</p>
+<div class="method">带走方法：脉冲题先写年龄；对无序求和可用均匀到达点，先处理随机幅度再处理随机位置。</div>
+</article>
+<article id="ex12" class="example">
+<div class="example-kicker">例 2.12 · 用过程模型选择发车时刻</div>
+<h3>两班车之间加开一班，放在哪里使总等待最短？</h3>
+<p class="problem">乘客按强度 λ 的齐次 Poisson 过程到站，0 时刻站上为空。原本 T 时刻一辆车带走所有乘客；现在在 (0,T) 中增加一班，时刻为 t，且两班容量足够带走各自等待的全部乘客。选择 t，使 (0,T] 中全部到达乘客的<strong>总等待时间的期望</strong>最小。</p>
+<p class="entry">
+<b>入口：</b>分为 (0,t] 与 (t,T] 两段。一个乘客贡献的等待，是“下一班车时刻−到达时刻”。</p>
+<details open>
+<summary>逐步解答</summary>
+<p>第一段给定来了 n 人，可把到达点看成未排序均匀点来求和，每人的平均等待是 t/2，因此条件总等待 nt/2。再对人数平均：</p>\[EW_1=\frac t2EN(t)=\frac{\lambda t^2}{2}.\]<p>第二段的长度为 T−t，平稳增量给出完全相同形式：</p>\[EW_2=\frac{\lambda(T-t)^2}{2}.\]<p>总期望为：</p>\[L(t)=\frac\lambda2[t^2+(T-t)^2]=\lambda(t-T/2)^2+\frac{\lambda T^2}{4}.\]<p>第一项是非负平方，只有 t=T/2 为 0，所以：</p>\[\boxed{t^*=T/2,\qquad\min L(t)=\lambda T^2/4}.\]<p>不加车时总等待期望为 λT²/2，因此增加中间这班车恰好把它减半。这里优化的是总等待的期望，没必要冒险把随机比值“总等待/人数”的期望换成两个期望相除。</p>
+</details>
+<div class="demo">
+<div class="demo-title">动手看 · 移动加班车，比较两段等待成本</div>
+<label for="bus-t">加班时刻 t/T：<output id="bus-t-value">
+</output>
+</label>
+<input id="bus-t" type="range" min="0" max="1" step="0.01" value="0.3">
+<svg id="bus-svg" viewBox="0 0 640 260" role="img" aria-label="归一化总等待时间随加班车时刻变化的抛物线">
+</svg>
+<p id="bus-result" aria-live="polite">
+</p>
+<p class="muted">纵轴为 L(t)/(λT²)，最低值为 1/4。端点表示两班几乎重合，等于没充分利用加班车。</p>
+</div>
+<p class="check">
+<b>检验：</b>两段等长，平均人数和平均等待都平衡。若客流强度随时间变化，积分权重会改变，中点未必最优；不能只背“任何发车问题都平分”。</p>
+<div class="method">带走方法：每段等待成本正比于长度平方；先把随机目标取期望，再做普通一元优化。</div>
+</article>
+<article id="ex13" class="example">
+<div class="example-kicker">例 2.13 · 独立流叠加与已知总数的条件分布</div>
+<h3>男女客流分别到来，总流量怎样分布？已知总数后怎样分配？</h3>
+<p class="problem">男性到达流 X(t) 与女性到达流 Y(t) 是相互独立的 Poisson 过程，强度分别为 1 人/分钟与 2 人/分钟。求 (1) 总到达流；(2) 给定 t&gt;0 时总共 50 人，其中恰有 30 位女性的概率，以及女性人数的条件期望。</p>
+<p class="entry">
+<b>入口：</b>总流量相加；已知总数后，每一位来自哪个来源的比例，等于该来源强度占总强度的比例。</p>
+<details open>
+<summary>逐步解答</summary>
+<p>令 Z(t)=X(t)+Y(t)。它从 0 开始；不重叠区间的总增量由两条独立流的相应增量相加，仍相互独立。长度 h 的增量是两个独立 Poisson(h)、Poisson(2h) 之和，故为 Poisson(3h)。所以：</p>\[\boxed{Z\text{ 是强度 }3\text{ 人/分钟的 Poisson 过程。}}\]<p>这一步检查了整个过程的增量结构，而不只是某个时刻的分布。</p>
+<p>第二问先写一般 n、k：</p>\[\begin{aligned}P(Y(t)=k\mid Z(t)=n)&amp;=\frac{P(Y(t)=k,X(t)=n-k)}{P(Z(t)=n)}\\&amp;=\frac{e^{-2t}(2t)^k/k!\ e^{-t}t^{n-k}/(n-k)!}{e^{-3t}(3t)^n/n!}\\&amp;=\binom nk(2/3)^k(1/3)^{n-k}.\end{aligned}\]<p>因此给定总数，女性人数是 Bin(n,2/3)：</p>\[\boxed{P(Y(t)=30\mid Z(t)=50)=\binom{50}{30}(2/3)^{30}(1/3)^{20}\approx0.0704900},\]\[\boxed{E[Y(t)\mid Z(t)=50]=50\cdot\frac23=\frac{100}3\approx33.33.}\]<p>t 消掉了：既然已经给定总数，剩下只看来源比例。33.33 是条件平均，不要求真实人数能取小数。</p>
+</details>
+<p class="check">
+<b>检验：</b>女性的来源强度是男性的 2 倍，所以比例应为 2/3，不能因为只有男女两类就各按 1/2。给定总数后，男女数量的和固定，不再相互独立。</p>
+<div class="method">带走方法：无条件叠加用 Poisson，给定总数后的来源分配用二项分布。</div>
+</article>
+<article id="ex14" class="example">
+<div class="example-kicker">例 2.14 · 三个指数时钟的竞争</div>
+<h3>刚来了一辆红车，下一辆的颜色会受它影响吗？</h3>
+<p class="problem">红、绿、蓝汽车分别按强度 λR、λG、λB&gt;0 的独立 Poisson 流经过哨卡，忽略车长与延迟。求：(1) 合并车流的相邻到达间隔密度；(2) 刚观察到一辆红车后，下一辆为红、蓝、非红的概率；(3) 接下来连续三辆红车，再接一辆非红车的概率。</p>
+<p class="entry">
+<b>入口：</b>红车刚来过，不会让下次红车“该休息一下”。指数分布无记忆，每个流都像重新开启一个独立时钟。</p>
+<details open>
+<summary>逐步解答</summary>
+<p>总强度 \(\lambda_\Sigma=\lambda_R+\lambda_G+\lambda_B\)。叠加仍为 Poisson，所以总到达间隔 Z：</p>\[\boxed{f_Z(z)=\lambda_\Sigma e^{-\lambda_\Sigma z},\quad z&gt;0}\quad\text{（其他处为 0）}.\]<p>令后续三个流的剩余等待分别 TR、TG、TB，它们独立指数，参数分别为各自强度。下一辆是红，就是 TR&lt;min(TG,TB)：</p>\[P(\text{下一辆红})=\int_0^\infty\lambda_Re^{-\lambda_Rr}e^{-\lambda_Gr}e^{-\lambda_Br}dr=\frac{\lambda_R}{\lambda_\Sigma}.\]<p>完全类似：</p>\[\boxed{P(\text{红})=\lambda_R/\lambda_\Sigma,\quad P(\text{蓝})=\lambda_B/\lambda_\Sigma,\quad P(\text{非红})=(\lambda_G+\lambda_B)/\lambda_\Sigma.}\]<p>每次最先到达的时钟触发后，它重新等待；其他时钟虽然已经等了一段时间，由无记忆性，其剩余等待仍是原参数的指数分布。因此下一次竞争的条件概率仍是同样比例，与先前颜色无关。接下来四辆的指定标签可相乘：</p>\[\boxed{P(R,R,R,\text{非}R)=\left(\frac{\lambda_R}{\lambda_\Sigma}\right)^3\frac{\lambda_G+\lambda_B}{\lambda_\Sigma}}.\]<p>题目从“已经观察到的红车”之后开始计数，那辆红车不再额外乘一次红色概率。严格说某个预定精确时刻“恰好到达”的概率为 0；这里是在实际观察到的红车到达时刻之后重新计时。</p>
+</details>
+<p class="check">
+<b>检验：</b>三色强度相等时，下一辆红/蓝各 1/3，非红 2/3；指定序列概率为 (1/3)³(2/3)=2/81，不是 (1/3)⁴。</p>
+<div class="method">带走方法：独立指数竞争，谁先到的概率 = 它的强度/总强度；每次到达后可再次用同样规则。</div>
+</article>
+<article id="ex15" class="example">
+<div class="example-kicker">例 2.15 · 到达次数达到门槛，谁先完成？</div>
+<h3>两架飞机分别等够乘客起飞，怎样比较两个完成时间？</h3>
+<p class="problem">从 0 开始，A、B 的乘客分别按强度 λA、λB&gt;0 的独立 Poisson 过程到达。A 等够 nA 人起飞，B 等够 nB 人起飞，nA,nB 为正整数。求 (1) A 在 B 之后起飞的概率；(2) nA=nB 且 λA=λB 时的结果。</p>
+<p class="entry">
+<b>入口：</b>起飞是第 n 次到达，所以起飞时刻是 Gamma 随机变量。也可以把两条流合并，只看每位乘客的来源标签，避免二维积分。</p>
+<details open>
+<summary>逐步解答：先给出完整积分式，再化为有限求和</summary>
+<p>令 τA、τB 为两次起飞时刻，则独立且：</p>\[f_A(x)=\frac{\lambda_A^{n_A}x^{n_A-1}e^{-\lambda_Ax}}{(n_A-1)!},\qquad f_B(y)=\frac{\lambda_B^{n_B}y^{n_B-1}e^{-\lambda_By}}{(n_B-1)!},\quad x,y&gt;0.\]<p>A 之后起飞就是 τA&gt;τB，所以：</p>\[P(\tau_A&gt;\tau_B)=\int_0^\infty f_B(y)\left[\int_y^\infty f_A(x)dx\right]dy.\]<p>这个式子已经能计算，不过整数门槛还可以得到更方便的有限和。</p>
+<p>合并客流后，每个来源标签独立：属于 A 的概率 \(p=\lambda_A/(\lambda_A+\lambda_B)\)，属于 B 的概率 \(q=1-p\)。若第 nB 位 B 乘客到达时，A 乘客只有 j 人，且 j≤nA−1，那么 B 先完成。</p>
+<p>最后一位必须是 B，之前 nB+j−1 位中安排 j 位 A，有 \(\binom{n_B+j-1}{j}\) 种。因此：</p>\[\boxed{P(\tau_A&gt;\tau_B)=\sum_{j=0}^{n_A-1}\binom{n_B+j-1}{j}q^{n_B}p^j}.\]<p>每个 j 描述互斥的一种停止情况。也可用固定长度标签串：前 L=nA+nB−1 位乘客中，总有一方已完成；B 先完成当且仅当其中至少有 nB 位 B。等价地：</p>\[P(\tau_A&gt;\tau_B)=\sum_{k=n_B}^{n_A+n_B-1}\binom{n_A+n_B-1}{k}q^kp^{n_A+n_B-1-k}.\]<p>若 nA=nB 且 λA=λB，两个起飞时刻独立同分布，连续密度使打平概率为 0；交换 A、B 不改变问题，两个先后事件概率相等：</p>\[\boxed{P(\tau_A&gt;\tau_B)=1/2}.\]</details>
+<p class="check">
+<b>检验：</b>nA=nB=1 时，A 晚于 B 的概率是 λB/(λA+λB)，符合两个指数时钟竞争。只比较平均起飞时间 nA/λA 与 nB/λB，不能得到完整的先后概率。</p>
+<div class="method">带走方法：第 n 次到达用 Gamma；两个完成门槛比较，可合并成独立来源标签的计数问题。</div>
+</article>
+</section>
+<section id="review" class="lesson">
+<div class="section-num">主动回忆 / 学完后检查理解</div>
+<h2>说清楚理由，比认出公式更重要</h2>
+<p>下面 16 题覆盖本章最容易混淆的概念。选择答案后立即显示解释和本套教程内部的复习入口。</p>
+<div id="quiz">
+</div>
+<p id="quiz-score" role="status">
+</p>
+<button id="quiz-reset">清空答案，重新自测</button>
+<h3>按问题选择工具</h3>
+<div class="table-wrap">
+<table>
+<tr>
+<th>题目关键词</th>
+<th>怎么开始</th>
+<th>本章例题</th>
+</tr>
+<tr>
+<td>一维/二维分布</td>
+<td>固定时刻，列状态；检查是否共享随机量</td>
+<td>
+<a href="#ex1">2.1</a>、<a href="#ex2">2.2</a>
+</td>
+</tr>
+<tr>
+<td>数字特征</td>
+<td>先 m，再 R 或 C，再设 s=t</td>
+<td>
+<a href="#ex3">2.3</a>、<a href="#ex5">2.5</a>、<a href="#ex6">2.6</a>
+</td>
+</tr>
+<tr>
+<td>随机时移</td>
+<td>按时移条件化，计算两点同格的概率</td>
+<td>
+<a href="#ex4">2.4</a>
+</td>
+</tr>
+<tr>
+<td>随机游动</td>
+<td>位置改写成向右次数，检查奇偶与边界</td>
+<td>
+<a href="#ex7">2.7</a>
+</td>
+</tr>
+<tr>
+<td>随机观察终点</td>
+<td>先固定终点再混合，不把终点换成均值</td>
+<td>
+<a href="#ex8">2.8</a>
+</td>
+</tr>
+<tr>
+<td>多时刻累计计数</td>
+<td>用不重叠增量替换累计值</td>
+<td>
+<a href="#ex9">2.9</a>
+</td>
+</tr>
+<tr>
+<td>所有到达点的贡献</td>
+<td>强度乘贡献函数的积分</td>
+<td>
+<a href="#ex10">2.10</a>、<a href="#ex11">2.11</a>
+</td>
+</tr>
+<tr>
+<td>已知一段时间的总人数</td>
+<td>无序到达点均匀；对称的和可直接替换</td>
+<td>
+<a href="#ex11">2.11</a>、<a href="#ex12">2.12</a>
+</td>
+</tr>
+<tr>
+<td>已知总数，问来源</td>
+<td>按强度比例做二项分配</td>
+<td>
+<a href="#ex13">2.13</a>
+</td>
+</tr>
+<tr>
+<td>下一次谁到/指定来源序列</td>
+<td>独立指数竞争，来源概率按强度占比</td>
+<td>
+<a href="#ex14">2.14</a>
+</td>
+</tr>
+<tr>
+<td>谁先等够 n 次到达</td>
+<td>Gamma 完成时间；或合并来源标签计数</td>
+<td>
+<a href="#ex15">2.15</a>
+</td>
+</tr>
+</table>
+</div>
+<details>
+<summary>复习时展开：本章公式速查</summary>
+<div class="formula-sheet">\[m(t)=EX(t),\quad\Phi(t)=E|X(t)|^2,\quad D(t)=\Phi(t)-|m(t)|^2.\]\[R(s,t)=E[\overline{X(s)}X(t)],\quad C(s,t)=R(s,t)-\overline{m(s)}m(t),\quad D(t)=C(t,t).\]\[\text{Gaussian 过程：}\quad (m,C)\text{ 决定全部有限维分布。}\]\[\text{零初值正交增量：}\quad R(s,t)=\Phi(\min(s,t)),\quad\Phi\text{ 不减。}\]\[W(t)-W(s)\sim N(0,\sigma^2(t-s)),\quad C_W(s,t)=\sigma^2\min(s,t).\]\[N(t)-N(s)\sim\operatorname{Pois}(\lambda(t-s)),\quad m_N(t)=D_N(t)=\lambda t.\]\[C_N(s,t)=\lambda\min(s,t),\quad R_N(s,t)=\lambda\min(s,t)+\lambda^2st.\]\[\varphi_N(t;u)=e^{\lambda t(e^{iu}-1)},\quad T_j\overset{\mathrm{i.i.d.}}\sim\operatorname{Exp}(\lambda),\quad\tau_n\sim\operatorname{Gamma}(n,\lambda).\]\[(\tau_1,\ldots,\tau_n)\mid N(t)=n\ \overset d=\ \operatorname{sort}(U_1,\ldots,U_n),\quad U_j\overset{\mathrm{i.i.d.}}\sim U(0,t).\]\[E\sum_j f(\tau_j)=\lambda\int f(u)du\quad\text{（非负或绝对可积）}.\]\[\text{非齐次：}\quad M(t)=\int_0^t\lambda(u)du,\quad\Delta N_{(a,b]}\sim\operatorname{Pois}(M(b)-M(a)).\]\[\text{混合：}\quad EN(t)=tE\Lambda,\quad DN(t)=tE\Lambda+t^2D\Lambda.\]\[\text{过滤：}\quad m_X(t)=\lambda\int_0^th(a)da,\quad D_X(t)=\lambda\int_0^th(a)^2da.\]\[C_X(s,t)=\lambda\int_0^{\min(s,t)}h(s-r)h(t-r)dr,\quad R_X(s,t)=C_X(s,t)+m_X(s)m_X(t)\ \text{（实响应）}.\]\[\text{复合：}\quad \varphi_S(t;u)=e^{\lambda t(f_Y(u)-1)},\quad ES(t)=\lambda tEY,\quad DS(t)=\lambda tEY^2.\]<p>速查默认各公式的条件与正文相同，尤其是二阶矩、独立性、确定/随机初值、过滤过程从 0 启动。实过程去掉共轭即可。Gamma 第二参数均为速率。</p>
+</div>
+</details>
+</section>
+<section id="coverage" class="lesson sources">
+<div class="section-num">知识覆盖 / 教程内部导航</div>
+<h2>本章的每一组内容，都能在这里学完</h2>
+<p>知识范围来自同步学习指导第二章，解释采用重新编写的语言，Poisson 的建模和取条件思路也参考了 Ross。以下是覆盖对照；出处仅作记录，不需要查阅原书，也没有外部必读材料。</p>
+<div class="table-wrap">
+<table>
+<tr>
+<th>知识组</th>
+<th>已包含的内容</th>
+<th>本页入口</th>
+</tr>
+<tr>
+<td>1. 定义与分类</td>
+<td>统一概率空间、固定 t/ω 的两种切片、状态空间、样本函数与四类过程</td>
+<td>
+<a href="#concept">过程与样本函数</a>
+</td>
+</tr>
+<tr>
+<td>2. 有限维分布族</td>
+<td>一维、二维、n 维分布及其全族；有限维特征函数族；对称性与相容性</td>
+<td>
+<a href="#finite">有限维分布</a>
+</td>
+</tr>
+<tr>
+<td>3. 数字特征</td>
+<td>均值、方差、均方值、相关、协方差，以及三组互相转换关系</td>
+<td>
+<a href="#statistics">数字特征</a>
+</td>
+</tr>
+<tr>
+<td>4. 两个过程</td>
+<td>联合有限维分布、两个边缘、过程独立、互相关、互协方差、不相关及独立推出不相关</td>
+<td>
+<a href="#joint">两个过程的关系</a>
+</td>
+</tr>
+<tr>
+<td>5. 复过程</td>
+<td>定义；均值、方差、均方值、相关、协方差；互相关、互协方差；共轭约定与全部基本恒等式</td>
+<td>
+<a href="#complex">复随机过程</a>
+</td>
+</tr>
+<tr>
+<td>6. 重要过程</td>
+<td>二阶矩与相关核两性质；Gaussian；正交增量及零初值结论；独立/平稳增量与有限维构造；Wiener</td>
+<td>
+<a href="#classes">重要过程</a>
+</td>
+</tr>
+<tr>
+<td>6. Poisson 及其推广</td>
+<td>计数、齐次定义、小区间概率、全部数字特征、增量分布、到达/间隔、条件均匀排序；非齐次、混合及后验、过滤全部公式、复合过程</td>
+<td>
+<a href="#poisson">Poisson</a> / <a href="#variants">四种推广</a>
+</td>
+</tr>
+<tr>
+<td>完整例题</td>
+<td>例 2.1—2.15 的条件、目标、入口、推导、检验与解题方法</td>
+<td>
+<a href="#examples">15 道例题</a>
+</td>
+</tr>
+</table>
+</div>
+<h3>统一记号，避免同一个字母承担两件事</h3>
+<ul>
+<li>t,s 是观察时刻；u 是特征函数参数。\(\varphi(t;u)\) 与 \(\Phi_X(t)\)（均方值）不同。</li>
+<li>τₙ 是第 n 次到达时刻，Tₙ 是到达间隔；例 2.8 单独定义的 T 是随机截止时间。</li>
+<li>λ(t) 是确定的时变强度，Λ 是整条路径共享的随机强度，M(t)=∫λ 是累计强度。</li>
+<li>相关函数 R 不是相关系数 ρ，且通常必须用 \(C=R-\overline m\,m\) 才得到协方差。</li>
+<li>对复过程始终在第一个因子上取共轭；正交增量的定义也遵循同一约定。</li>
+</ul>
+<h3>本章直接补足的使用条件与易错点</h3>
+<ul>
+<li>例 2.1 明确区分独立硬币与共享硬币，两种完整模型的联合分布都已给出。</li>
+<li>锯齿波用模运算补全所有周期；分段常值过程明确端点约定。</li>
+<li>Wiener 明确选取连续样本路径版本；Gaussian 定义允许退化有限维分布。</li>
+<li>随机初值与增量的关系不能省略；“独立增量”本身不保证初值独立。</li>
+<li>过滤过程 R 的均值项已补正为两个时刻均值的乘积，并给出共同脉冲解释。</li>
+<li>已知总数后的均匀点必须先区分排序前后；所有例题都正确使用对称求和。</li>
+<li>例 2.15 除完整积分外，还提供可直接计算的有限求和。</li>
+</ul>
+<p class="muted">依据：学习指导 §2.1、§2.2（书页 28—43）；参考解释范围：Ross §5.3 的计数、Poisson、到达时间条件分布，以及 §5.4 的非齐次与复合模型。所有使用到的结论都已写入本章或第一章 HTML。</p>
+</section>
+<footer>
+<p>读完这一章，你应该能分清：</p>
+<p class="footer-line">“整条路径、单个时刻、共同历史、新增部分。”</p>
+<div class="chapter-links">
+<a href="../chapter1/index.html">← 第一章：概率论基础</a>
+<a href="../index.html">教程目录</a>
+<a href="#start">回到本章开头 ↑</a>
+</div>
+</footer>
+</main>
+</body>
+</html>
