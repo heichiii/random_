@@ -1,0 +1,136 @@
+{
+  "lecture": 2,
+  "title": "随机过程的基本概念",
+  "sections": [
+    {
+      "id": "process",
+      "title": "01 一次抽到一条记录，再沿时间读数",
+      "slides": "4—15"
+    },
+    {
+      "id": "types",
+      "title": "02 分类只看时间与状态，不看曲线长相",
+      "slides": "17—21"
+    },
+    {
+      "id": "finite",
+      "title": "03 先一起观测，再谈时间依赖",
+      "slides": "23—37"
+    },
+    {
+      "id": "statistics",
+      "title": "04 把单个随机量的矩，沿时间排成函数",
+      "slides": "39—50"
+    },
+    {
+      "id": "two-processes",
+      "title": "05 两个过程：比较的是任意两组时刻",
+      "slides": "52—56"
+    },
+    {
+      "id": "complex",
+      "title": "06 复过程：共轭保证平方强度非负",
+      "slides": "58—63"
+    },
+    {
+      "id": "classes",
+      "title": "07 二阶矩、Gaussian与增量：各自多加了什么条件",
+      "slides": "65—74"
+    },
+    {
+      "id": "stationary",
+      "title": "08 平稳：不依赖观察起点的统计规律",
+      "slides": "75—76"
+    }
+  ],
+  "examples": [
+    {
+      "id": "ex-2-1-3",
+      "label": "例2.1.3",
+      "slides": "11—15"
+    },
+    {
+      "id": "ex-2-3-1",
+      "label": "例2.3.1",
+      "slides": "29—32"
+    },
+    {
+      "id": "ex-2-3-2",
+      "label": "例2.3.2",
+      "slides": "33—37"
+    },
+    {
+      "id": "ex-2-4-1",
+      "label": "例2.4.1",
+      "slides": "46"
+    },
+    {
+      "id": "ex-2-4-2",
+      "label": "例2.4.2",
+      "slides": "47—49"
+    },
+    {
+      "id": "ex-2-4-3",
+      "label": "例2.4.3",
+      "slides": "50"
+    },
+    {
+      "id": "ex-2-6-1",
+      "label": "例2.6.1",
+      "slides": "61—63"
+    },
+    {
+      "id": "ex-2-7-1",
+      "label": "例2.7.1",
+      "slides": "68—70"
+    }
+  ],
+  "questions": 12,
+  "coverage": [
+    {
+      "slides": "1—3、16、22、38、51、57、64、77—78",
+      "topic": "封面、目录、小结与结束",
+      "anchor": "start"
+    },
+    {
+      "slides": "4—15",
+      "topic": "过程/样本路径/状态；呼叫与噪声；例2.1.3",
+      "anchor": "process"
+    },
+    {
+      "slides": "17—21",
+      "topic": "四类过程及例2.2.1—2.2.5",
+      "anchor": "types"
+    },
+    {
+      "slides": "23—37",
+      "topic": "有限维分布/特征族、对称相容、2道例题",
+      "anchor": "finite"
+    },
+    {
+      "slides": "39—50",
+      "topic": "五种数字特征、恒等式、3道例题",
+      "anchor": "statistics"
+    },
+    {
+      "slides": "52—56",
+      "topic": "过程间联合、独立与互相关/不相关",
+      "anchor": "two-processes"
+    },
+    {
+      "slides": "58—63",
+      "topic": "复过程与例2.6.1",
+      "anchor": "complex"
+    },
+    {
+      "slides": "65—74",
+      "topic": "二阶矩、Gaussian、正交/独立/平稳增量、Wiener",
+      "anchor": "classes"
+    },
+    {
+      "slides": "75—76",
+      "topic": "严与宽平稳",
+      "anchor": "stationary"
+    }
+  ]
+}

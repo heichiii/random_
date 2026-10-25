@@ -1,0 +1,106 @@
+from build_lectures import build,block as S,problem as P,table,OUT
+
+def write():
+    sections=[
+S('count','01 先看计数：一段时间来了多少个','4—9',r'''
+前两讲已经会描述随机量和时间依赖。现在专门建模事件到达：N(t)为(0,t]内的累计次数，是非负整数且随t不减，N(t)−N(s)才是(s,t]内的新增次数。用到达列表就能画阶梯，不需要假设每次等待固定长度。
+强度λ&gt;0的齐次Poisson过程满足：N(0)=0；不相交区间的计数相互独立；同长度区间计数同分布；N(t)~Poisson(λt)。这里λ是单位时间平均次数，a=λt才是某段的计数参数。
+\[P(N(t)-N(s)=k)=e^{-\lambda(t-s)}\frac{[\lambda(t-s)]^k}{k!},\quad k=0,1,\ldots\ .\]
+例如λ=2次/小时，长度3小时的计数均值6；零次概率e⁻⁶，恰好2次概率18e⁻⁶。λ=2不表示每半小时必来一次。
+<h3>相关为什么是共同的那一段？</h3>
+EN(t)=DN(t)=λt。对s≤t，N(t)=N(s)+独立后段增量，所以Cov(N(s),N(t))=DN(s)=λs，再加回均值乘积：
+\[C(s,t)=\lambda\min(s,t),\quad R(s,t)=\lambda\min(s,t)+\lambda^2st,\quad\Phi(t)=\lambda t+(\lambda t)^2.\]
+累计状态不独立：N(t)包含N(s)。例如Cov(N(1),N(3))=λ，而Cov(N(1),N(3)−N(1))=0。
+<h3>从小时间规则也能定义同一模型</h3>
+课件另一套定义保留独立/平稳增量，并规定短时h内一次概率λh+o(h)，两次以上为o(h)；o(h)/h→0，所以零次概率1−λh+o(h)。Poisson公式作展开就得这些规则。
+反过来令pₖ(t)=P(N(t)=k)。将(t,t+h]按零次、一次、多次分情况，独立性给pₖ′=λpₖ₋₁−λpₖ（k≥1），p₀′=−λp₀，初值p₀(0)=1、其余0。先解p₀=e⁻λᵗ，再用积分因子递推得pₖ=e⁻λᵗ(λt)ᵏ/k!，因此两套定义等价。关键是“多次概率比h更小”，不能仅说短时间内大概很少发生。
+<h3>多时刻题先差分</h3>
+若0&lt;t₁&lt;t₂，求N(t₁)=a、N(t₂)=b，先写N(t₁)=a、N(t₂)−N(t₁)=b−a，然后相乘；要求b≥a≥0为整数。比如λ=1，N(1)=1、N(3)=3的概率=(e⁻¹)(e⁻²2²/2)=2e⁻³，不能乘N(1)与N(3)两边缘概率。
+<div class="demo"><div class="demo-title">速率×时长，决定计数分布</div><label for="count-rate">λ：<output id="count-rate-value"></output></label><input id="count-rate" type="range" min="0.5" max="4" step="0.5" value="2"><label for="count-time">时长t：<output id="count-time-value"></output></label><input id="count-time" type="range" min="0" max="4" step="0.25" value="1"><svg id="count-svg" viewBox="0 0 640 270" role="img" aria-label="Poisson概率柱状图，横轴次数k，纵轴概率0至1"></svg><p id="count-result" aria-live="polite"></p></div>
+'''),
+S('gaps','02 反过来问：下一次还要等多久','11—12',r'''
+计数问题问一段时间内几次；等待问题把时长当作未知量。沿用PPT记号：τₙ为第n次到达的绝对时刻，τ₀=0；Tₙ=τₙ−τₙ₋₁为相邻到达间隔，因此τₙ=T₁+…+Tₙ。T与τ不能混用。
+第一次要等超过u，恰好表示(0,u]没有到达：P(T₁&gt;u)=P(N(u)=0)=e⁻λᵘ。取补得分布函数，再求导得到密度：
+\[F_T(u)=1-e^{-\lambda u},\quad f_T(u)=\lambda e^{-\lambda u}\quad(u\ge0);\quad F_T(u)=f_T(u)=0\ (u<0).\]
+F(0)=0，F(∞)=1。课件第12页把CDF写成1−λe⁻λᵘ，多了λ；那会使F(0)=1−λ，显然不对。本教程用上面的正确式。
+Poisson到达间隔T₁,T₂,…相互独立且都为Exp(λ)。这是该到达模型的结论；不能仅因两个不重叠的确定区间计数独立，就省略对随机到达时刻的论证。
+一种直接验证：前n个到达位置0&lt;s₁&lt;…&lt;sₙ的联合密度是λⁿe⁻λˢⁿ；把每个小窗口要求一次到达、窗口间要求零次，再用小时间规则相乘即可得到。换成间隔u₁=s₁、u₂=s₂−s₁、…，Jacobian为1，密度变∏λe⁻λᵘʲ（uⱼ&gt;0），于是独立同指数。
+由第一讲指数矩，ETₙ=1/λ、DTₙ=1/λ²。指数无记忆性也由尾概率直接给出：P(T&gt;a+b|T&gt;a)=e⁻λᵇ。从一个固定时刻继续等下一次，分布仍是Exp(λ)；这不表示到达时刻τₙ都服从指数。
+'''),
+S('arrivals','03 第n次到达：把计数门槛反过来','14',r'''
+第n次到达已经发生，当且仅当累计数至少n。这个事件对应关系是整讲最有用的桥：
+\[\{\tau_n\le t\}=\{N(t)\ge n\},\qquad P(\tau_n>t)=e^{-\lambda t}\sum_{k=0}^{n-1}\frac{(\lambda t)^k}{k!}.\]
+对右侧取负导数，连续两项抵消后只剩最后一项，得到
+\[f_{\tau_n}(t)=\frac{\lambda^nt^{n-1}e^{-\lambda t}}{(n-1)!}\quad(t>0).\]
+它是形状n、速率λ的Gamma，也叫n阶Erlang；若用第一讲PPT的Gamma尺度β，则β=1/λ。也可由τₙ是n个独立指数间隔之和得到同一结论。
+Eτₙ=n/λ、Dτₙ=n/λ²，由独立间隔的均值方差相加，不需要重新积分。τₙ与τₙ₊₁不独立，因为共享前n个间隔；对m≤n有Cov(τₘ,τₙ)=m/λ²。
+最小例子：λ=2次/小时，第3次到达平均1.5小时；P(τ₃&gt;1)=P(N(1)≤2)=e⁻²(1+2+2)=5e⁻²。比起硬积分Gamma密度，计数转换通常更快。
+'''),
+S('conditional-arrivals','04 已知总数后：在区间内均匀撒点，再排序','16—19',r'''
+上面计数总数随机。现在已知到t时恰好n次，问题变成这些到达在区间里怎样分布。给定N(t)=1，唯一到达τ≤s的条件概率等于N(s)=1且后段零次的概率除以P(N(t)=1)：
+\[P(\tau\le s\mid N(t)=1)=\frac{(\lambda s)e^{-\lambda s}e^{-\lambda(t-s)}}{\lambda te^{-\lambda t}}=\frac st,\quad0\le s\le t.\]
+因此这个位置均匀于(0,t)。一般地，给定N(t)=n，按顺序的τ₁&lt;…&lt;τₙ与n个独立U(0,t)点排序后的结果同分布。
+可从联合密度看原因：指定这n个有序位置并要求到t无额外到达，密度λⁿe⁻λᵗ；除以P(N(t)=n)=e⁻λᵗ(λt)ⁿ/n!，得到n!/tⁿ，在有序区域上是常数。独立均匀点的无序联合密度1/tⁿ，排序合并n!种排列，正好相同。
+<h3>哪些可以当独立均匀，哪些不能？</h3>
+不在意顺序的和Σg(τⱼ)，可以用Σg(Uⱼ)代替分布。按排序的τ₁,…,τₙ<strong>不独立</strong>，最早时刻也不再均匀。比如P(τ₁&gt;s|N(t)=n)=(1−s/t)ⁿ，因为所有均匀点都得落在s之后。
+子区间计数给定总数后服从Binomial(n,s/t)：n个无序均匀点各以s/t落入前段。也可将两个独立Poisson计数的联合概率除以总数概率得到C(n,k)(s/t)ᵏ(1−s/t)ⁿ⁻ᵏ。知道总数之后，各段计数之和固定，不能仍当独立Poisson。
+例2.7.2的等待时间之和不依赖到达顺序，因此可以直接用无序均匀点计算，不必求每个顺序统计量的密度。
+'''),
+S('compound','05 每次不只加1：复合Poisson的随机总量','21—25',r'''
+普通N(t)只数“来了几次”。如果每次到达带来一户人口或一笔赔偿，给第j次一个贡献Yⱼ，定义X(t)=Σⱼ₌₁ᴺ⁽ᵗ⁾Yⱼ，N(t)=0时X=0。要求Yⱼ独立同分布，整列贡献独立于计数过程。X才是复合过程；不能把计数N和总贡献X叫同一个变量。
+<h3>先给定项数，平均就好算</h3>
+记μ=EY、v=DY。给定N=n，E[X|N=n]=nμ、D[X|N=n]=nv。全期望给EX=μEN=λtμ。方差还要把人数变化引入的波动计进去。
+将X−EX拆成[X−E(X|N)]+[E(X|N)−EX]，交叉项先给定N后平均为0，所以
+\[DX=E[D(X\mid N)]+D[E(X\mid N)]=vEN+\mu^2DN.\]
+Poisson有EN=DN=λt，故
+\[EX(t)=\lambda t\,EY,\qquad DX(t)=\lambda t\,[DY+(EY)^2]=\lambda t\,E[Y^2].\]
+最后的E[Y²]不是方差DY；漏掉人数波动就会少一项。若Y恒为1，退回普通Poisson均值和方差λt，是最方便的检查。
+<h3>特征函数同样先固定项数</h3>
+设φᵧ(u)=E eⁱᵘʸ。给定N=n，贡献独立让φₓ|ₙ=φᵧ(u)ⁿ；再按Poisson权重相加：
+\[\varphi_{X(t)}(u)=\sum_{n\ge0}e^{-\lambda t}\frac{(\lambda t)^n}{n!}\varphi_Y(u)^n=\exp\{\lambda t[\varphi_Y(u)-1]\}.\]
+PPT记号f(u)在这个公式中是Y的特征函数，不是密度。贡献为常数c时得到X=cN，通常不是普通Poisson；贡献可负时X甚至不再是非减计数过程。
+''')]
+    E=[
+P('ex-2-7-2','例2.7.2','18—19','所有乘客总共等待多久',r'乘客按强度λ的Poisson过程到站，列车在固定时刻t启程。求(0,t]内到站乘客等待时间总和S(t)的期望。','先固定N(t)=n，把无序到达点视作n个独立U(0,t)。',r'''
+给定n，等待和Σ(t−τⱼ)不依赖排序，因此等价于Σ(t−Uⱼ)。每项平均t−t/2=t/2，故E[S|N=n]=nt/2。全期望给
+\[ES(t)=\frac t2EN(t)=\frac{\lambda t^2}2.\]
+另一种理解：每一时刻s，站内已经到的人都再等ds，所以S(t)=∫₀ᵗN(s)ds。对非负量交换平均与累积，得到∫₀ᵗλs ds=λt²/2。λ的单位是人/时间，乘t²后是人·时间，正是总等待的量纲。''','不能把每个有序τⱼ都说成独立均匀；可替换的是不依赖排序的总和。'),
+P('ex-2-7-3','例2.7.3','22—23','移民户数与人口数要分开',r'每周定居户数为速率λ=2的Poisson过程。各户人口独立，Y=1,2,3,4的概率依次1/6、1/3、1/3、1/6，且独立于到达过程。求5周总人口的均值、方差。','先算单户的EY与E[Y²]，再乘5周的平均户数10。',r'''
+EY=1/6+2/3+1+4/6=5/2；E[Y²]=1/6+4/3+3+16/6=43/6；DY=43/6−25/4=11/12。
+5周平均户数λt=10，所以EX=10×5/2=25人，DX=10×43/6=215/3（人²）。若只算10×11/12，则漏掉了户数随机的贡献10×(5/2)²。
+''','总人口并非Poisson(25)，因为一次到达可增加多个人；其方差也不等于均值。'),
+P('ex-2-7-4','例2.7.4','24—25','赔偿总额的方差为何有系数2',r'死亡事件按速率λ的Poisson过程发生；每次赔偿Yⱼ独立同Exp(a)，a>0为速率，并与计数过程独立。X(t)为期间总赔偿，求EX、DX。','指数分布先给EY=1/a、DY=1/a²，复合过程方差需要二阶矩。',r'''
+E[Y²]=DY+(EY)²=2/a²，因此
+\[EX(t)=\frac{\lambda t}a,\qquad DX(t)=\frac{2\lambda t}{a^2}.\]
+系数2的两份来源相同大小：固定人数下每笔金额的波动λt/a²，加上随机人数带来的波动λt/a²。''','a增大意味着单笔平均金额减小；λ增大意味着事件更多，均值与方差都线性增大。')]
+    Q=[
+('λ=3次/小时，2小时内计数参数？',['3','6','3/2'],1,'速率乘时长，得到平均总次数6。','count'),
+('N(2)与N(5)独立吗？',['独立','不独立，后者含前者','只在λ=1时独立'],1,'独立的是不重叠区间的新增计数。','count'),
+('下次等待T的CDF是哪一个？',['1−λe⁻λt','1−e⁻λt','λe⁻λt'],1,'CDF在0为0、在∞为1；最后一项是密度。','gaps'),
+('τ₃>t等价于哪个事件？',['N(t)=3','N(t)≤2','N(t)≥3'],1,'第三次还未发生，累计最多2次。','arrivals'),
+('λ=2时Eτ₃等于？',['6','3/2','1/2'],1,'3段独立指数等待，每段均值1/2。','arrivals'),
+('给定N(t)=n，哪些点独立均匀？',['按时间排序的τ₁,…,τₙ','排序前的n个等价均匀点','最早到达时刻'],1,'顺序统计量有大小约束，不能独立。','conditional-arrivals'),
+('给定N(4)=6，N(1)是什么分布？',['Poisson(6)','Binomial(6,1/4)','Exp(1/4)'],1,'每个无序均匀点落在前1/4区间的概率1/4。','conditional-arrivals'),
+('复合Poisson的方差应乘什么？',['DY','E[Y²]','(EY)²'],1,'随机项数还增加(均值)²这一份。','compound'),
+('例2.7.2的总等待期望？',['λt/2','λt²/2','λ²t/2'],1,'平均人数λt乘平均每人等待t/2。','ex-2-7-2'),
+('例2.7.3总人口方差是多少？',['25','215/3','55/6'],1,'平均10户，乘单户二阶矩43/6。','ex-2-7-3')]
+    quick=r'''
+看到“几次”用Poisson(λ×区间长度)；看到“到下次”用Exp(λ)；看到“到第n次”用Erlang(n,λ)或转成计数；看到“给定总数”先改成均匀点或二项；看到“随机总贡献”先定项数。
+\[\tau_n=\sum_{j=1}^nT_j,\quad P(\tau_n>t)=P(N(t)\le n-1),\quad E\tau_n=n/\lambda.\]
+\[EX(t)=\lambda tEY,\quad DX(t)=\lambda tE[Y^2],\quad\varphi_{X(t)}=e^{\lambda t(\varphi_Y-1)}.\]
+三条不要混用：Tₙ是间隔，τₙ是时刻；λ是速率，λt是平均次数；E[Y²]是二阶矩，DY是方差。
+'''
+    coverage=[('1—3、10、13、15、20、26','封面、目录与结束','start'),('4—9','计数、Poisson两套定义、数字特征、等价性','count'),('11—12','到达间隔及独立指数分布','gaps'),('14','到达时刻Gamma/Erlang分布','arrivals'),('16—19','到达条件分布、顺序统计量、原题2.7.2','conditional-arrivals'),('21—25','复合Poisson、特征函数、矩、原题2.7.3—2.7.4','compound')]
+    corrections=r'''
+第12页指数CDF多写了λ，改为1−e⁻λt。第21—23页N（次数）与X（贡献总和）有名称混用，本页明确复合过程是X。Gamma统一说明速率λ与第一讲尺度β=1/λ的对应。独立性条件补全为贡献序列与整个计数过程独立。
+'''
+    meta=build(3,'泊松过程','同一条到达记录，用计数、等待和总贡献三种方式计算。',r'''
+这份PPT只有5个主题，它们其实都在描述同一批到达。先由“零次到达”得到指数等待，再把“第n次发生了没”转回计数；给定总数后再用均匀位置，最后用随机项数求总贡献。
+本讲不扩写非齐次、混合或过滤Poisson等课件未展开的模型。前置只需<a href="../lecture1/index.html#models">第一讲的分布与参数</a>、<a href="../lecture1/index.html#conditional">条件期望</a>和<a href="../lecture2/index.html#classes">第二讲的增量定义</a>。
+''',sections,E,Q,quick,coverage,corrections)
+    app=OUT/'lecture3/app.js'
+    app.write_text(app.read_text(encoding='utf-8')+r'''
+function countDemo(){const rate=+$('#count-rate').value,t=+$('#count-time').value,a=rate*t;$('#count-rate-value').textContent=rate.toFixed(1);$('#count-time-value').textContent=t.toFixed(2);const last=Math.max(8,Math.ceil(a+4*Math.sqrt(a))),step=540/(last+1);let p=Math.exp(-a),bars='',total=0;for(let k=0;k<=last;k++){if(k>0)p*=a/k;total+=p;bars+=`<rect x="${50+k*step}" y="${220-p*180}" width="${Math.max(2,step-3)}" height="${p*180}" fill="#136e55"/>`;if(k%Math.max(1,Math.ceil(last/10))===0)bars+=`<text x="${50+k*step}" y="240" font-size="12" fill="#58724e">${k}</text>`;}$('#count-svg').innerHTML=`<path d="M45 25V220H610" fill="none" stroke="#a6b29e"/>${bars}<g font-size="13" fill="#58724e"><text x="20" y="43">1</text><text x="20" y="224">0</text><text x="600" y="255">k</text></g>`;$('#count-result').textContent=`计数参数λt=${a.toFixed(2)}，均值和方差均为${a.toFixed(2)}。零次概率=${Math.exp(-a).toFixed(4)}；图画至k=${last}，所示概率和=${total.toFixed(6)}。${a===0?'时长为0，全部质量在k=0。':'未画出的尾部仍可能有很小概率。'}`;}
+$('#count-rate').addEventListener('input',countDemo);$('#count-time').addEventListener('input',countDemo);countDemo();
+''',encoding='utf-8')
+    return meta

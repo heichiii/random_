@@ -1,0 +1,246 @@
+{
+  "lecture": 4,
+  "title": "马尔可夫过程",
+  "sections": [
+    {
+      "id": "markov",
+      "title": "01 先选对状态：现在能否概括有用的过去",
+      "slides": "4—7"
+    },
+    {
+      "id": "transition",
+      "title": "02 一步表、多步预测与初始分布",
+      "slides": "9—19"
+    },
+    {
+      "id": "model",
+      "title": "03 模型题：先列下一步，再列方程",
+      "slides": "20—41"
+    },
+    {
+      "id": "returns",
+      "title": "04 返回：迟早回来，与平均多久，是两问",
+      "slides": "43—56"
+    },
+    {
+      "id": "classes",
+      "title": "05 先画道路，再分类状态",
+      "slides": "50—65"
+    },
+    {
+      "id": "period",
+      "title": "06 周期看全部返回步数的最大公约数",
+      "slides": "46—48、54—55、64—65"
+    },
+    {
+      "id": "stationary",
+      "title": "07 平稳分布先求“保持”，极限再问“趋近”",
+      "slides": "92—103"
+    },
+    {
+      "id": "workflow",
+      "title": "08 做题的固定顺序与估计转移表",
+      "slides": "86—90、104—120"
+    }
+  ],
+  "examples": [
+    {
+      "id": "ex-5-2-1",
+      "label": "例5.2.1",
+      "slides": "20"
+    },
+    {
+      "id": "ex-5-2-2",
+      "label": "例5.2.2",
+      "slides": "21—23"
+    },
+    {
+      "id": "ex-5-2-3",
+      "label": "例5.2.3",
+      "slides": "24—25"
+    },
+    {
+      "id": "ex-5-2-4",
+      "label": "例5.2.4",
+      "slides": "26—30"
+    },
+    {
+      "id": "ex-5-2-5",
+      "label": "例5.2.5",
+      "slides": "31—32"
+    },
+    {
+      "id": "ex-5-2-6",
+      "label": "例5.2.6",
+      "slides": "33—34"
+    },
+    {
+      "id": "ex-5-2-7",
+      "label": "例5.2.7",
+      "slides": "35—36"
+    },
+    {
+      "id": "ex-5-2-8",
+      "label": "例5.2.8",
+      "slides": "37—41"
+    },
+    {
+      "id": "ex-5-3-1",
+      "label": "例5.3.1",
+      "slides": "66—67"
+    },
+    {
+      "id": "ex-5-3-2",
+      "label": "例5.3.2",
+      "slides": "68—69"
+    },
+    {
+      "id": "ex-5-3-3",
+      "label": "例5.3.3",
+      "slides": "70—71"
+    },
+    {
+      "id": "ex-5-3-4",
+      "label": "例5.3.4",
+      "slides": "72—73"
+    },
+    {
+      "id": "ex-5-3-5",
+      "label": "例5.3.5",
+      "slides": "74—75"
+    },
+    {
+      "id": "ex-5-3-6",
+      "label": "例5.3.6",
+      "slides": "76—77"
+    },
+    {
+      "id": "ex-5-3-7",
+      "label": "例5.3.7",
+      "slides": "78—79"
+    },
+    {
+      "id": "ex-5-3-8",
+      "label": "例5.3.8",
+      "slides": "80—81"
+    },
+    {
+      "id": "ex-5-3-9",
+      "label": "例5.3.9",
+      "slides": "82—85"
+    },
+    {
+      "id": "sup-class-1",
+      "label": "5.3补充例题1",
+      "slides": "86—88"
+    },
+    {
+      "id": "sup-class-2",
+      "label": "5.3补充例题2",
+      "slides": "89—90"
+    },
+    {
+      "id": "ex-5-4-1",
+      "label": "例5.4.1",
+      "slides": "104—105"
+    },
+    {
+      "id": "ex-5-4-2",
+      "label": "例5.4.2",
+      "slides": "106—107"
+    },
+    {
+      "id": "ex-5-4-3",
+      "label": "例5.4.3",
+      "slides": "108—110"
+    },
+    {
+      "id": "ex-5-4-4",
+      "label": "例5.4.4",
+      "slides": "111—115"
+    },
+    {
+      "id": "sup-limit-1",
+      "label": "5.4补充例题1",
+      "slides": "116—118"
+    },
+    {
+      "id": "sup-limit-2",
+      "label": "5.4补充例题2",
+      "slides": "119—120"
+    }
+  ],
+  "questions": 14,
+  "coverage": [
+    {
+      "slides": "1—3、8、42、91、121",
+      "topic": "封面、目录、结束与复习路线",
+      "anchor": "start"
+    },
+    {
+      "slides": "4—7",
+      "topic": "马尔可夫定义与链",
+      "anchor": "markov"
+    },
+    {
+      "slides": "9—19",
+      "topic": "转移矩阵、C–K、初始/绝对分布、齐次",
+      "anchor": "transition"
+    },
+    {
+      "slides": "20—41",
+      "topic": "8个模型与计算原题",
+      "anchor": "model"
+    },
+    {
+      "slides": "43—56",
+      "topic": "首达、Doeblin、常返判据、周期与类型",
+      "anchor": "returns"
+    },
+    {
+      "slides": "50—65",
+      "topic": "可达互通、闭类、状态分解与有限性",
+      "anchor": "classes"
+    },
+    {
+      "slides": "46—48、54—55、64—65",
+      "topic": "周期、周期子类与d步骨架",
+      "anchor": "period"
+    },
+    {
+      "slides": "66—85",
+      "topic": "状态分类原题5.3.1—5.3.9",
+      "anchor": "ex-5-3-1"
+    },
+    {
+      "slides": "86—88",
+      "topic": "股票补充题",
+      "anchor": "sup-class-1"
+    },
+    {
+      "slides": "89—90",
+      "topic": "七状态分解补充题",
+      "anchor": "sup-class-2"
+    },
+    {
+      "slides": "92—103",
+      "topic": "极限、平稳、遍历条件、类混合",
+      "anchor": "stationary"
+    },
+    {
+      "slides": "104—115",
+      "topic": "平稳原题5.4.1—5.4.4",
+      "anchor": "ex-5-4-1"
+    },
+    {
+      "slides": "116—118",
+      "topic": "换球补充题",
+      "anchor": "sup-limit-1"
+    },
+    {
+      "slides": "119—120",
+      "topic": "销售补充题",
+      "anchor": "sup-limit-2"
+    }
+  ]
+}

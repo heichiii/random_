@@ -1,0 +1,30 @@
+[
+  {
+    "lecture": 1,
+    "filename": "1. 随机过程-概率论基础.ppt",
+    "bytes": 2770944,
+    "sha256": "ae54746313ac46b30222ef66db2bc69c7950d1e333ddd7507b99b0a5586a95f2",
+    "slides": 122
+  },
+  {
+    "lecture": 2,
+    "filename": "2. 随机过程-随机过程的基本概念.ppt",
+    "bytes": 3118080,
+    "sha256": "961733c6d58d9b6e4797e94d64198f69a09442a7377e8e18bcd9f801778c242c",
+    "slides": 78
+  },
+  {
+    "lecture": 3,
+    "filename": "3. 随机过程-泊松过程.ppt",
+    "bytes": 1283072,
+    "sha256": "bc8ebb2c35b4116b17572ebf82beb65415c786a8a1ddbfe71540407cde1eb23c",
+    "slides": 26
+  },
+  {
+    "lecture": 4,
+    "filename": "4. 随机过程-马尔可夫过程.ppt",
+    "bytes": 3009536,
+    "sha256": "989d0b8948ccdf216fb7fd6d55d9d83e2e3dc339783342bff7cb5b8e2e478051",
+    "slides": 121
+  }
+]

@@ -13,6 +13,7 @@
 </script>
 <script defer src="app.js">
 </script>
+<link rel="stylesheet" href="../shared.css">
 </head>
 <body>
 <div id="reading-progress" aria-hidden="true">
@@ -45,7 +46,7 @@
 <p>
 <a href="../chapter1/index.html">← 第一章：概率论基础</a>
 </p>
-<p class="muted">整套 HTML 自成体系，无需配合书本。</p>
+<p><a href="../chapter3/index.html">第三章：随机分析 →</a></p><p class="muted">整套 HTML 自成体系，无需配合书本。</p>
 </div>
 </aside>
 <main>
@@ -109,7 +110,7 @@
 </section>
 <section id="concept" class="lesson">
 <div class="section-num">01 / 知识组 1 · 随机过程的定义与分类</div>
-<h2>随机过程：随机抽到一整条时间曲线</h2>
+<h2>随机过程：随机抽到一整条时间曲线</h2><p class="bridge">第一章的一次结果只读出一个数。现在把顾客的整天到达记录当作一次结果，就能在任意时刻读出累计人数。先分清“换一天记录”与“同一天往后看”，才能理解下面的两个输入与样本路径。</p>
 <p class="intuition">随机变量像抽一张卡，再读卡上的一个数字。随机过程像抽一段完整录像，再查看录像中每个时刻的状态。</p>
 <h3>随机过程的文字定义：把同一次试验各时刻的随机变量放在一起</h3><p>第一章的随机变量只需要一条完整结果 ω，就能读出一个数。现在还要指定<strong>观察时刻 t</strong>。同一条完整记录中，t=1 与 t=2 的读数可以不同，所以规则 X 需要两个输入。对每个固定的 t，如果它关于 ω 都是同一概率空间上的随机变量，就把这一整组规则叫<strong>随机过程</strong>。</p><p>写法里，Ω 仍是全部完整试验记录的集合，T 是允许的时刻集合，ℝ 是实数集合；Ω×T 表示“取一条记录 ω，再取一个时刻 t”形成的所有输入配对。箭头表示把这对输入变成数值：</p><p class="formula-name">随机过程定义的符号写法</p>\[X:\Omega\times T\longrightarrow\mathbb R,\qquad(\omega,t)\longmapsto X(\omega,t).\]<p>这里不是 Ω 与 T 的数值乘法。固定 t 时，X(·,t) 中的点号是“这个位置仍可输入不同 ω”的占位符；要求它是随机变量，意思是满足<a href="../chapter1/index.html#random-variable-definition">第一章已经逐个符号解释的可测性定义</a>。常把 ω 藏起来写成 X(t)，但不表示随机性消失了。</p><div class="table-wrap">
 <table>
@@ -187,11 +188,11 @@
 </section>
 <section id="finite" class="lesson">
 <div class="section-num">02 / 知识组 2 · 有限维分布与特征函数族</div>
-<h2>别只看每一帧，还要知道帧与帧怎样联系</h2>
+<h2>别只看每一帧，还要知道帧与帧怎样联系</h2><p class="bridge">知道每天 12 点的人数分布，还不能回答“12 点已经很多，13 点还会很多吗”。这要同时观察两个时刻。先从一维走到二维，再推广到任意有限次观测；有限维分布正是保留时间依赖的完整描述。</p>
 <p class="intuition">两段录像可以每一帧看起来都服从相同分布，却有完全不同的剧情。一维分布只说明“这一刻怎样”，联合分布才说明“这些时刻怎样一起出现”。</p>
 <h3>有限维分布的定义：只挑有限个时刻，问它们同时满足什么条件</h3><p>先只挑一个固定时刻 t，X(t) 就是一个普通随机变量。另设一个数值门槛 x，“这个时刻的状态不超过 x”的概率定义为<strong>一维分布函数</strong> F(t;x)。分号左边放时刻，右边放数值门槛：</p>\[F(t;x):=P(X(t)\le x).\]<p>再挑两个时刻 t₁、t₂，分别设门槛 x₁、x₂。要求它们<strong>同时</strong>满足，得到<strong>二维分布函数</strong>；n 个时刻同理：</p>\[F(t_1,t_2;x_1,x_2):=P(X(t_1)\le x_1\text{ 且 }X(t_2)\le x_2),\]\[F(t_1,\ldots,t_n;x_1,\ldots,x_n):=P\left(\bigcap_{j=1}^n\{X(t_j)\le x_j\}\right).\]<p>最后的 ∩ 表示“全部这些事件都发生”，j 是从 1 到 n 的编号。n 维是因为取到了 n 个随机数，不表示时间有 n 个方向。“有限维分布函数族”就是让 n 和这些时刻任意变化后，收集到的<strong>全部</strong>联合分布；“族”只是“一整套”的数学说法。</p><h3>同一维分布，不同的时间依赖</h3>
 <p>令 \(B_n\) 是独立的公平 0/1 硬币。过程 A 每次都用同一枚结果：\(X_n=B_1\)；过程 B 每次用新的结果：\(Y_n=B_n\)。各自每个时刻都以 1/2 概率取 0 或 1。但 A 永远不变，B 会跳来跳去。比如：</p>\[P(X_1=0,X_2=0)=\tfrac12,\qquad P(Y_1=0,Y_2=0)=\tfrac14.\]<p>所以<strong>只给所有一维分布，还没有描述完整的过程规律</strong>。后面 Gaussian 过程能用均值与协方差描述，是一种特殊的便利，不是普遍事实。</p>
-<h3>两条必须满足的一致性要求</h3>
+<p class="bridge">如果这些联合分布真来自同一段记录，就不能因我们重排观测顺序、或少看一个时刻而自相矛盾。这正是下面对称性与相容性的来源。</p><h3>两条必须满足的一致性要求</h3>
 <ol>
 <li>
 <b>对称性：</b>同时交换时刻及其门槛，不改变事件。\(F(t_2,t_1;x_2,x_1)=F(t_1,t_2;x_1,x_2)\)。只交换时间不交换门槛，一般不对。</li>
@@ -204,7 +205,7 @@
 </section>
 <section id="statistics" class="lesson">
 <div class="section-num">03 / 知识组 3 · 随机过程的数字特征</div>
-<h2>均值看中心，协方差看时刻之间的联动</h2>
+<h2>均值看中心，协方差看时刻之间的联动</h2><p class="bridge">有限维分布虽完整，实际往往太复杂。沿用第一章“用少量数字摘要”的办法：每一时刻算平均，每一对时刻算联动。于是均值从一个数变成时间函数，协方差从一个数变成二元函数；这些摘要有用，但通常不能替代全部分布。</p>
 <p class="intuition">把所有试验在同一时刻的值堆起来，你可以算平均和方差。再同时拿两个时刻的值，就能问“这一刻偏高，另一刻是否也偏高”。</p>
 <p>下面是在<strong>定义名称</strong>，先把各符号对上：t 是一个观察时刻，s 是另一个观察时刻；E 表示按试验概率平均；D 表示方差。mX(t) 不是某条实际路径，而是“所有试验在 t 时刻的平均”。Φ（大写 phi）用来命名均方值，R 命名相关，C 命名协方差；下标 X 只是提醒属于哪个过程。</p><div class="table-wrap">
 <table>
@@ -252,7 +253,7 @@
 </section>
 <section id="joint" class="lesson">
 <div class="section-num">04 / 知识组 4 · 两个过程的联合分布与数字特征</div>
-<h2>两段随机故事，怎样算“没有关系”？</h2>
+<h2>两段随机故事，怎样算“没有关系”？</h2><p class="bridge">刚才比较的是同一过程的两个时刻。现在同时记录温度 X 和用电量 Y，问题变成：X 的记录能否帮助预测 Y？把两类观测放进同一个联合分布，就得到过程之间的独立；只比较偏差乘积，则得到较弱的不相关。</p>
 <p class="intuition">两支传感器在同一时刻读数互不影响，不代表它们的整段记录彼此独立。一个传感器可能只是另一个的延迟版本。</p>
 <h3>二维过程与联合有限维分布</h3>
 <p>把两个过程配在一起，得到向量过程 \(\{(X(t),Y(t)):t\in T\}\)。可以在 X 里取 m 个时刻，在 Y 里取 n 个不必相同的时刻，联合分布就是：</p>\[P\left(\bigcap_{j=1}^m\{X(t_j)\le x_j\}\cap\bigcap_{k=1}^n\{Y(r_k)\le y_k\}\right).\]<p>边缘分布就是放弃对另一过程的限制。<strong>两个过程独立</strong>，要求对任意这些有限时刻选择，上式都等于：</p>\[P\left(\bigcap_{j=1}^m\{X(t_j)\le x_j\}\right)P\left(\bigcap_{k=1}^n\{Y(r_k)\le y_k\}\right).\]<p>这比“每个 t 下 X(t) 与 Y(t) 独立”强。反例：\(X_n\) 是独立硬币，\(Y_n=X_{n+1}\)。同一时刻的 Xₙ 与 Yₙ 独立，但 Yₙ 与 Xₙ₊₁ 完全相同，所以两个过程并不独立。</p>
@@ -263,7 +264,7 @@
 </section>
 <section id="complex" class="lesson">
 <div class="section-num">05 / 知识组 5 · 复随机过程</div>
-<h2>复过程：把两个实信号装进一个数</h2>
+<h2>复过程：把两个实信号装进一个数</h2><p class="bridge">工程里常同时记录两路信号。用 X+iY 把它们写在一起，旋转和振荡会更容易计算。这里先解释这种记法怎样保留两路数据，再说明为何方差和相关要使用共轭。如果你先想掌握到达模型，可完成本节最小例子后进入下一节，遇到复数题再回查展开式。</p>
 <p class="intuition">复数不是多加一种神秘随机性，而是同时记录两个实信号：实部 X(t) 与虚部 Y(t)。平方大小应该是 X²+Y²，不能用普通平方把它们相减。</p>\[Z(t)=X(t)+iY(t),\qquad |Z(t)|^2=X(t)^2+Y(t)^2.\]<div class="note">
 <b>共轭约定：</b>本章采用学习指导的“第一个因子取共轭”：\(R_Z(s,t)=E[\overline{Z(s)}Z(t)]\)。有些材料对第二个因子取共轭；两种约定会互为共轭，本套教程在这里保持第一因子取共轭。实过程不受影响。</div>
 <h3>复过程的定义怎样沿用“平均、平方偏差”的思路？</h3><p>先提醒：i²=−1；对 z=a+ib，共轭 z̄=a−ib，模长平方 |z|²=a²+b²。均值仍是逐项平均；方差必须平均<strong>模长平方</strong>，以保证它是非负实数。mZ、DZ、ΦZ、RZ、CZ 分别沿用均值、方差、均方值、相关、协方差的名称。于是按定义与期望线性性：</p>\[m_Z(t)=E[Z(t)]=m_X(t)+im_Y(t),\]\[D_Z(t)=E|Z(t)-m_Z(t)|^2=D_X(t)+D_Y(t),\]\[\Phi_Z(t)=E|Z(t)|^2,\qquad R_Z(s,t)=E[\overline{Z(s)}Z(t)],\]\[C_Z(s,t)=E[\overline{Z(s)-m_Z(s)}(Z(t)-m_Z(t))]=R_Z(s,t)-\overline{m_Z(s)}m_Z(t),\]\[D_Z(t)=C_Z(t,t),\qquad\Phi_Z(t)=R_Z(t,t).\]<p>例如第二式的来由是 |(X−mX)+i(Y−mY)|²=(X−mX)²+(Y−mY)²，再取期望。因此方差相加<strong>不需要实部与虚部独立或不相关</strong>，因为模长平方直接等于两部分平方之和，没有交叉项。与实随机变量的 D(X+Y) 公式不同。</p>
@@ -273,7 +274,7 @@
 </section>
 <section id="classes" class="lesson">
 <div class="section-num">06 / 知识组 6 · 几类重要的随机过程（前半）</div>
-<h2>用特殊结构，让整条过程变得可计算</h2>
+<h2>用特殊结构，让整条过程变得可计算</h2><p class="bridge">前面建立了描述任何过程的语言，还没有指定“时间之间究竟怎样联系”。现在加入可计算的结构：二阶矩保证相关存在，Gaussian 限制联合分布，增量性质限制新增部分的关系。最后把这些条件组合成 Wiener 和 Poisson 两个模型；各条件并不是一层比一层强的同一条分类。</p>
 <h3 id="second-order">6.1 二阶矩过程：可以谈均方与相关</h3>
 <p>如果每个 t 都有 \(E|X(t)|^2&lt;\infty\)，就称为二阶矩过程。<a href="../chapter1/index.html#second-moment-bound">第一章的二阶矩不等式</a>说明它自动保证一阶绝对矩有限，因为 \(E|X(t)|\le\sqrt{E|X(t)|^2}\)。它的相关函数不是任意凑出来的二元函数，至少满足：</p>
 <ol>
@@ -287,7 +288,7 @@
 <p>
 <b>别只检查每个时刻单独正态。</b>例如 Z 标准正态，S 独立等概率取 ±1；令 X(0)=Z、X(1)=SZ。这两个时刻各自标准正态，但 \(|X(0)|=|X(1)|\)，不是联合正态。因此不能据此宣布它是 Gaussian 过程。</p>
 <h3 id="increments">6.3 增量：只算一段时间内新增加的部分</h3>\[\Delta X_{(s,t]}=X(t)-X(s),\qquad s&lt;t.\]<p>累计总量包含过去；增量把过去扣掉。N(5) 是前 5 分钟总人数，N(5)−N(3) 才是第 3 到第 5 分钟新增人数。下面几类过程都在说“增量之间是什么关系”。</p>
-<h3 id="orthogonal">6.4 正交增量：不重叠的新增量，其乘积平均为零</h3>
+<p class="bridge">下一步不是比较累计状态，而是比较两段新增量。可以要求乘积平均为零（正交），也可以要求全部概率可分解（独立）；先分开这两个要求，才不会把它们误当同义词。</p><h3 id="orthogonal">6.4 正交增量：不重叠的新增量，其乘积平均为零</h3>
 <p>二阶矩过程若对任意 \(t_1&lt;t_2\le t_3&lt;t_4\) 都满足：</p>\[E[\overline{X(t_2)-X(t_1)}(X(t_4)-X(t_3))]=0,\]<p>就叫正交增量过程。“正交”沿用几何直觉：把随机变量看成向量，\(E[\overline AB]\) 看成内积，内积为 0 就相当于垂直。</p>
 <div class="note">
 <b>正交不等于不相关，除非均值条件合适。</b>不相关要求 \(E[\overline AB]=\overline{EA}EB\)；正交要求左边为 0。当两个增量均值都为 0 时，两者一致。独立增量若均值非零，也不一定正交，例如普通 Poisson 过程的两个非空区间增量均值均为正，其乘积平均大于 0。</div>
@@ -331,7 +332,7 @@
 </section>
 <section id="poisson" class="lesson">
 <div class="section-num">知识组 6 · Poisson 过程（本章重点）</div>
-<h2>Poisson 过程：随机事件到达，计数器向上跳</h2>
+<h2>Poisson 过程：随机事件到达，计数器向上跳</h2><p class="bridge">Wiener 适合连续起伏的扰动；若每次事件发生让计数加 1，就需要另一种路径。把“互不重叠区间的新增计数独立”和“同长度区间有同样规律”放在一起，再指定计数服从 Poisson 分布，就得到这里的到达模型。</p>
 <p class="intuition">想象一个只加不减的计数器：每来一位顾客就跳 1 格。它记录“到现在一共来了几个”，不是“现在店里还剩几个”。</p>
 <h3 id="counting">计数过程是什么？</h3>
 <p>N(t) 表示从 0 到 t 为止累计发生的事件数，取非负整数，随时间不减；N(t)−N(s) 表示 (s,t] 内的新增事件数。常规的简单计数过程从 N(0)=0 开始，每次事件跳 1，并取右连续路径。</p>
@@ -362,14 +363,14 @@
 </p>
 <p class="muted">绿色竖线是到达时刻，阶梯记录累计值；橙色区间只算 (2,t] 的新增事件。一次模拟的计数不必等于它的期望。</p>
 </div>
-<h3 id="arrivals">到达时刻与到达间隔：不要都叫 T</h3>
+<p class="bridge">“三分钟内来了几人”已经会算；现在把问题倒过来：“等到第三个人要多久？”计数与到达时刻描述的是同一条阶梯，连接两者的事件是：第 k 次到达已发生，当且仅当累计计数至少为 k。</p><h3 id="arrivals">到达时刻与到达间隔：不要都叫 T</h3>
 <p>本章用 τₙ 表示<strong>第 n 次事件发生在几点</strong>，用 Tₙ 表示<strong>第 n−1 次到第 n 次等了多久</strong>：</p>\[\tau_0=0,\quad T_n=\tau_n-\tau_{n-1},\quad \tau_n=T_1+\cdots+T_n.\]<p>第一次到达要等超过 x，就等于前 x 时间没有事件：</p>\[P(T_1&gt;x)=P(N(x)=0)=e^{-\lambda x}.\]<p>因此到达间隔是<strong>相互独立、同服从 Exp(λ)</strong> 的随机变量，均值 1/λ、方差 1/λ²。它的无记忆性可以直接计算：</p>\[P(T_1&gt;a+b\mid T_1&gt;a)=\frac{e^{-\lambda(a+b)}}{e^{-\lambda a}}=e^{-\lambda b}.\]<p>已经等了多久，不改变剩余等待时间的分布。这也解释为什么从某个事件发生后重新计时，后续仍遵循同样的规则。</p>
 <details>
 <summary>间隔的“独立”也能从联合密度看出来</summary>
 <p>对 0&lt;r₁&lt;…&lt;rₙ，前 n 次到达时刻的联合密度为 \(\lambda^ne^{-\lambda r_n}\)：每个 rⱼ 的微小窗口恰好来一次，其他截至 rₙ 的间隙都没有事件，指数因子相乘后只剩总时间 rₙ。令 vⱼ=rⱼ−rⱼ₋₁，Jacobian 为 1，就得到：</p>\[f_{T_1,\ldots,T_n}(v_1,\ldots,v_n)=\lambda^ne^{-\lambda\sum_jv_j}=\prod_{j=1}^n\lambda e^{-\lambda v_j},\quad v_j&gt;0.\]<p>乘积分解证明了间隔相互独立，同时每一项都是指数密度。</p>
 </details>
 <p>到达时刻 τₙ 是 n 个独立指数间隔之和，所以使用<a href="../chapter1/index.html#gamma-law">Gamma 的整数形状模型</a>：</p>\[\tau_n\sim\operatorname{Gamma}(n,\lambda),\quad f_{\tau_n}(r)=\frac{\lambda^nr^{n-1}e^{-\lambda r}}{(n-1)!}\quad(r&gt;0),\]\[E\tau_n=n/\lambda,\qquad D\tau_n=n/\lambda^2.\]<p>也可用事件等价式理解：\(\{\tau_n\le t\}=\{N(t)\ge n\}\)，因此 \(P(\tau_n\le t)=1-\sum_{k=0}^{n-1}e^{-\lambda t}(\lambda t)^k/k!\)。</p>
-<h3 id="uniform-arrivals">已知总数后：先在区间里均匀撒点，再排序</h3>
+<p class="bridge">下一类题先告诉你总共来了 n 人，再问他们在区间里怎样分布。总数已经固定，不能继续把子区间计数当作无条件独立的 Poisson；要改用给定总数后的到达位置规律。</p><h3 id="uniform-arrivals">已知总数后：先在区间里均匀撒点，再排序</h3>
 <p>若已知 N(t)=n，则：</p>\[(\tau_1,\ldots,\tau_n)\mid\{N(t)=n\}\ \overset d=\ (U_{(1)},\ldots,U_{(n)}),\quad U_1,\ldots,U_n\text{ i.i.d. }U(0,t).\]<p>括号下标 (j) 表示从小到大排序后的第 j 个。排序后的到达时刻<strong>有依赖、各自不全是均匀分布</strong>；均匀且独立的是排序前的 n 个点。条件联合密度是：</p>\[f(r_1,\ldots,r_n\mid N(t)=n)=\frac{n!}{t^n},\quad0&lt;r_1&lt;\cdots&lt;r_n&lt;t.\]<p>为什么常数这么简单？指定这些到达点且 t 前无别的事件，密度为 \(\lambda^ne^{-\lambda t}\)；再除以 \(P(N(t)=n)=e^{-\lambda t}(\lambda t)^n/n!\)，λ 和指数全部消掉了。</p>
 <p>对<strong>不依赖顺序的和</strong>可以放心替换：\(\sum_jg(\tau_j)\) 与 \(\sum_jg(U_j)\) 在给定 N(t)=n 时同分布，因此：</p>\[E\left[\sum_{j=1}^ng(\tau_j)\ \middle|\ N(t)=n\right]=\frac nt\int_0^tg(u)du.\]<p>这就是后面脉冲总和、乘客等待题的共同工具。若问“第一个到达者何时到”，不能把它当 U(0,t)，其条件均值是 t/(n+1)，而不是 t/2。</p>
 <h3 id="superposition">叠加、分流与竞争：三种常用操作</h3>
@@ -388,7 +389,7 @@
 </section>
 <section id="variants" class="lesson">
 <div class="section-num">知识组 6 · Poisson 的四种推广</div>
-<h2>四种“更复杂”，分别改了哪一层？</h2>
+<h2>四种“更复杂”，分别改了哪一层？</h2><p class="bridge">普通 Poisson 模型已会处理固定速率、每次贡献 1 的到达。现实偏离它时，先辨认改了什么：速率随时钟变、速率随这一天变、一次到达留下持续响应，还是每次贡献量不同。下面分别只改一层，沿用已经会的条件化与求和方法。</p>
 <div class="table-wrap">
 <table>
 <tr>

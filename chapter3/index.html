@@ -1,0 +1,93 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第3章 · 随机分析</title><link rel="stylesheet" href="../chapter2/assets/katex/katex.min.css"><link rel="stylesheet" href="../chapter2/style.css"><link rel="stylesheet" href="../shared.css"><script defer src="../chapter2/assets/katex/katex.min.js"></script><script defer src="../chapter2/assets/katex/contrib/auto-render.min.js"></script><script defer src="app.js"></script></head><body><div id="reading-progress" aria-hidden="true"></div><aside class="sidebar"><a class="brand" href="../index.html">∿ 随机过程 · 理解笔记</a><p class="side-label">CHAPTER 03 / 随机分析</p><nav aria-label="章节目录"><a href="#start">学习路线</a><a href="#limit">01 从误差出发：均方极限</a><a href="#continuity">02 从读数靠近到均方连续</a><a href="#derivative">03 均方导数：差商是否有稳定的随机极限</a><a href="#integral">04 均方积分：累积一段随机输入</a><a href="#equation">05 用累积反推变化：均方随机微分方程</a><a href="#ito">06 遇到 Wiener：为什么另定义 Itô 积分</a><a href="#examples">全部编号例题</a><a href="#review">理解自测</a><a href="#coverage">覆盖与速查</a></nav><div class="side-bottom"><label for="search">查找知识点或例题</label><input id="search" type="search" placeholder="概念或例题编号"><button id="search-button">查找</button><p id="search-status" role="status"></p><button id="print">打印 / 保存为 PDF</button><p><a href="../chapter2/index.html">← 第2章</a> · <a href="../chapter4/index.html">第4章 →</a></p></div></aside><main><header id="start" class="hero"><div class="eyebrow">随机过程 · 第3站</div><h1>随机分析</h1><p class="lead">从“误差是否变小”，走到随机曲线的连续、导数、积分与方程。</p><div class="hero-meta"><span>6 个相连的学习环节</span><span>12 道完整例题</span><span>离线学习 · 可打印</span></div><a class="primary" href="#limit">开始理解 →</a></header><section class="intro"><h2>先知道这章为什么这样学</h2><p>第二章已经会描述 X(t)，本章开始对它做运算。普通微积分离不开极限，所以先选定均方误差标准，再依次定义连续、导数和积分；这三步是一条线。</p>
+<p>先完成 01—04 与例 3.1—3.9，建立主干；05 用这些工具解线性方程。06 处理 Wiener 噪声：因为它没有均方导数，才另引入 Itô 积分与修正项。不要把两类积分混成同一件事。</p>
+<p>前置：<a href="../chapter1/index.html#moments">二阶矩、方差、协方差</a>、<a href="../chapter1/index.html#convergence">均方收敛</a>、<a href="../chapter2/index.html#statistics">相关函数</a>、<a href="../chapter2/index.html#wiener">Wiener 增量</a>。</p><div class="note">先读每节的问题、最小例子和结论，再跟做相应例题。核心定义和推导默认展开，补充细节可以稍后读。前置解释均在本套教程内；不需要打开教材。</div></section><section id="limit" class="lesson"><h2>01 从误差出发：均方极限</h2><p>温度计的近似读数 Xₙ 与真实随机温度 X 不一定每次都相同。我们要求“误差平方的平均越来越小”，这就是第一章<a href="../chapter1/index.html#convergence">均方收敛</a>。本章沿用这个误差标准来定义连续、导数和积分。</p>
+<h3>先把二阶矩变量放到同一个空间里</h3>
+<p>所有满足 E|X|²&lt;∞ 的随机变量组成集合 H；它们必须定义在同一个概率空间上，才能讨论 X−Y。定义长度 \(\|X\|_2=(E|X|^2)^{1/2}\)，距离为 \(\|X-Y\|_2\)。概率 1 相同的变量视作同一个元素。平方来自它能同时衡量正负偏差，且能展开成相关函数。</p>
+\[X_n\xrightarrow{L^2}X\quad\Longleftrightarrow\quad E|X_n-X|^2\to0.\]
+<p>书中的 l.i.m 是 limit in mean 的记号，在这里就是均方极限，不是逐条样本路径取极限。例如 Xₙ=A/n，EA²=4，则到 0 的误差平方平均为 4/n²；n=10 时为 0.04。</p>
+<p>均方极限在概率1意义下唯一：若X、Y都是极限，由三角不等式，X与Y的距离不超过它们分别与Xₙ的距离之和，极限为0。因此E|X−Y|²=0，即X=Y几乎必然。</p>
+<h3>为什么要检查“自身互相靠近”？</h3>
+<p>有时还不知道候选极限是谁。Cauchy（柯西）准则说：在 H 中，Xₙ 有均方极限，当且仅当 E|Xₙ−Xₘ|²→0（n、m 各自都趋于∞）。这是二阶矩空间的完备性定理。它把“找出终点”换成“检查后面的项彼此够近”。</p>
+<p>采用第二章的共轭约定 \(R(m,n)=E[\overline{X_m}X_n]\)，有：</p>
+\[E|X_n-X_m|^2=R(n,n)+R(m,m)-2\operatorname{Re}R(m,n).\]
+<p>因此也可检查双重极限 R(m,n) 是否趋向同一个有限常数 c；这里包括 m=n 的情况，c 必为非负实数。对连续参数，t→t₀ 时同理检查 s,t 同时趋向 t₀ 的 R(s,t)。这只是保证极限存在，不自动保证极限就是 X(t₀)。</p>
+<h3>哪些运算可以带进极限？</h3>
+<p>由 Cauchy–Schwarz 不等式 \(|E[\overline UV]|\le\|U\|_2\|V\|_2\) 和三角不等式 \(\|U+V\|_2\le\|U\|_2+\|V\|_2\)，可以控制误差。若 Xₙ→X、Yₙ→Y 都是均方收敛，则 aXₙ+bYₙ→aX+bY，EXₙ→EX，E|Xₙ|²→E|X|²，DXₙ→DX，且 E[共轭 Xₙ·Yₙ]→E[共轭 X·Y]。</p>
+<p>例如乘积期望的误差拆成 E[共轭(Xₙ−X)Yₙ]+E[共轭 X(Yₙ−Y)]，再用上面的不等式；收敛序列的二阶矩有界，所以两项都趋 0。注意结论是<strong>乘积的期望</strong>收敛，不能据此断言乘积本身均方收敛。</p>
+<p>若普通函数 f 满足 Lipschitz 条件 |f(u)−f(v)|≤M|u−v|（变化速度有统一上界 M），则误差平方至多放大 M² 倍，故 f(Xₙ)→f(X) 均方。复指数满足 |eⁱᵗᵘ−eⁱᵗᵛ|≤|t||u−v|，从而特征函数逐点收敛；任意非线性函数不能直接照套。</p>
+<div class="takeaway">独立同分布、均值 μ、有限方差 σ² 时，样本平均到 μ 的均方误差为 σ²/n。这既解释平均为什么有用，也把第一章大数定律接到了本章。对应例 3.1—3.3。</div></section><section id="continuity" class="lesson"><h2>02 从读数靠近到均方连续</h2><p>第二章允许各种样本路径。本章要做积分、求导，先问：把观察时间挪一点，读数在均方意义下是否也只变一点？</p>
+\[X\text{ 在 }t\text{ 均方连续}\iff\lim_{h\to0}E|X(t+h)-X(t)|^2=0.\]
+<p>在端点只从时间定义域内逼近。展开平方可直接用已知相关函数：</p>
+\[E|X(t+h)-X(t)|^2=R(t+h,t+h)+R(t,t)-2\operatorname{Re}R(t,t+h).\]
+<p>若 R(s,u) 在每个对角点 (t,t) 联合连续，则过程均方连续；反过来，处处均方连续使 R 在整个时间平面连续。这由上节的乘积期望极限得到。均值和方差也随时间连续。</p>
+<h3>一条路径跳了，与平均误差变小，是两个问题</h3>
+<p>Poisson 过程在每次到达时跳 1，但固定时刻 t，长度 h&gt;0 的增量满足 E[增量²]=λh+(λh)²→0，故均方连续。原因是短区间内发生跳跃的概率也在变小。反过来，样本路径连续本身也不保证均方连续：还要控制罕见但幅度很大的误差。</p>
+<p>最小可算例子 X(t)=At+B、EA²&lt;∞：读数差为 Ah，平方平均 h²EA²→0，故处处均方连续。不需要 A、B 独立。对应例 3.4—3.5。</p></section><section id="derivative" class="lesson"><h2>03 均方导数：差商是否有稳定的随机极限</h2><p>普通导数用差商近似瞬时变化率。随机过程也先写差商，只把“极限”的标准换为均方。记 Qₕ(t)=[X(t+h)−X(t)]/h；若存在二阶矩变量 V(t)，使 E|Qₕ(t)−V(t)|²→0，就定义 X′(t)=V(t)。若每个 t 都成立，V 就叫导数过程。</p>
+<p>对 X(t)=At+B，差商始终是 A，故 X′(t)=A。它是随机变量，不能把“导数”自动当成确定数。</p>
+<h3>不知道路径公式，怎样从 R 判断？</h3>
+<p>根据均方 Cauchy 准则，差商族有极限，当且仅当它们两两相关在 h,k 独立趋 0 时有有限共同极限：</p>
+\[E[\overline{Q_h(t)}Q_k(t)]=\frac{R(t+h,t+k)-R(t+h,t)-R(t,t+k)+R(t,t)}{hk}.\]
+<p>这叫 R 在 (t,t) 的广义二阶导数条件。必须检查<strong>二个增量共同趋零</strong>，不能只算先后两次偏导。方便的充分条件是：R 在对角附近有连续的混合偏导 ∂²R/∂s∂u。</p>
+<h3>导数的统计量为什么也能求导？</h3>
+<p>均方极限允许交换期望和差商的极限，所以先对差商取期望，再让步长趋零，即得到第一式；相关的公式同样对各自时间的差商取极限：</p>
+\[m_{X'}(t)=m_X'(t),\quad R_{X'X}(s,t)=\partial_sR_X(s,t),\quad R_{XX'}(s,t)=\partial_tR_X(s,t),\quad R_{X'}(s,t)=\partial_s\partial_tR_X(s,t).\]
+<p>这里第一个过程始终取共轭；对实过程共轭可省略。高阶导数照此继续。线性法则、与确定可导函数的乘积法则都成立；时间不变的二阶矩随机变量导数为 0。均方可导必均方连续，因为 X(t+h)−X(t)=hQₕ(t)，收敛差商的二阶矩有界。</p>
+<p>若每个时刻导数都为 0，则任意固定 s,t 有 X(s)=X(t) 几乎必然；要说存在一个概率 1 事件使所有实数时刻同时相等，还需选择合适的连续版本，不能随意交换“任意时刻”和“概率 1”。</p>
+<h3>Wiener 为什么不能普通求导？</h3>
+<p>标准 Wiener 增量方差是 |h|，所以 Qₕ 的二阶矩是 1/|h|→∞。它不可能趋向二阶矩有限的导数。路径连续、均方连续都不够保证均方可导。这一障碍将在最后引出 dW 积分。对应例 3.6、3.9。</p></section><section id="integral" class="lesson"><h2>04 均方积分：累积一段随机输入</h2><p>瞬时变化未必存在，累计量却可能存在。把区间 [a,b] 切成小段，每段用一个读数乘段长，得到随机和 S=ΣX(tⱼ*)Δtⱼ。若最长段长趋 0 时，无论怎样划分、怎样选段内取样点，这些和都趋向同一个均方极限，就把极限定义为 ∫ₐᵇX(t)dt。这是对时间 dt 积分。</p>
+<p>足够好用的存在条件：X 在有限闭区间上均方连续。更一般地，若加权相关核 \(\overline{f(s)}f(t)R_X(s,t)\) 在矩形上 Riemann 可积，比较不同划分的和式相关便能验证 Cauchy 准则。仅写“某个形式上的积分有限”不应代替和式收敛条件。</p>
+<h3>把确定权重也装进去</h3>
+<p>令 Y(u)=∫ₐᵇf(t,u)X(t)dt。t 是被积时间，u 是输出参数，f 为确定函数。f(t,u) 可以只在 t≤u 时非零，从而表示上限随 u 变化的积分。由有限和展开、再取均方极限：</p>
+\[m_Y(u)=\int_a^bf(t,u)m_X(t)dt,\]
+\[R_Y(u,v)=\int_a^b\int_a^b\overline{f(s,u)}f(t,v)R_X(s,t)\,ds\,dt.\]
+<p>把 Rₓ 换成 Cₓ 就得到 Cᵧ；再令 v=u 得 Dᵧ(u)，而 Rᵧ(u,u) 是均方值。双重积分是因为两个输出各带一个求和指标，乘开后每一对时间都必须计入。<strong>方差用 C，二阶矩用 R。</strong></p>
+<p>最小例子 X(t)=A、DA=v，则 ∫₀ᵀXdt=AT，方差是 vT²。不能写成 ∫₀ᵀvdt=vT：每一刻共享同一个 A，不能把时间之间误作独立。</p>
+<h3>积分与导数怎样接起来？</h3>
+<p>若 X 均方连续，Y(t)=∫ₐᵗX(u)du 则 Y′(t)=X(t)。理由是差商减 X(t) 等于小区间内 X(u)−X(t) 的平均，利用均方连续即可把误差压到 0。若 X 均方可导且 X′ 均方连续，则 ∫ₐᵇX′(t)dt=X(b)−X(a)。</p>
+<p>还可估计总量：\(E|\int_a^bXdt|^2\le (b-a)\int_a^bE|X(t)|^2dt\)，由积分版 Cauchy–Schwarz 得到。无限区间积分要再令端点趋∞并验证均方 Cauchy；例如 \(\int_a^\infty |f(t)|\|X(t)\|_2dt&lt;\infty\) 是实用充分条件，不能把有限区间结论直接延伸到无限区间。对应例 3.7—3.8。</p></section><section id="equation" class="lesson"><h2>05 用累积反推变化：均方随机微分方程</h2><p>现在把“当前量影响自身增长”和“外界随机输入”放在一起。X′(t)=a(t)X(t)+Y(t)，X(t₀)=X₀；a 是确定连续函数，Y 均方连续，X₀ 有有限二阶矩。这里 X′ 是刚才的均方导数，Y(t)dt 是随时间积累的普通随机输入。</p>
+<h3>积分因子不是新技巧，只是把乘积的导数凑出来</h3>
+<p>令 A(t)=∫ₜ₀ᵗa(u)du，则 [e⁻ᴬ⁽ᵗ⁾X(t)]′=e⁻ᴬ⁽ᵗ⁾Y(t)。两边积分并用初值：</p>
+\[X(t)=e^{A(t)}X_0+\int_{t_0}^t e^{A(t)-A(s)}Y(s)ds.\]
+<p>第一项是初值留下的影响，第二项是每个历史输入的累积。若 a=−2，过去 s 时刻的输入到 t 时衰减 e⁻²⁽ᵗ⁻ˢ⁾，解释了系统的“遗忘”。X₀ 与 Y 不必独立；求方差和相关时必须保留初值与输入的交叉项。对应例 3.10—3.11。</p>
+<h3>为什么 Gaussian 过程在这里特别方便？</h3>
+<p>如果输入为 Gaussian 过程，有限和与差商是联合正态向量的线性变换，仍联合正态；均方极限的均值、协方差收敛，代入其特征函数仍是正态的特征函数，所以导数和确定核积分也为 Gaussian 过程（允许方差为 0）。若还含随机初值 X₀，则须 X₀ 与输入<strong>共同联合正态</strong>，不能只检查各自单独正态。</p></section><section id="ito" class="lesson"><h2>06 遇到 Wiener：为什么另定义 Itô 积分</h2><p>Wiener 没有均方导数，不能写成某个普通随机速度乘 dt。若噪声直接以 Wiener 增量进入，就定义新的和式：</p>
+\[\int_a^bH(t)dW(t)=L^2\!\text{-}\!\lim\sum_jH(t_{j-1})[W(t_j)-W(t_{j-1})].\]
+<p>W 是标准 Wiener。H(tⱼ₋₁) 取左端值，表示决定当前权重时只能用已经发生的信息，不能偷看下一段。用 ℱₜ 表示截至 t 的信息；W 的未来增量须与 ℱₜ 独立。H 要可预测（可由不看未来的阶梯过程逼近），并满足 E∫ₐᵇ|H(t)|²dt&lt;∞。常见连续适应过程满足所需的可预测性；“适应”指每个 H(t) 都由 ℱₜ 中的信息决定。</p>
+<p>直接使用上述左端取样和式，先考虑均方连续且适应的H。一般平方可积的可预测H，则用满足E∫|Hₙ−H|²dt→0的可预测阶梯过程Hₙ来定义积分；不能仅凭平方可积就声称任意逐点左端取样都收敛。</p>
+<h3>最重要的两条计算规则从哪里来？</h3>
+<p>阶梯和每一项的系数已知，后续 Wiener 增量均值 0，故整个和均值 0。不同区间的交叉项取条件期望为 0，每段平方项留下 EH²Δt。取极限得 Itô 等距：</p>
+\[E\int_a^bH\,dW=0,\qquad E\left|\int_a^bH\,dW\right|^2=E\int_a^b|H(t)|^2dt.\]
+<p>两被积过程 H、K 的积分乘积期望是 E∫共轭 H·K dt。线性性、区间可加性成立；若 E∫|Hₙ−H|²dt→0，则对应积分均方收敛。积分过程 I(t)=∫ₐᵗH dW 均方连续，因为增量二阶矩是 E∫ₛᵗH²du→0。</p>
+<p>常数权重 H=c 时结果就是 c[W(b)−W(a)]，方差 c²(b−a)，这与 dt 积分的常值例子 vT² 完全不同。确定权重产生正态积分；随机权重一般不会。</p>
+<h3>为什么普通链式法则要多一项？</h3>
+<p>记 dX=A dt+B dW，只是积分方程 X(t)=X(a)+∫A ds+∫B dW 的简写。W 增量量级为 √Δt，其平方累计并不消失：均匀划分下，Σ(ΔW)² 的均值为 T、方差为 2T²/n→0。泰勒展开的二阶项因而留下 dt，而不是可忽略的小量。这就是 Itô 公式的来源。</p>
+<p>若 f(t,x) 对 t 一阶、对 x 二阶连续可导（记为 C¹,²），则在使积分有定义的条件下：</p>
+\[d f(t,X)=\left(f_t+Af_x+\tfrac12B^2f_{xx}\right)dt+Bf_xdW.\]
+<p>偏导均在 (t,X(t)) 处取值。以 X=W、f=x² 为最小例子：d(W²)=dt+2W dW，所以 ∫₀ᵀW dW=(W(T)²−T)/2；若套普通链式法则，就会漏掉 −T/2。</p>
+<p>对 m 个由同一个 W 驱动的过程 dXᵢ=Aᵢdt+BᵢdW，推广式为：</p>
+\[df=\left(f_t+\sum_iA_if_{x_i}+\tfrac12\sum_{i,j}B_iB_jf_{x_ix_j}\right)dt+\left(\sum_iB_if_{x_i}\right)dW.\]
+<p>例如乘积规则 d(XY)=X dY+Y dX+BₓBᵧdt。若由多个相互独立 Wiener 驱动，二阶项改用各驱动系数的乘积求和；不能把不同驱动误当同一个。</p>
+<h3>怎样确认方程确实有唯一解？</h3>
+<p>对 dX=f(t,X)dt+g(t,X)dW，确定系数对t连续、关于 x 全局 Lipschitz，且在有限时间区间有统一线性增长界 |f|²+|g|²≤K²(1+|x|²)，初值平方可积且不含未来噪声时，存在唯一强解。这是存在唯一性定理；确定系数下解为马尔可夫过程，第五章将解释这个词。例 3.12 的线性系数满足这些条件，可先构造正的指数解再验证，避免在尚未证明 X&gt;0 前贸然取 ln X。</p></section><section id="examples" class="examples"><h2>把知识接到题目上</h2><div class="example-index"><a href="#ex1">例 3.1 · 收敛要检查什么</a><a href="#ex2">例 3.2 · 平均与最后一项</a><a href="#ex3">例 3.3 · 样本平均</a><a href="#ex4">例 3.4 · 分段读数</a><a href="#ex5">例 3.5 · 偏导还不够</a><a href="#ex6">例 3.6 · 随机频率求导</a><a href="#ex7">例 3.7 · 随机系数积分</a><a href="#ex8">例 3.8 · 累积余弦</a><a href="#ex9">例 3.9 · 导数组合</a><a href="#ex10">例 3.10 · 线性方程</a><a href="#ex11">例 3.11 · 随机初值也有关联</a><a href="#ex12">例 3.12 · Itô 方程</a></div><article id="ex1" class="example"><div class="example-kicker">例 3.1</div><h3>罕见的大幅度，与收敛的不同标准</h3><div class="problem"><p>对充分大的 n，Xₙ 取 −√n、0、√n 的概率分别为 n⁻ᵏ、1−2n⁻ᵏ、n⁻ᵏ，k&gt;0。讨论到 0 的几乎必然收敛与均方收敛。有限个使概率不合法的小 n 可另行定义，不影响极限。</p></div><p class="entry"><b>入口：</b>先算大误差的概率，再算平方误差；几乎必然结论还要看序列的联合构造。</p><p>对任意固定 ε&gt;0，充分大 n 有 P(|Xₙ|&gt;ε)=2n⁻ᵏ→0，所以对所有 k&gt;0 都依概率趋 0。</p>
+\[E|X_n|^2=n\cdot n^{-k}+n\cdot n^{-k}=2n^{1-k}.\]
+<p>故均方趋 0 当且仅当 k&gt;1。几乎必然收敛<strong>不能仅由这些边缘分布判断</strong>。k&gt;1 时，出现非零项的概率总和有限：从 N 起至少一次非零的概率≤Σₙ≥ᴺ2n⁻ᵏ→0，故几乎必然最终全为零。</p>
+<p>当 0&lt;k≤1，可以把所有变量放在同一个 U~U(0,1) 上，令 U&lt;n⁻ᵏ 时取 √n，U&gt;1−n⁻ᵏ 时取 −√n，否则取 0；几乎每个 U 最终落在中间，因此几乎必然收敛。若各 Xₙ 独立，则任意 N 后永远为零的概率为 ∏ₙ≥ᴺ(1−2n⁻ᵏ)≤exp(−Σₙ≥ᴺ2n⁻ᵏ)=0，故几乎必然有无穷多个非零项，不收敛。</p><p class="check"><b>检查：</b>k=1 时大误差概率趋 0，但平方误差恒为 2；原资料把 k&gt;0 一概断为几乎必然收敛，缺少联合构造条件。</p><p class="method"><b>带走的方法：</b>边缘分布决定依概率与均方到常数的判断；路径结论需序列之间的关系。</p></article><article id="ex2" class="example"><div class="example-kicker">例 3.2</div><h3>怎样从相关量判断平均变稳定</h3><div class="problem"><p>实零均值序列 Xₙ 满足 E(XₘXₙ)≤K，对所有 m,n。令 Mₙ=(X₁+…+Xₙ)/n、Cₙ=E(MₙXₙ)。证明 |Cₙ|²≤KDMₙ；n²DMₙ=2Σᵢ₌₁ⁿiCᵢ−Σᵢ₌₁ⁿDXᵢ；若 Cₙ→0 则 n⁻²ΣiCᵢ→0；并证明 DMₙ→0 当且仅当 Cₙ→0。</p></div><p class="entry"><b>入口：</b>先用平方矩不等式，再把三角区域的和配成完整方阵。</p><p>取 m=n 知 EXₙ²≤K。故 |Cₙ|²≤EMₙ² EXₙ²≤KDMₙ。又 iCᵢ=Σⱼ≤ᵢE(XⱼXᵢ)，两倍下三角减去一次对角，恰好是全部配对，得到所需恒等式。</p>
+<p>若 Cᵢ→0，给定 ε，取 N 使 i≥N 时 |Cᵢ|≤ε，则 n⁻²|Σᵢ≤ⁿiCᵢ|≤n⁻²Σᵢ&lt;ᴺi|Cᵢ|+εn(n+1)/(2n²)。先 n→∞ 再 ε→0，得到极限 0。</p>
+<p>若 DMₙ→0，首个不等式给 Cₙ→0。反过来 Cₙ→0 时，恒等式中第一项除 n² 趋 0，而 ΣDXᵢ/n²≤K/n→0，故 DMₙ→0。</p><p class="check"><b>检查：</b>这里不需要独立；相关结构已经被 Cₙ 汇总。</p><p class="method"><b>带走的方法：</b>平均的稳定性可由“平均与新项的联动是否消失”刻画。</p></article><article id="ex3" class="example"><div class="example-kicker">例 3.3</div><h3>不知道极限时，先检查 Cauchy</h3><div class="problem"><p>Y₁,Y₂,…独立同分布，EYᵢ=μ、DYᵢ=σ²&lt;∞。令 Xₙ=Σᵢ₌₁ⁿYᵢ/n，证明 Xₙ 均方收敛。</p></div><p class="entry"><b>入口：</b>各平均共享前面的样本；先数重叠项。</p><p>Cov(Xₘ,Xₙ)=σ²min(m,n)/(mn)=σ²/max(m,n)，因为只有同一 Yᵢ 的配对留下方差。两个平均的均值相同，所以</p>
+\[E|X_n-X_m|^2=\sigma^2\left(\frac1n+\frac1m-\frac2{\max(m,n)}\right)\to0.\]
+<p>Cauchy 准则保证极限存在。再算 E|Xₙ−μ|²=σ²/n→0，识别极限就是 μ。</p><p class="check"><b>检查：</b>m=n 时误差为 0；m≥n 时等于 σ²(1/n−1/m)≥0。</p><p class="method"><b>带走的方法：</b>先找共享随机项，再算平均之间的相关。</p></article><article id="ex4" class="example"><div class="example-kicker">例 3.4</div><h3>整数处换一个新变量，会连续吗</h3><div class="problem"><p>Z₀,Z₁,…相互独立，EZₙ=0、DZₙ=σₙ²。定义 X(t)=Zₙ，n≤t&lt;n+1，t≥0。判断均方连续性。</p></div><p class="entry"><b>入口：</b>段内差为零，接缝要比较前后两个变量。</p><p>非整数 t 附近都用同一个 Zₙ，故均方连续；0 从右侧也连续。正整数 n 的右侧差为 0，左侧有 E|Zₙ−Zₙ₋₁|²=σₙ²+σₙ₋₁²。因此 n 处连续当且仅当这两个方差都为 0；否则不连续。</p><p class="check"><b>检查：</b>若相邻两个变量都恒为 0，即使切换编号也不会发生均方跳跃。</p><p class="method"><b>带走的方法：</b>“换变量”要检查其真实差异，不能忽略退化情形。</p></article><article id="ex5" class="example"><div class="example-kicker">例 3.5</div><h3>两个增量必须一起趋零</h3><div class="problem"><p>X(0)=0；当 2⁻ᵏ&lt;t≤2⁻⁽ᵏ⁻¹⁾ 时 X(t)=Yₖ，k=1,2,…。Yₖ 独立同分布，均值 0、方差 1。讨论 [0,1] 上均方可导性。</p></div><p class="entry"><b>入口：</b>先查连续，再查差商，没必要强行算复杂偏导。</p><p>各区间内部过程恒定，故均方导数为 0。在接缝 2⁻ᵏ，两边用不同的独立 Y，差的二阶矩是 2，因此不连续、更不可导。0 附近 EX(t)²=1，不趋于 X(0) 的二阶矩 0；而差商的二阶矩 E|X(h)/h|²=1/h²→∞，所以 0 也不可导。1 按左端方向的导数为 0。</p>
+<p>相关函数在同一段内为 1，不同段为 0；R(0,t)=R(s,0)=0。但沿对角线的广义差商 R(h,h)/h²=1/h² 发散。轴上看起来平坦，不能说明二维共同极限存在。</p><p class="check"><b>检查：</b>至少 0 与所有内部接缝不可导，所以整个过程不是均方可导过程。</p><p class="method"><b>带走的方法：</b>普通偏导存在不能替代广义二阶条件。</p></article><article id="ex6" class="example"><div class="example-kicker">例 3.6</div><h3>形式上能求导，为什么还要验均方</h3><div class="problem"><p>X(t)=sin(At)，A 为实随机变量，EA⁴&lt;∞。求均方导数。</p></div><p class="entry"><b>入口：</b>候选是 A cos(At)，用普通泰勒余项控制随机误差。</p><p>对每个固定 A，sin(A(t+h))=sin(At)+Ah cos(At)+r，且 |r|≤A²h²/2（二阶导绝对值≤A²）。所以</p>
+\[E\left|\frac{X(t+h)-X(t)}h-A\cos(At)\right|^2\le\frac{h^2}4EA^4\to0.\]
+<p>EA⁴ 有限也保证 EA² 有限，故候选为二阶矩变量；于是 X′(t)=A cos(At)。</p><p class="check"><b>检查：</b>不是先逐路径求导就结束；上式才验证了本章要求的误差标准。</p><p class="method"><b>带走的方法：</b>猜候选，再给能取期望的余项界。</p></article><article id="ex7" class="example"><div class="example-kicker">例 3.7</div><h3>先辨认随机性来自哪里</h3><div class="problem"><p>X(t)=2A²t，EA⁴&lt;∞。求 ∫₀ᵗX(s)ds。</p></div><p class="entry"><b>入口：</b>A 对时间不变，比较和式与候选 A²t²。</p><p>采用每段中点 sⱼ*=(sⱼ+sⱼ₋₁)/2，和式 Σ2A²sⱼ*Δsⱼ=A²Σ(sⱼ²−sⱼ₋₁²)=A²t²，恰好相等。一般取样点误差绝对值≤2A²tδ，其中 δ 为最长段长，故均方误差≤4EA⁴t²δ²→0。因此积分为 A²t²。</p><p class="check"><b>检查：</b>t=0 为 0；其均方导数是 2A²t。</p><p class="method"><b>带走的方法：</b>确定时间函数乘随机系数，仍需检查系数对应的矩有限。</p></article><article id="ex8" class="example"><div class="example-kicker">例 3.8</div><h3>积分的方差为什么要算双重积分</h3><div class="problem"><p>X(t)=A cos(ω₀t+φ)，A、ω₀ 为常数，已知 mₓ(t)=0、Rₓ(s,t)=A²cos(ω₀(t−s))/2。令 Y(T)=∫₀ᵀX(t)dt，求均值与方差。</p></div><p class="entry"><b>入口：</b>均值可直接积分，方差要保留不同时间的相关。</p><p>EY(T)=0，因此 DY(T)=E[Y(T)²]=∫₀ᵀ∫₀ᵀRₓ(s,t)dsdt。用 cos(ω(t−s))=cosωt cosωs+sinωt sinωs，将双重积分拆成两个平方：</p>
+\[DY(T)=\frac{A^2}{2}\left[\left(\frac{\sin\omega_0T}{\omega_0}\right)^2+\left(\frac{1-\cos\omega_0T}{\omega_0}\right)^2\right]=\frac{A^2}{\omega_0^2}(1-\cos\omega_0T).\]
+<p>上式先假定 ω₀≠0；ω₀=0 时取连续极限，方差为 A²T²/2。</p><p class="check"><b>检查：</b>小 T 时 1−cosωT≈ω²T²/2，符合短时间内近似常值的累计。</p><p class="method"><b>带走的方法：</b>对相关核利用三角恒等式，常能把双积分变成一维积分的平方。</p></article><article id="ex9" class="example"><div class="example-kicker">例 3.9</div><h3>X 加 X′ 后，相关函数怎样变化</h3><div class="problem"><p>二阶矩过程相关函数 Rₓ(s,t)=exp(−(t−s)²)。令 Y(t)=X(t)+X′(t)，求 Rᵧ(s,t)。</p></div><p class="entry"><b>入口：</b>先确认混合偏导连续，保证导数存在，再展开四项。</p><p>R 光滑，均方导数存在。写 τ=t−s，则 ∂ₜR=−2τ\(e^{-\tau^2}\)、∂ₛR=2τ\(e^{-\tau^2}\)，两交叉项抵消；∂ₛ∂ₜR=(2−4τ²)\(e^{-\tau^2}\)。因此</p>
+\[R_Y(s,t)=R_X+\partial_sR_X+\partial_tR_X+\partial_s\partial_tR_X=(3-4(t-s)^2)e^{-(t-s)^2}.\]<p class="check"><b>检查：</b>Rᵧ(t,t)=3；相关函数在部分时差上为负不违背合法性，非负的是二次型。</p><p class="method"><b>带走的方法：</b>先按过程展开，再把每项翻译成相关函数的偏导。</p></article><article id="ex10" class="example"><div class="example-kicker">例 3.10</div><h3>积分因子把随机输入累积起来</h3><div class="problem"><p>a(t) 连续、Y(t) 均方连续、X₀ 二阶矩有限。求 X′(t)=a(t)X(t)+Y(t)、X(t₀)=X₀ 的解。</p></div><p class="entry"><b>入口：</b>与普通线性方程一样选确定积分因子，随机性只留在初值和积分内。</p><p>设 A(t)=∫ₜ₀ᵗa(u)du，由乘积法则 [e⁻ᴬX]′=e⁻ᴬY。积分得到</p>
+\[X(t)=e^{A(t)}X_0+\int_{t_0}^te^{A(t)-A(s)}Y(s)ds.\]
+<p>代回求导：第一项产生 a(t)eᴬX₀，第二项的上端产生 Y(t)，核的导数产生 a(t) 乘该积分，所以满足方程。两个解的差 Z 满足 Z′=aZ、Z(t₀)=0，乘积分因子后恒为 0，故均方意义下唯一。</p><p class="check"><b>检查：</b>t=t₀ 时积分为 0，解等于 X₀。</p><p class="method"><b>带走的方法：</b>用确定因子处理自身增长，再累计随机驱动。</p></article><article id="ex11" class="example"><div class="example-kicker">例 3.11</div><h3>解过程的相关函数不能漏交叉项</h3><div class="problem"><p>Y(t) 为已知实均方连续过程，X₀ 为二阶矩随机变量。求 X′(t)=Y(t)、X(a)=X₀ 的解及数字特征；不假定 X₀ 与 Y 独立。</p></div><p class="entry"><b>入口：</b>先求出和，再按定义展开；题目未给独立就保留初值与输入相关。</p>\[X(t)=X_0+\int_a^tY(u)du,\qquad m_X(t)=EX_0+\int_a^tm_Y(u)du.\]
+\[R_X(s,t)=EX_0^2+\int_a^tE[X_0Y(v)]dv+\int_a^sE[X_0Y(u)]du+\int_a^s\int_a^tR_Y(u,v)dudv.\]
+<p>协方差由同式把 EX₀² 换为 DX₀、E[X₀Y] 换为 Cov(X₀,Y)、Rᵧ 换为 Cᵧ 得到；再令 s=t 是方差。若初值独立于整个 Y，交叉协方差才为 0；若初值为常数，也同样为 0。</p><p class="check"><b>检查：</b>a 时刻的均值与二阶矩恰为 EX₀、EX₀²。</p><p class="method"><b>带走的方法：</b>先写全部配对，再根据确有的条件删项。</p></article><article id="ex12" class="example"><div class="example-kicker">例 3.12</div><h3>先构造指数解，再验证</h3><div class="problem"><p>W 为标准 Wiener。解 dX(t)=−X(t)dt/2+X(t)dW(t)，X(0)=1。</p></div><p class="entry"><b>入口：</b>几何型噪声提示指数形式；先验证避免循环假定 X 始终为正。</p><p>取候选 X(t)=e^{W(t)−t}。对 f(t,w)=e^{w−t}，有 fₜ=−f、f𝑤=f、f𝑤𝑤=f，Itô 公式给 dX=(−X+X/2)dt+X dW，恰为所需方程，且初值为 1。线性系数满足存在唯一性条件，所以候选就是解。</p>
+<p>验证后知道 X&gt;0，也可安全用 ln X：d ln X=(−1/2−1/2)dt+dW=−dt+dW。故 ln X=W(t)−t。由正态指数矩 E eᵃᵂ⁽ᵗ⁾=eᵃ²ᵗ⁄² 得 EX=\(e^{-t/2}\)，EX²=1，DX=1−\(e^{-t}\)。</p><p class="check"><b>检查：</b>均值满足 m′=−m/2，吻合漂移项。漏掉 Itô 修正会得到错误的指数。</p><p class="method"><b>带走的方法：</b>乘性 Wiener 噪声先试指数，再用 Itô 公式验算。</p></article></section><section id="review" class="lesson"><h2>能解释理由，才算学会</h2><div id="quiz"></div><p id="quiz-score" role="status"></p><button id="quiz-reset">清空答案，重新自测</button></section><section id="coverage" class="lesson"><h2>复习速查与覆盖记录</h2><div class="table-wrap"><table><thead><tr><th>学习指导内容</th><th>教程入口</th></tr></thead><tbody><tr><td>01 从误差出发：均方极限</td><td><a href="#limit">01 从误差出发：均方极限</a></td></tr><tr><td>02 从读数靠近到均方连续</td><td><a href="#continuity">02 从读数靠近到均方连续</a></td></tr><tr><td>03 均方导数：差商是否有稳定的随机极限</td><td><a href="#derivative">03 均方导数：差商是否有稳定的随机极限</a></td></tr><tr><td>04 均方积分：累积一段随机输入</td><td><a href="#integral">04 均方积分：累积一段随机输入</a></td></tr><tr><td>05 用累积反推变化：均方随机微分方程</td><td><a href="#equation">05 用累积反推变化：均方随机微分方程</a></td></tr><tr><td>06 遇到 Wiener：为什么另定义 Itô 积分</td><td><a href="#ito">06 遇到 Wiener：为什么另定义 Itô 积分</a></td></tr></tbody></table></div>
+<h3>做题时只按这个顺序选择工具</h3>
+<p>问极限：先算 E|误差|²；没有候选则算两项之差。问连续：算增量二阶矩。问可导：算差商的共同极限。问累积：先辨认 dt 还是 dW。问方程：先辨认均方导数方程还是 Itô 方程。</p>
+<div class="formula-sheet">\[R_{X'}=\partial_s\partial_tR_X,\quad R_{\int X}=\iint R_X,\quad E|\int H dW|^2=E\int|H|^2dt.\]</div>
+<p>内容提要 7 组均已对应：均方极限、连续、导数、积分、均方方程、Gaussian 随机分析、Itô 分析。例 3.1—3.12 全部在本页；例 3.1 的几乎必然条件、例 3.4 的退化例外已说明。</p></section><footer><p class="footer-line"><a href="../chapter2/index.html">← 第2章</a>　<a href="../chapter4/index.html">第4章 →</a></p><p>知识范围：学习指导本章内容提要与全部编号例题。课后习题全解未逐题改写。编写依据记录见本章阅读说明。</p></footer></main></body></html>

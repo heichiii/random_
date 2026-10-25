@@ -1,0 +1,298 @@
+[
+  {
+    "name": "Unique ids: chapter1\\index.html",
+    "passed": true
+  },
+  {
+    "name": "Unique ids: chapter2\\index.html",
+    "passed": true
+  },
+  {
+    "name": "Unique ids: chapter3\\index.html",
+    "passed": true
+  },
+  {
+    "name": "Unique ids: chapter4\\index.html",
+    "passed": true
+  },
+  {
+    "name": "Unique ids: chapter5\\index.html",
+    "passed": true
+  },
+  {
+    "name": "Unique ids: lecture\\index.html",
+    "passed": true
+  },
+  {
+    "name": "Unique ids: lecture\\lecture1\\index.html",
+    "passed": true
+  },
+  {
+    "name": "Unique ids: lecture\\lecture2\\index.html",
+    "passed": true
+  },
+  {
+    "name": "Unique ids: lecture\\lecture3\\index.html",
+    "passed": true
+  },
+  {
+    "name": "Unique ids: lecture\\lecture4\\index.html",
+    "passed": true
+  },
+  {
+    "name": "Unique ids: index.html",
+    "passed": true
+  },
+  {
+    "name": "All HTML local files and anchors exist",
+    "passed": true
+  },
+  {
+    "name": "PPT1: all 122 slide numbers mapped",
+    "passed": true
+  },
+  {
+    "name": "PPT2: all 78 slide numbers mapped",
+    "passed": true
+  },
+  {
+    "name": "PPT3: all 26 slide numbers mapped",
+    "passed": true
+  },
+  {
+    "name": "PPT4: all 121 slide numbers mapped",
+    "passed": true
+  },
+  {
+    "name": "5.3.1: closed classes and periods",
+    "passed": true
+  },
+  {
+    "name": "5.3.1: numerical row sum 0",
+    "passed": true
+  },
+  {
+    "name": "5.3.1: numerical row sum 1",
+    "passed": true
+  },
+  {
+    "name": "5.3.1: numerical row sum 2",
+    "passed": true
+  },
+  {
+    "name": "5.3.2: closed classes and periods",
+    "passed": true
+  },
+  {
+    "name": "5.3.2: numerical row sum 0",
+    "passed": true
+  },
+  {
+    "name": "5.3.2: numerical row sum 0",
+    "passed": true
+  },
+  {
+    "name": "5.3.2: numerical row sum 2",
+    "passed": true
+  },
+  {
+    "name": "5.3.2: numerical row sum 3",
+    "passed": true
+  },
+  {
+    "name": "5.3.3: closed classes and periods",
+    "passed": true
+  },
+  {
+    "name": "5.3.3: numerical row sum 0",
+    "passed": true
+  },
+  {
+    "name": "5.3.3: numerical row sum 1",
+    "passed": true
+  },
+  {
+    "name": "5.3.3: numerical row sum 2",
+    "passed": true
+  },
+  {
+    "name": "5.3.3: numerical row sum 3",
+    "passed": true
+  },
+  {
+    "name": "5.3.3: numerical row sum 4",
+    "passed": true
+  },
+  {
+    "name": "5.3.4: closed classes and periods",
+    "passed": true
+  },
+  {
+    "name": "5.3.5: closed classes and periods",
+    "passed": true
+  },
+  {
+    "name": "5.3.5: numerical row sum 0",
+    "passed": true
+  },
+  {
+    "name": "5.3.5: numerical row sum 1",
+    "passed": true
+  },
+  {
+    "name": "5.3.5: numerical row sum 2",
+    "passed": true
+  },
+  {
+    "name": "5.3.5: numerical row sum 2",
+    "passed": true
+  },
+  {
+    "name": "5.3.6: closed classes and periods",
+    "passed": true
+  },
+  {
+    "name": "5.3.6: numerical row sum 0",
+    "passed": true
+  },
+  {
+    "name": "5.3.6: numerical row sum 0",
+    "passed": true
+  },
+  {
+    "name": "5.3.6: numerical row sum 2",
+    "passed": true
+  },
+  {
+    "name": "5.3.6: numerical row sum 2",
+    "passed": true
+  },
+  {
+    "name": "5.3.6: numerical row sum 4",
+    "passed": true
+  },
+  {
+    "name": "5.3.7: closed classes and periods",
+    "passed": true
+  },
+  {
+    "name": "5.3.7: numerical row sum 0",
+    "passed": true
+  },
+  {
+    "name": "5.3.7: numerical row sum 0",
+    "passed": true
+  },
+  {
+    "name": "5.3.7: numerical row sum 2",
+    "passed": true
+  },
+  {
+    "name": "5.3.7: numerical row sum 2",
+    "passed": true
+  },
+  {
+    "name": "5.3.8: closed classes and periods",
+    "passed": true
+  },
+  {
+    "name": "5.3.8: numerical row sum 0",
+    "passed": true
+  },
+  {
+    "name": "5.3.8: numerical row sum 1",
+    "passed": true
+  },
+  {
+    "name": "5.3.8: numerical row sum 2",
+    "passed": true
+  },
+  {
+    "name": "5.3.8: numerical row sum 3",
+    "passed": true
+  },
+  {
+    "name": "5.3.8: numerical row sum 4",
+    "passed": true
+  },
+  {
+    "name": "5.3.8: numerical row sum 5",
+    "passed": true
+  },
+  {
+    "name": "5.3.8: numerical row sum 6",
+    "passed": true
+  },
+  {
+    "name": "5.3.8: numerical row sum 6",
+    "passed": true
+  },
+  {
+    "name": "5.2.7 joint 5/48 and absolute 11/24",
+    "passed": true
+  },
+  {
+    "name": "5.2.4 ruin recurrence p=1/3",
+    "passed": true
+  },
+  {
+    "name": "5.2.4 ruin recurrence p=1/2",
+    "passed": true
+  },
+  {
+    "name": "5.2.4 ruin recurrence p=2/3",
+    "passed": true
+  },
+  {
+    "name": "5.2.8 return after flips",
+    "passed": true
+  },
+  {
+    "name": "5.4.2 invariant vector",
+    "passed": true
+  },
+  {
+    "name": "5.4.3 invariant vector",
+    "passed": true
+  },
+  {
+    "name": "5.4.4 first closed class",
+    "passed": true
+  },
+  {
+    "name": "5.4 exchange supplement",
+    "passed": true
+  },
+  {
+    "name": "5.4 sales supplement",
+    "passed": true
+  },
+  {
+    "name": "Stock supplement 40 values and 39 adjacent pairs",
+    "passed": true
+  },
+  {
+    "name": "Stock supplement two-step row",
+    "passed": true
+  },
+  {
+    "name": "Poisson immigration example moments",
+    "passed": true
+  },
+  {
+    "name": "Discrete uniform table n=1",
+    "passed": true
+  },
+  {
+    "name": "Discrete uniform table n=2",
+    "passed": true
+  },
+  {
+    "name": "Discrete uniform table n=5",
+    "passed": true
+  },
+  {
+    "name": "Two-time Gaussian determinant",
+    "passed": true
+  }
+]

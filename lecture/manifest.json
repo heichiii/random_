@@ -1,0 +1,651 @@
+[
+  {
+    "lecture": 1,
+    "title": "概率论基础",
+    "sections": [
+      {
+        "id": "events",
+        "title": "01 先把试验说清：事件、概率与条件",
+        "slides": "4—18"
+      },
+      {
+        "id": "distribution",
+        "title": "02 把记录变成数：随机变量与分布",
+        "slides": "20—28"
+      },
+      {
+        "id": "joint-transform",
+        "title": "03 从一起取值，到函数变换",
+        "slides": "29—47"
+      },
+      {
+        "id": "moments",
+        "title": "04 平均与波动：先会算，再谈性质",
+        "slides": "50—65"
+      },
+      {
+        "id": "models",
+        "title": "05 课件的分布表：按计数与等待理解",
+        "slides": "66—67"
+      },
+      {
+        "id": "characteristic",
+        "title": "06 特征函数：把独立相加变成函数相乘",
+        "slides": "70—91"
+      },
+      {
+        "id": "normal",
+        "title": "07 联合正态：先明确“共同”的要求",
+        "slides": "93—102"
+      },
+      {
+        "id": "conditional",
+        "title": "08 条件期望：先分组，再把平均拼回去",
+        "slides": "104—121"
+      }
+    ],
+    "examples": [
+      {
+        "id": "ex-1-2-1",
+        "label": "例1.2.1",
+        "slides": "42"
+      },
+      {
+        "id": "ex-1-2-2",
+        "label": "例1.2.2",
+        "slides": "43"
+      },
+      {
+        "id": "ex-1-2-3",
+        "label": "例1.2.3",
+        "slides": "44—47"
+      },
+      {
+        "id": "ex-1-3-1",
+        "label": "例1.3.1",
+        "slides": "59—60"
+      },
+      {
+        "id": "ex-1-3-2",
+        "label": "例1.3.2",
+        "slides": "61—64"
+      },
+      {
+        "id": "ex-1-4-1",
+        "label": "例1.4.1",
+        "slides": "74"
+      },
+      {
+        "id": "ex-1-4-2",
+        "label": "例1.4.2",
+        "slides": "74"
+      },
+      {
+        "id": "ex-1-4-3",
+        "label": "例1.4.3",
+        "slides": "75"
+      },
+      {
+        "id": "ex-1-4-4",
+        "label": "例1.4.4",
+        "slides": "75"
+      },
+      {
+        "id": "ex-1-4-5",
+        "label": "例1.4.5",
+        "slides": "76"
+      },
+      {
+        "id": "ex-1-4-6",
+        "label": "例1.4.6",
+        "slides": "77"
+      },
+      {
+        "id": "ex-1-4-7",
+        "label": "例1.4.7",
+        "slides": "80"
+      },
+      {
+        "id": "ex-1-4-8",
+        "label": "例1.4.8",
+        "slides": "81"
+      },
+      {
+        "id": "ex-1-4-9",
+        "label": "例1.4.9",
+        "slides": "84"
+      },
+      {
+        "id": "ex-1-4-10",
+        "label": "例1.4.10",
+        "slides": "85"
+      },
+      {
+        "id": "ex-1-6-1",
+        "label": "例1.6.1",
+        "slides": "117"
+      },
+      {
+        "id": "ex-1-6-2",
+        "label": "例1.6.2",
+        "slides": "118"
+      }
+    ],
+    "questions": 12,
+    "coverage": [
+      {
+        "slides": "1—3、19、49、69、92、103、122",
+        "topic": "封面、目录与结束：学习路线",
+        "anchor": "start"
+      },
+      {
+        "slides": "4—18",
+        "topic": "概率空间、条件概率、独立性",
+        "anchor": "events"
+      },
+      {
+        "slides": "20—28",
+        "topic": "变量、CDF、PMF/PDF与图示",
+        "anchor": "distribution"
+      },
+      {
+        "slides": "29—47",
+        "topic": "联合、边缘、独立、Jacobian与3道变换例题",
+        "anchor": "joint-transform"
+      },
+      {
+        "slides": "48",
+        "topic": "1.2小结",
+        "anchor": "joint-transform"
+      },
+      {
+        "slides": "50—65、68",
+        "topic": "矩、方差、协方差、不等式与配对例题",
+        "anchor": "moments"
+      },
+      {
+        "slides": "66—67",
+        "topic": "全部离散/连续分布表及参数约定",
+        "anchor": "models"
+      },
+      {
+        "slides": "70—91",
+        "topic": "特征函数、性质、反演、多维及10道例题",
+        "anchor": "characteristic"
+      },
+      {
+        "slides": "93—102",
+        "topic": "联合正态、矩阵与线性变换",
+        "anchor": "normal"
+      },
+      {
+        "slides": "104—121",
+        "topic": "条件分布、条件期望、全期望与2道例题",
+        "anchor": "conditional"
+      }
+    ]
+  },
+  {
+    "lecture": 2,
+    "title": "随机过程的基本概念",
+    "sections": [
+      {
+        "id": "process",
+        "title": "01 一次抽到一条记录，再沿时间读数",
+        "slides": "4—15"
+      },
+      {
+        "id": "types",
+        "title": "02 分类只看时间与状态，不看曲线长相",
+        "slides": "17—21"
+      },
+      {
+        "id": "finite",
+        "title": "03 先一起观测，再谈时间依赖",
+        "slides": "23—37"
+      },
+      {
+        "id": "statistics",
+        "title": "04 把单个随机量的矩，沿时间排成函数",
+        "slides": "39—50"
+      },
+      {
+        "id": "two-processes",
+        "title": "05 两个过程：比较的是任意两组时刻",
+        "slides": "52—56"
+      },
+      {
+        "id": "complex",
+        "title": "06 复过程：共轭保证平方强度非负",
+        "slides": "58—63"
+      },
+      {
+        "id": "classes",
+        "title": "07 二阶矩、Gaussian与增量：各自多加了什么条件",
+        "slides": "65—74"
+      },
+      {
+        "id": "stationary",
+        "title": "08 平稳：不依赖观察起点的统计规律",
+        "slides": "75—76"
+      }
+    ],
+    "examples": [
+      {
+        "id": "ex-2-1-3",
+        "label": "例2.1.3",
+        "slides": "11—15"
+      },
+      {
+        "id": "ex-2-3-1",
+        "label": "例2.3.1",
+        "slides": "29—32"
+      },
+      {
+        "id": "ex-2-3-2",
+        "label": "例2.3.2",
+        "slides": "33—37"
+      },
+      {
+        "id": "ex-2-4-1",
+        "label": "例2.4.1",
+        "slides": "46"
+      },
+      {
+        "id": "ex-2-4-2",
+        "label": "例2.4.2",
+        "slides": "47—49"
+      },
+      {
+        "id": "ex-2-4-3",
+        "label": "例2.4.3",
+        "slides": "50"
+      },
+      {
+        "id": "ex-2-6-1",
+        "label": "例2.6.1",
+        "slides": "61—63"
+      },
+      {
+        "id": "ex-2-7-1",
+        "label": "例2.7.1",
+        "slides": "68—70"
+      }
+    ],
+    "questions": 12,
+    "coverage": [
+      {
+        "slides": "1—3、16、22、38、51、57、64、77—78",
+        "topic": "封面、目录、小结与结束",
+        "anchor": "start"
+      },
+      {
+        "slides": "4—15",
+        "topic": "过程/样本路径/状态；呼叫与噪声；例2.1.3",
+        "anchor": "process"
+      },
+      {
+        "slides": "17—21",
+        "topic": "四类过程及例2.2.1—2.2.5",
+        "anchor": "types"
+      },
+      {
+        "slides": "23—37",
+        "topic": "有限维分布/特征族、对称相容、2道例题",
+        "anchor": "finite"
+      },
+      {
+        "slides": "39—50",
+        "topic": "五种数字特征、恒等式、3道例题",
+        "anchor": "statistics"
+      },
+      {
+        "slides": "52—56",
+        "topic": "过程间联合、独立与互相关/不相关",
+        "anchor": "two-processes"
+      },
+      {
+        "slides": "58—63",
+        "topic": "复过程与例2.6.1",
+        "anchor": "complex"
+      },
+      {
+        "slides": "65—74",
+        "topic": "二阶矩、Gaussian、正交/独立/平稳增量、Wiener",
+        "anchor": "classes"
+      },
+      {
+        "slides": "75—76",
+        "topic": "严与宽平稳",
+        "anchor": "stationary"
+      }
+    ]
+  },
+  {
+    "lecture": 3,
+    "title": "泊松过程",
+    "sections": [
+      {
+        "id": "count",
+        "title": "01 先看计数：一段时间来了多少个",
+        "slides": "4—9"
+      },
+      {
+        "id": "gaps",
+        "title": "02 反过来问：下一次还要等多久",
+        "slides": "11—12"
+      },
+      {
+        "id": "arrivals",
+        "title": "03 第n次到达：把计数门槛反过来",
+        "slides": "14"
+      },
+      {
+        "id": "conditional-arrivals",
+        "title": "04 已知总数后：在区间内均匀撒点，再排序",
+        "slides": "16—19"
+      },
+      {
+        "id": "compound",
+        "title": "05 每次不只加1：复合Poisson的随机总量",
+        "slides": "21—25"
+      }
+    ],
+    "examples": [
+      {
+        "id": "ex-2-7-2",
+        "label": "例2.7.2",
+        "slides": "18—19"
+      },
+      {
+        "id": "ex-2-7-3",
+        "label": "例2.7.3",
+        "slides": "22—23"
+      },
+      {
+        "id": "ex-2-7-4",
+        "label": "例2.7.4",
+        "slides": "24—25"
+      }
+    ],
+    "questions": 10,
+    "coverage": [
+      {
+        "slides": "1—3、10、13、15、20、26",
+        "topic": "封面、目录与结束",
+        "anchor": "start"
+      },
+      {
+        "slides": "4—9",
+        "topic": "计数、Poisson两套定义、数字特征、等价性",
+        "anchor": "count"
+      },
+      {
+        "slides": "11—12",
+        "topic": "到达间隔及独立指数分布",
+        "anchor": "gaps"
+      },
+      {
+        "slides": "14",
+        "topic": "到达时刻Gamma/Erlang分布",
+        "anchor": "arrivals"
+      },
+      {
+        "slides": "16—19",
+        "topic": "到达条件分布、顺序统计量、原题2.7.2",
+        "anchor": "conditional-arrivals"
+      },
+      {
+        "slides": "21—25",
+        "topic": "复合Poisson、特征函数、矩、原题2.7.3—2.7.4",
+        "anchor": "compound"
+      }
+    ]
+  },
+  {
+    "lecture": 4,
+    "title": "马尔可夫过程",
+    "sections": [
+      {
+        "id": "markov",
+        "title": "01 先选对状态：现在能否概括有用的过去",
+        "slides": "4—7"
+      },
+      {
+        "id": "transition",
+        "title": "02 一步表、多步预测与初始分布",
+        "slides": "9—19"
+      },
+      {
+        "id": "model",
+        "title": "03 模型题：先列下一步，再列方程",
+        "slides": "20—41"
+      },
+      {
+        "id": "returns",
+        "title": "04 返回：迟早回来，与平均多久，是两问",
+        "slides": "43—56"
+      },
+      {
+        "id": "classes",
+        "title": "05 先画道路，再分类状态",
+        "slides": "50—65"
+      },
+      {
+        "id": "period",
+        "title": "06 周期看全部返回步数的最大公约数",
+        "slides": "46—48、54—55、64—65"
+      },
+      {
+        "id": "stationary",
+        "title": "07 平稳分布先求“保持”，极限再问“趋近”",
+        "slides": "92—103"
+      },
+      {
+        "id": "workflow",
+        "title": "08 做题的固定顺序与估计转移表",
+        "slides": "86—90、104—120"
+      }
+    ],
+    "examples": [
+      {
+        "id": "ex-5-2-1",
+        "label": "例5.2.1",
+        "slides": "20"
+      },
+      {
+        "id": "ex-5-2-2",
+        "label": "例5.2.2",
+        "slides": "21—23"
+      },
+      {
+        "id": "ex-5-2-3",
+        "label": "例5.2.3",
+        "slides": "24—25"
+      },
+      {
+        "id": "ex-5-2-4",
+        "label": "例5.2.4",
+        "slides": "26—30"
+      },
+      {
+        "id": "ex-5-2-5",
+        "label": "例5.2.5",
+        "slides": "31—32"
+      },
+      {
+        "id": "ex-5-2-6",
+        "label": "例5.2.6",
+        "slides": "33—34"
+      },
+      {
+        "id": "ex-5-2-7",
+        "label": "例5.2.7",
+        "slides": "35—36"
+      },
+      {
+        "id": "ex-5-2-8",
+        "label": "例5.2.8",
+        "slides": "37—41"
+      },
+      {
+        "id": "ex-5-3-1",
+        "label": "例5.3.1",
+        "slides": "66—67"
+      },
+      {
+        "id": "ex-5-3-2",
+        "label": "例5.3.2",
+        "slides": "68—69"
+      },
+      {
+        "id": "ex-5-3-3",
+        "label": "例5.3.3",
+        "slides": "70—71"
+      },
+      {
+        "id": "ex-5-3-4",
+        "label": "例5.3.4",
+        "slides": "72—73"
+      },
+      {
+        "id": "ex-5-3-5",
+        "label": "例5.3.5",
+        "slides": "74—75"
+      },
+      {
+        "id": "ex-5-3-6",
+        "label": "例5.3.6",
+        "slides": "76—77"
+      },
+      {
+        "id": "ex-5-3-7",
+        "label": "例5.3.7",
+        "slides": "78—79"
+      },
+      {
+        "id": "ex-5-3-8",
+        "label": "例5.3.8",
+        "slides": "80—81"
+      },
+      {
+        "id": "ex-5-3-9",
+        "label": "例5.3.9",
+        "slides": "82—85"
+      },
+      {
+        "id": "sup-class-1",
+        "label": "5.3补充例题1",
+        "slides": "86—88"
+      },
+      {
+        "id": "sup-class-2",
+        "label": "5.3补充例题2",
+        "slides": "89—90"
+      },
+      {
+        "id": "ex-5-4-1",
+        "label": "例5.4.1",
+        "slides": "104—105"
+      },
+      {
+        "id": "ex-5-4-2",
+        "label": "例5.4.2",
+        "slides": "106—107"
+      },
+      {
+        "id": "ex-5-4-3",
+        "label": "例5.4.3",
+        "slides": "108—110"
+      },
+      {
+        "id": "ex-5-4-4",
+        "label": "例5.4.4",
+        "slides": "111—115"
+      },
+      {
+        "id": "sup-limit-1",
+        "label": "5.4补充例题1",
+        "slides": "116—118"
+      },
+      {
+        "id": "sup-limit-2",
+        "label": "5.4补充例题2",
+        "slides": "119—120"
+      }
+    ],
+    "questions": 14,
+    "coverage": [
+      {
+        "slides": "1—3、8、42、91、121",
+        "topic": "封面、目录、结束与复习路线",
+        "anchor": "start"
+      },
+      {
+        "slides": "4—7",
+        "topic": "马尔可夫定义与链",
+        "anchor": "markov"
+      },
+      {
+        "slides": "9—19",
+        "topic": "转移矩阵、C–K、初始/绝对分布、齐次",
+        "anchor": "transition"
+      },
+      {
+        "slides": "20—41",
+        "topic": "8个模型与计算原题",
+        "anchor": "model"
+      },
+      {
+        "slides": "43—56",
+        "topic": "首达、Doeblin、常返判据、周期与类型",
+        "anchor": "returns"
+      },
+      {
+        "slides": "50—65",
+        "topic": "可达互通、闭类、状态分解与有限性",
+        "anchor": "classes"
+      },
+      {
+        "slides": "46—48、54—55、64—65",
+        "topic": "周期、周期子类与d步骨架",
+        "anchor": "period"
+      },
+      {
+        "slides": "66—85",
+        "topic": "状态分类原题5.3.1—5.3.9",
+        "anchor": "ex-5-3-1"
+      },
+      {
+        "slides": "86—88",
+        "topic": "股票补充题",
+        "anchor": "sup-class-1"
+      },
+      {
+        "slides": "89—90",
+        "topic": "七状态分解补充题",
+        "anchor": "sup-class-2"
+      },
+      {
+        "slides": "92—103",
+        "topic": "极限、平稳、遍历条件、类混合",
+        "anchor": "stationary"
+      },
+      {
+        "slides": "104—115",
+        "topic": "平稳原题5.4.1—5.4.4",
+        "anchor": "ex-5-4-1"
+      },
+      {
+        "slides": "116—118",
+        "topic": "换球补充题",
+        "anchor": "sup-limit-1"
+      },
+      {
+        "slides": "119—120",
+        "topic": "销售补充题",
+        "anchor": "sup-limit-2"
+      }
+    ]
+  }
+]

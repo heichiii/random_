@@ -1,0 +1,186 @@
+{
+  "lecture": 1,
+  "title": "概率论基础",
+  "sections": [
+    {
+      "id": "events",
+      "title": "01 先把试验说清：事件、概率与条件",
+      "slides": "4—18"
+    },
+    {
+      "id": "distribution",
+      "title": "02 把记录变成数：随机变量与分布",
+      "slides": "20—28"
+    },
+    {
+      "id": "joint-transform",
+      "title": "03 从一起取值，到函数变换",
+      "slides": "29—47"
+    },
+    {
+      "id": "moments",
+      "title": "04 平均与波动：先会算，再谈性质",
+      "slides": "50—65"
+    },
+    {
+      "id": "models",
+      "title": "05 课件的分布表：按计数与等待理解",
+      "slides": "66—67"
+    },
+    {
+      "id": "characteristic",
+      "title": "06 特征函数：把独立相加变成函数相乘",
+      "slides": "70—91"
+    },
+    {
+      "id": "normal",
+      "title": "07 联合正态：先明确“共同”的要求",
+      "slides": "93—102"
+    },
+    {
+      "id": "conditional",
+      "title": "08 条件期望：先分组，再把平均拼回去",
+      "slides": "104—121"
+    }
+  ],
+  "examples": [
+    {
+      "id": "ex-1-2-1",
+      "label": "例1.2.1",
+      "slides": "42"
+    },
+    {
+      "id": "ex-1-2-2",
+      "label": "例1.2.2",
+      "slides": "43"
+    },
+    {
+      "id": "ex-1-2-3",
+      "label": "例1.2.3",
+      "slides": "44—47"
+    },
+    {
+      "id": "ex-1-3-1",
+      "label": "例1.3.1",
+      "slides": "59—60"
+    },
+    {
+      "id": "ex-1-3-2",
+      "label": "例1.3.2",
+      "slides": "61—64"
+    },
+    {
+      "id": "ex-1-4-1",
+      "label": "例1.4.1",
+      "slides": "74"
+    },
+    {
+      "id": "ex-1-4-2",
+      "label": "例1.4.2",
+      "slides": "74"
+    },
+    {
+      "id": "ex-1-4-3",
+      "label": "例1.4.3",
+      "slides": "75"
+    },
+    {
+      "id": "ex-1-4-4",
+      "label": "例1.4.4",
+      "slides": "75"
+    },
+    {
+      "id": "ex-1-4-5",
+      "label": "例1.4.5",
+      "slides": "76"
+    },
+    {
+      "id": "ex-1-4-6",
+      "label": "例1.4.6",
+      "slides": "77"
+    },
+    {
+      "id": "ex-1-4-7",
+      "label": "例1.4.7",
+      "slides": "80"
+    },
+    {
+      "id": "ex-1-4-8",
+      "label": "例1.4.8",
+      "slides": "81"
+    },
+    {
+      "id": "ex-1-4-9",
+      "label": "例1.4.9",
+      "slides": "84"
+    },
+    {
+      "id": "ex-1-4-10",
+      "label": "例1.4.10",
+      "slides": "85"
+    },
+    {
+      "id": "ex-1-6-1",
+      "label": "例1.6.1",
+      "slides": "117"
+    },
+    {
+      "id": "ex-1-6-2",
+      "label": "例1.6.2",
+      "slides": "118"
+    }
+  ],
+  "questions": 12,
+  "coverage": [
+    {
+      "slides": "1—3、19、49、69、92、103、122",
+      "topic": "封面、目录与结束：学习路线",
+      "anchor": "start"
+    },
+    {
+      "slides": "4—18",
+      "topic": "概率空间、条件概率、独立性",
+      "anchor": "events"
+    },
+    {
+      "slides": "20—28",
+      "topic": "变量、CDF、PMF/PDF与图示",
+      "anchor": "distribution"
+    },
+    {
+      "slides": "29—47",
+      "topic": "联合、边缘、独立、Jacobian与3道变换例题",
+      "anchor": "joint-transform"
+    },
+    {
+      "slides": "48",
+      "topic": "1.2小结",
+      "anchor": "joint-transform"
+    },
+    {
+      "slides": "50—65、68",
+      "topic": "矩、方差、协方差、不等式与配对例题",
+      "anchor": "moments"
+    },
+    {
+      "slides": "66—67",
+      "topic": "全部离散/连续分布表及参数约定",
+      "anchor": "models"
+    },
+    {
+      "slides": "70—91",
+      "topic": "特征函数、性质、反演、多维及10道例题",
+      "anchor": "characteristic"
+    },
+    {
+      "slides": "93—102",
+      "topic": "联合正态、矩阵与线性变换",
+      "anchor": "normal"
+    },
+    {
+      "slides": "104—121",
+      "topic": "条件分布、条件期望、全期望与2道例题",
+      "anchor": "conditional"
+    }
+  ]
+}
